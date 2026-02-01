@@ -6,7 +6,7 @@
     
     <!-- Meta Tags për SEO -->
     <meta name="description" content="Shijoni mijëra filma dhe seriale HD në shqip me titra të plotë. ALBATV është platforma më e mirë për streaming shqiptar me kontent të përditësuar çdo ditë.">
-    <meta name="keywords" content="filma shqip, seriale shqip, streaming shqiptar, filma me titra shqip, ALBATV, film online, seriale online, HD shqip">
+    <meta name="keywords" content="filma shqip, seriale shqip, streaming shqiptar, filma me titra shqip, ALBATV, film online, seriale online, HD shqip, film jugosllav, ex yu filmovi">
     <meta name="author" content="ALBATV">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
@@ -14,7 +14,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://albatv.com/">
     <meta property="og:title" content="ALBATV - Premium Streaming Shqiptar">
-    <meta property="og:description" content="Shijoni mijëra filma dhe seriale HD në shqip me titra të plotë. Platforma më e mirë për streaming shqiptar.">
+    <meta property="og:description" content="Shijoni mijëra filma dhe seriale HD në shqip me titra të plotë. Platforma më e mirë për streaming shqiptar me filmat jugosllavë.">
     <meta property="og:image" content="https://albatv.com/images/og-image.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -24,7 +24,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://albatv.com/">
     <meta name="twitter:title" content="ALBATV - Premium Streaming Shqiptar">
-    <meta name="twitter:description" content="Shijoni mijëra filma dhe seriale HD në shqip me titra të plotë.">
+    <meta name="twitter:description" content="Shijoni mijëra filma dhe seriale HD në shqip me titra të plotë. Me filmat klasikë jugosllavë.">
     <meta name="twitter:image" content="https://albatv.com/images/twitter-image.jpg">
     
     <!-- Apple Touch Icons -->
@@ -45,1055 +45,31 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-body {
-    background: #0a0a0a;
-    color: #fff;
-    min-height: 100vh;
-    overflow-x: hidden;
-    line-height: 1.6;
-}
-
-/* Header */
-.header {
-    background: linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 100%);
-    padding: 0;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    box-shadow: 0 2px 20px rgba(229,9,20,0.3);
-    backdrop-filter: blur(10px);
-}
-
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 28px;
-    font-weight: 800;
-    cursor: pointer;
-}
-
-.logo-icon {
-    color: #e50914;
-    font-size: 32px;
-    animation: pulse 2s infinite;
-}
-
-.logo-text {
-    background: linear-gradient(90deg, #e50914, #ff0000);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.logo-subtitle {
-    font-size: 11px;
-    color: #ff6b6b;
-    letter-spacing: 1.5px;
-    margin-top: 2px;
-}
-
-/* Navigation */
-.main-nav {
-    background: rgba(0,0,0,0.9);
-    padding: 12px 30px;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    display: flex;
-    gap: 25px;
-    overflow-x: auto;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-.nav-link {
-    color: #ccc;
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    padding: 8px 0;
-    white-space: nowrap;
-    position: relative;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.nav-link:hover {
-    color: #fff;
-}
-
-.nav-link.active {
-    color: #e50914;
-}
-
-.nav-link.active::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: #e50914;
-    border-radius: 2px;
-}
-
-/* Hero Section */
-.hero-section {
-    margin-top: 120px;
-    padding: 40px 30px;
-    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
-                url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
-    background-size: cover;
-    background-position: center;
-    border-radius: 20px;
-    margin: 120px 30px 40px;
-    max-width: 1400px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.hero-title {
-    font-size: 48px;
-    font-weight: 900;
-    margin-bottom: 20px;
-    background: linear-gradient(90deg, #fff, #ff6b6b);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    line-height: 1.2;
-}
-
-.hero-subtitle {
-    font-size: 20px;
-    color: #ccc;
-    max-width: 600px;
-    margin-bottom: 40px;
-    line-height: 1.6;
-}
-
-.cta-buttons {
-    display: flex;
-    gap: 20px;
-    margin-top: 30px;
-}
-
-.cta-button {
-    padding: 15px 30px;
-    border-radius: 30px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    border: none;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.cta-button.primary {
-    background: #e50914;
-    color: white;
-}
-
-.cta-button.primary:hover {
-    background: #ff0000;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(229,9,20,0.3);
-}
-
-.cta-button.secondary {
-    background: transparent;
-    color: white;
-    border: 2px solid rgba(255,255,255,0.3);
-}
-
-.cta-button.secondary:hover {
-    border-color: #e50914;
-    background: rgba(229,9,20,0.1);
-}
-
-/* Stats */
-.stats {
-    display: flex;
-    gap: 40px;
-    margin-top: 40px;
-    flex-wrap: wrap;
-}
-
-.stat-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.stat-number {
-    font-size: 36px;
-    font-weight: 800;
-    color: #e50914;
-    margin-bottom: 5px;
-}
-
-.stat-label {
-    font-size: 14px;
-    color: #999;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* Categories */
-.categories-section {
-    padding: 0 30px 40px;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-.section-title {
-    font-size: 28px;
-    font-weight: 800;
-    margin-bottom: 25px;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.section-title i {
-    color: #e50914;
-    font-size: 26px;
-}
-
-/* Category Grid */
-.categories-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 20px;
-    margin-bottom: 40px;
-}
-
-.category-card {
-    background: linear-gradient(135deg, #141414, #1a1a1a);
-    border-radius: 12px;
-    overflow: hidden;
-    text-decoration: none;
-    transition: all 0.3s;
-    border: 1px solid #333;
-    height: 200px;
-    position: relative;
-}
-
-.category-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(229,9,20,0.3);
-    border-color: #e50914;
-}
-
-.category-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.7;
-    transition: opacity 0.3s;
-}
-
-.category-card:hover img {
-    opacity: 1;
-}
-
-.category-card .overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(transparent, rgba(0,0,0,0.9));
-    padding: 20px;
-}
-
-.category-card .category-title {
-    color: #fff;
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 5px;
-}
-
-.category-card .category-count {
-    color: #ff6b6b;
-    font-size: 13px;
-}
-
-/* Featured Content */
-.featured-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 25px;
-    margin-bottom: 40px;
-}
-
-.featured-card {
-    background: #141414;
-    border-radius: 12px;
-    overflow: hidden;
-    transition: all 0.3s;
-    border: 1px solid #333;
-    height: 320px;
-    position: relative;
-    cursor: pointer;
-}
-
-.featured-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(229,9,20,0.4);
-    border-color: #e50914;
-}
-
-.featured-card img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-}
-
-.featured-card .rating {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    background: linear-gradient(135deg, gold, #ffd700);
-    color: #000;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.featured-card .type-badge {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: #e50914;
-    color: white;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: bold;
-}
-
-.featured-card .card-content {
-    padding: 15px;
-}
-
-.featured-card .card-title {
-    font-size: 15px;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: #fff;
-    line-height: 1.3;
-    height: 40px;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-}
-
-.featured-card .card-year {
-    font-size: 13px;
-    color: #ff6b6b;
-    background: rgba(229,9,20,0.1);
-    padding: 4px 10px;
-    border-radius: 15px;
-    display: inline-block;
-    margin-top: 5px;
-    border: 1px solid rgba(229,9,20,0.3);
-}
-
-/* Movies Container */
-.movies-container {
-    padding: 30px;
-    margin-top: 20px;
-    background: #0a0a0a;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-.movies-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.movies-header h2 {
-    font-size: 32px;
-    color: #fff;
-    font-weight: 800;
-}
-
-/* Search Container */
-.search-container {
-    position: relative;
-    max-width: 400px;
-    width: 100%;
-}
-
-.search-input {
-    padding: 14px 20px 14px 50px;
-    border-radius: 30px;
-    border: 2px solid #333;
-    background: rgba(255,255,255,0.1);
-    color: white;
-    font-size: 16px;
-    width: 100%;
-    transition: all 0.3s;
-}
-
-.search-input:focus {
-    outline: none;
-    border-color: #e50914;
-    box-shadow: 0 0 20px rgba(229,9,20,0.3);
-}
-
-.search-icon {
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #ff6b6b;
-    font-size: 18px;
-    cursor: pointer;
-}
-
-/* Filter Buttons */
-.filter-buttons {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
-}
-
-.filter-btn {
-    padding: 10px 25px;
-    border-radius: 25px;
-    border: 2px solid #333;
-    background: rgba(255,255,255,0.05);
-    color: #ccc;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    transition: all 0.3s;
-}
-
-.filter-btn:hover {
-    background: rgba(229,9,20,0.1);
-    border-color: #e50914;
-    color: #fff;
-}
-
-.filter-btn.active {
-    background: #e50914;
-    border-color: #e50914;
-    color: #fff;
-}
-
-/* Movies Grid */
-.movies-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 25px;
-}
-
-.movie-card {
-    background: #141414;
-    border-radius: 12px;
-    overflow: hidden;
-    transition: all 0.4s;
-    border: 1px solid #333;
-    height: 380px;
-    position: relative;
-    cursor: pointer;
-}
-
-.movie-card:hover {
-    transform: translateY(-10px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(229,9,20,0.4);
-    border-color: #e50914;
-}
-
-.movie-card img {
-    width: 100%;
-    height: 280px;
-    object-fit: cover;
-    border-bottom: 1px solid #333;
-}
-
-.movie-card .rating {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    background: linear-gradient(135deg, gold, #ffd700);
-    color: #000;
-    padding: 8px 15px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.movie-card .type-badge {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: #e50914;
-    color: white;
-    padding: 8px 15px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.movie-card .card-content {
-    padding: 20px;
-}
-
-.movie-card .card-title {
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 10px;
-    color: #fff;
-    line-height: 1.3;
-    height: 44px;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-}
-
-.movie-card .card-year {
-    font-size: 14px;
-    color: #ff6b6b;
-    background: rgba(229,9,20,0.1);
-    padding: 6px 12px;
-    border-radius: 20px;
-    display: inline-block;
-    margin-top: 8px;
-    border: 1px solid rgba(229,9,20,0.3);
-}
-
-/* Shqip Badge */
-.shqip-badge {
-    background: #8B0000 !important;
-    display: flex !important;
-    align-items: center;
-    gap: 5px;
-}
-
-/* Player Modal */
-.player-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.95);
-    z-index: 2000;
-}
-
-.modal-content {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.modal-header {
-    padding: 20px 30px;
-    background: rgba(0,0,0,0.9);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #333;
-}
-
-.modal-title {
-    font-size: 22px;
-    color: #fff;
-    font-weight: 700;
-}
-
-.close-modal {
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 5px;
-    transition: color 0.3s;
-}
-
-.close-modal:hover {
-    color: #e50914;
-}
-
-.modal-body {
-    flex: 1;
-    padding: 0;
-    position: relative;
-}
-
-#playerFrame {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
-
-/* Series Controls */
-.series-controls {
-    background: rgba(20,20,20,0.95);
-    padding: 20px;
-    border-bottom: 1px solid #333;
-    display: none;
-}
-
-.controls-container {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.control-group {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.control-label {
-    font-size: 12px;
-    color: #999;
-}
-
-.control-select {
-    padding: 10px 15px;
-    border-radius: 8px;
-    background: #333;
-    color: #fff;
-    border: 1px solid #444;
-    min-width: 150px;
-    font-size: 14px;
-}
-
-.play-btn {
-    padding: 12px 25px;
-    background: #e50914;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    cursor: pointer;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    transition: all 0.3s;
-}
-
-.play-btn:hover {
-    background: #ff0000;
-    transform: translateY(-2px);
-}
-
-/* Loading */
-.loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 18px;
-    color: #ff6b6b;
-    padding: 100px;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.loading i {
-    font-size: 42px;
-    color: #e50914;
-    animation: spin 2s linear infinite;
-}
-
-/* Source Selection */
-.sources-container {
-    background: rgba(20,20,20,0.95);
-    padding: 15px;
-    border-bottom: 1px solid #333;
-    display: none;
-}
-
-.sources-title {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 10px;
-    color: #fff;
-}
-
-.sources-buttons {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.source-btn {
-    padding: 8px 15px;
-    border-radius: 6px;
-    border: 1px solid #444;
-    background: #222;
-    color: #ccc;
-    cursor: pointer;
-    font-size: 13px;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.source-btn:hover {
-    background: #333;
-    border-color: #e50914;
-}
-
-.source-btn.active {
-    background: #e50914;
-    border-color: #e50914;
-    color: #fff;
-}
-
-/* Footer */
-.footer {
-    background: #0a0a0a;
-    padding: 60px 30px 30px;
-    border-top: 1px solid #333;
-    margin-top: 50px;
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 40px;
-    margin-bottom: 30px;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-.footer-section h3 {
-    font-size: 20px;
-    color: #fff;
-    margin-bottom: 20px;
-    font-weight: 700;
-}
-
-.footer-section p {
-    color: #999;
-    font-size: 15px;
-    line-height: 1.6;
-    margin-bottom: 15px;
-}
-
-.footer-links {
-    list-style: none;
-}
-
-.footer-links li {
-    margin-bottom: 12px;
-}
-
-.footer-links a {
-    color: #999;
-    text-decoration: none;
-    font-size: 15px;
-    transition: color 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.footer-links a:hover {
-    color: #e50914;
-}
-
-.social-links {
-    display: flex;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.social-link {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #222;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    text-decoration: none;
-    transition: all 0.3s;
-}
-
-.social-link:hover {
-    background: #e50914;
-    transform: translateY(-3px);
-}
-
-.footer-bottom {
-    text-align: center;
-    padding-top: 30px;
-    border-top: 1px solid #333;
-    color: #666;
-    font-size: 14px;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-/* Animations */
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
-
-.movie-card {
-    animation: fadeIn 0.5s ease-out;
-}
-
-/* Notification */
-.notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: #4CAF50;
-    color: white;
-    padding: 15px 20px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    z-index: 9999;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    animation: slideIn 0.3s ease-out;
-}
-
-.notification.error {
-    background: #e50914;
-}
-
-.notification.warning {
-    background: #ff9800;
-}
-
-.notification button {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 20px;
-    cursor: pointer;
-    padding: 0 0 0 10px;
-}
-
-@keyframes slideIn {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-}
-
-@keyframes slideOut {
-    from { transform: translateX(0); opacity: 1; }
-    to { transform: translateX(100%); opacity: 0; }
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-    width: 10px;
-}
-
-::-webkit-scrollbar-track {
-    background: #141414;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #e50914;
-    border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #ff0000;
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-    .header-content {
-        padding: 12px 20px;
-        flex-direction: column;
-        gap: 15px;
-    }
+     <link rel="stylesheet" href="style.css">
     
-    .hero-section {
-        margin: 100px 20px 30px;
-        padding: 30px 20px;
-        text-align: center;
+  <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "ALBATV Premium Streaming",
+      "url": "https://albatv.com",
+      "description": "Platforma më e mirë për streaming të filmit dhe serialeve në gjuhën shqipe me filmat klasikë jugosllavë",
+      "publisher": {
+        "@type": "Organization",
+        "name": "ALBATV",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://albatv.com/logo.png"
+        }
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://albatv.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
     }
-    
-    .hero-title {
-        font-size: 32px;
-    }
-    
-    .hero-subtitle {
-        font-size: 16px;
-    }
-    
-    .cta-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .main-nav {
-        padding: 10px 20px;
-        gap: 15px;
-    }
-    
-    .categories-section, .movies-container {
-        padding: 20px;
-    }
-    
-    .categories-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 15px;
-    }
-    
-    .featured-grid, .movies-grid {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        gap: 20px;
-    }
-    
-    .movie-card {
-        height: 360px;
-    }
-    
-    .movie-card img {
-        height: 260px;
-    }
-    
-    .modal-header {
-        padding: 15px 20px;
-    }
-    
-    .series-controls {
-        padding: 15px;
-    }
-    
-    .sources-container {
-        padding: 10px;
-    }
-    
-    .controls-container {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .control-select {
-        width: 100%;
-    }
-    
-    .footer {
-        padding: 40px 20px 20px;
-    }
-    
-    .footer-content {
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
-}
-
-@media (max-width: 480px) {
-    .categories-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .featured-grid, .movies-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .movie-card {
-        height: 340px;
-    }
-    
-    .movie-card img {
-        height: 240px;
-    }
-    
-    .stats {
-        justify-content: center;
-    }
-    
-    .stat-item {
-        min-width: 100px;
-    }
-}
-</style>
-
-<!-- JSON-LD Structured Data -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "ALBATV Premium Streaming",
-  "url": "https://albatv.com",
-  "description": "Platforma më e mirë për streaming të filmit dhe serialeve në gjuhën shqipe",
-  "publisher": {
-    "@type": "Organization",
-    "name": "ALBATV",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://albatv.com/logo.png"
-    }
-  },
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://albatv.com/search?q={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }
-}
-</script>
+    </script>
 </head>
 
 <body>
@@ -1116,6 +92,7 @@ body {
         <a href="#" class="nav-link" onclick="showSection('movies')"><i class="fas fa-film"></i> Filma</a>
         <a href="#" class="nav-link" onclick="showSection('series')"><i class="fas fa-tv"></i> Serialet</a>
         <a href="#" class="nav-link" onclick="showSection('shqip')"><i class="fas fa-flag"></i> Shqip</a>
+        <a href="#" class="nav-link" onclick="showSection('yu')"><i class="fas fa-star"></i> Jugosllav</a>
         <a href="#" class="nav-link" onclick="showSection('trending')"><i class="fas fa-fire"></i> Trending</a>
     </div>
 </div>
@@ -1124,14 +101,14 @@ body {
 <div id="home" class="section">
     <div class="hero-section">
         <h1 class="hero-title">ALBATV Premium Streaming</h1>
-        <p class="hero-subtitle">Shijoni mijëra filma dhe seriale HD të reja dhe klasike, të titulluara në shqip. Platforma më e mirë për argëtim shqiptar!</p>
+        <p class="hero-subtitle">Shijoni mijëra filma dhe seriale HD të reja dhe klasike, të titulluara në shqip. Platforma më e mirë për argëtim shqiptar me filmat klasikë jugosllavë!</p>
         
         <div class="cta-buttons">
             <button class="cta-button primary" onclick="showSection('movies')">
                 <i class="fas fa-play"></i> Filloni Tani
             </button>
-            <button class="cta-button secondary" onclick="showSection('trending')">
-                <i class="fas fa-fire"></i> Shiko Trending
+            <button class="cta-button secondary" onclick="showSection('yu')">
+                <i class="fas fa-star"></i> Film Jugosllavë
             </button>
         </div>
         
@@ -1142,11 +119,11 @@ body {
             </div>
             <div class="stat-item">
                 <div class="stat-number" id="seriesCount">2,000+</div>
-                <div class="stat-label">Seriale</div>
+                <div class="stat-label">Serialet</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number" id="userCount">50,000+</div>
-                <div class="stat-label">Përdorues</div>
+                <div class="stat-number" id="yuCount">500+</div>
+                <div class="stat-label">Film Jugosllavë</div>
             </div>
             <div class="stat-item">
                 <div class="stat-number">24/7</div>
@@ -1168,6 +145,13 @@ body {
             <div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar...</div>
         </div>
     </div>
+
+    <div class="categories-section">
+        <h2 class="section-title"><i class="fas fa-star"></i> Klasikë Jugosllavë</h2>
+        <div class="featured-grid" id="featuredYU">
+            <div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar filmat jugosllavë...</div>
+        </div>
+    </div>
 </div>
 
 <!-- Movies Section -->
@@ -1181,10 +165,11 @@ body {
             </div>
         </div>
         <div class="filter-buttons">
-            <button class="filter-btn active" onclick="filterMovies('all')">Të gjitha</button>
-            <button class="filter-btn" onclick="filterMovies('action')">Aksion</button>
-            <button class="filter-btn" onclick="filterMovies('comedy')">Komedi</button>
-            <button class="filter-btn" onclick="filterMovies('drama')">Dramë</button>
+            <button class="filter-btn active" onclick="filterContent('movies', 'all')">Të gjitha</button>
+            <button class="filter-btn" onclick="filterContent('movies', 'action')">Aksion</button>
+            <button class="filter-btn" onclick="filterContent('movies', 'comedy')">Komedi</button>
+            <button class="filter-btn" onclick="filterContent('movies', 'drama')">Dramë</button>
+            <button class="filter-btn" onclick="filterContent('movies', 'horror')">Horror</button>
         </div>
         <div class="movies-grid" id="moviesGrid">
             <div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar filmat...</div>
@@ -1203,10 +188,11 @@ body {
             </div>
         </div>
         <div class="filter-buttons">
-            <button class="filter-btn active" onclick="filterSeries('all')">Të gjitha</button>
-            <button class="filter-btn" onclick="filterSeries('drama')">Dramë</button>
-            <button class="filter-btn" onclick="filterSeries('comedy')">Komedi</button>
-            <button class="filter-btn" onclick="filterSeries('crime')">Krim</button>
+            <button class="filter-btn active" onclick="filterContent('series', 'all')">Të gjitha</button>
+            <button class="filter-btn" onclick="filterContent('series', 'drama')">Dramë</button>
+            <button class="filter-btn" onclick="filterContent('series', 'comedy')">Komedi</button>
+            <button class="filter-btn" onclick="filterContent('series', 'crime')">Krim</button>
+            <button class="filter-btn" onclick="filterContent('series', 'fantasy')">Fantazi</button>
         </div>
         <div class="movies-grid" id="seriesGrid">
             <div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar serialet...</div>
@@ -1236,6 +222,29 @@ body {
     </div>
 </div>
 
+<!-- Jugosllav Section -->
+<div id="yu" class="section" style="display:none;">
+    <div class="movies-container">
+        <div class="movies-header">
+            <h2><i class="fas fa-star"></i> Jugoslovenski filmovi (Ex Yu movies)</h2>
+            <div class="search-container">
+                <input type="text" class="search-input" id="yuSearch" placeholder="Kërko film jugosllav...">
+                <i class="fas fa-search search-icon" onclick="performSearch(document.getElementById('yuSearch').value, 'yuSearch')"></i>
+            </div>
+        </div>
+        <div class="filter-buttons">
+            <button class="filter-btn active" onclick="filterYU('all')">Të gjitha</button>
+            <button class="filter-btn" onclick="filterYU('classic')">Klasikë</button>
+            <button class="filter-btn" onclick="filterYU('war')">Luftë</button>
+            <button class="filter-btn" onclick="filterYU('comedy')">Komedi</button>
+            <button class="filter-btn" onclick="filterYU('drama')">Dramë</button>
+        </div>
+        <div class="movies-grid" id="yuGrid">
+            <div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar filmat jugosllavë...</div>
+        </div>
+    </div>
+</div>
+
 <!-- Trending Section -->
 <div id="trending" class="section" style="display:none;">
     <div class="movies-container">
@@ -1250,6 +259,7 @@ body {
             <button class="filter-btn active" onclick="filterTrending('all')">Të gjitha</button>
             <button class="filter-btn" onclick="filterTrending('today')">Sot</button>
             <button class="filter-btn" onclick="filterTrending('week')">Këtë javë</button>
+            <button class="filter-btn" onclick="filterTrending('month')">Këtë muaj</button>
         </div>
         <div class="movies-grid" id="trendingGrid">
             <div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar trendin...</div>
@@ -1257,7 +267,7 @@ body {
     </div>
 </div>
 
-<!-- Player Modal -->
+<!-- Player Modal për filmat/serialet -->
 <div class="player-modal" id="playerModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -1282,6 +292,8 @@ body {
                         <option value="1">Sezoni 1</option>
                         <option value="2">Sezoni 2</option>
                         <option value="3">Sezoni 3</option>
+                        <option value="4">Sezoni 4</option>
+                        <option value="5">Sezoni 5</option>
                     </select>
                 </div>
                 <div class="control-group">
@@ -1290,6 +302,8 @@ body {
                         <option value="1">Episodi 1</option>
                         <option value="2">Episodi 2</option>
                         <option value="3">Episodi 3</option>
+                        <option value="4">Episodi 4</option>
+                        <option value="5">Episodi 5</option>
                     </select>
                 </div>
                 <button class="play-btn" onclick="playSelectedEpisode()">
@@ -1304,12 +318,25 @@ body {
     </div>
 </div>
 
+<!-- YouTube Player Modal për filmat shqiptar -->
+<div class="youtube-modal" id="youtubeModal">
+    <div class="youtube-content">
+        <div class="youtube-header">
+            <h2 class="youtube-title" id="youtubeTitle">FILM SHQIP</h2>
+            <button class="close-modal" onclick="closeYouTubePlayer()">&times;</button>
+        </div>
+        <div class="youtube-body">
+            <iframe class="youtube-iframe" id="youtubeIframe" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
 <!-- Footer -->
 <div class="footer">
     <div class="footer-content">
         <div class="footer-section">
             <h3>ALBATV</h3>
-            <p>Platforma më e mirë për streaming të filmit dhe serialeve në gjuhën shqipe. Kontent i pasur dhe i përditësuar çdo ditë.</p>
+            <p>Platforma më e mirë për streaming të filmit dhe serialeve në gjuhën shqipe. Kontent i pasur dhe i përditësuar çdo ditë me filmat klasikë jugosllavë.</p>
         </div>
         <div class="footer-section">
             <h3>Kategoritë</h3>
@@ -1317,6 +344,7 @@ body {
                 <li><a href="#" onclick="showSection('movies')">Filma</a></li>
                 <li><a href="#" onclick="showSection('series')">Serialet</a></li>
                 <li><a href="#" onclick="showSection('shqip')">Kontent Shqiptar</a></li>
+                <li><a href="#" onclick="showSection('yu')">Film Jugosllavë</a></li>
                 <li><a href="#" onclick="showSection('trending')">Trending</a></li>
             </ul>
         </div>
@@ -1331,894 +359,6 @@ body {
     </div>
 </div>
 
-<script>
-// ==================== KONFIGURIMET ====================
-// VENDOS API KEY TUAJ KËTU
-const TMDB_API_KEY = "dc375cc5d8355f3483fe6fa990736b0e"; // Zëvendëso me API Key të vërtetë
-const TMDB_BASE_URL = "https://api.themoviedb.org/3";
-
-// YouTube Playlist ID për filmat shqiptare
-const YOUTUBE_PLAYLIST_ID = "PLSuBYEvhw1pCENZXNW5XHUww1VrusPxLh";
-
-// Burimet e video (Streaming APIs)
-const VIDEO_SOURCES = {
-    vidsrc: {
-        name: "VidSrc",
-        baseUrl: "https://vidsrc.to/embed/movie/", // Për filmat
-        baseUrlTv: "https://vidsrc.to/embed/tv/",   // Për serialet
-        type: "embed"
-    },
-    smashy: {
-        name: "Smashy",
-        baseUrl: "https://smashy.stream/movie/",
-        baseUrlTv: "https://smashy.stream/tv/",
-        type: "embed"
-    },
-    vidsrcme: {
-        name: "VidSrc.me",
-        baseUrl: "https://vidsrc.me/embed/",
-        type: "embed"
-    }
-};
-
-// ==================== VARIABLA GLOBALE ====================
-let allMovies = [];
-let allSeries = [];
-let shqipMovies = [];
-let currentMovieData = null;
-let currentSeriesData = null;
-let currentSources = [];
-
-// ==================== FUNKSIONE NDIHMËSE ====================
-function getImageUrl(path, size = 'w500') {
-    if (!path) return 'https://images.unsplash.com/photo-1535016120720-40c646be5580?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80';
-    return `https://image.tmdb.org/t/p/${size}${path}`;
-}
-
-function escapeQuote(text) {
-    if (!text) return '';
-    return text
-        .replace(/\\/g, '\\\\')
-        .replace(/'/g, "\\'")
-        .replace(/"/g, '\\"')
-        .replace(/\n/g, '\\n')
-        .replace(/\r/g, '\\r')
-        .replace(/\t/g, '\\t');
-}
-
-function showNotification(message, type = 'info') {
-    const existingNotification = document.querySelector('.notification');
-    if (existingNotification) {
-        existingNotification.remove();
-    }
-    
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.innerHTML = `
-        <i class="fas fa-${type === 'error' ? 'exclamation-triangle' : type === 'warning' ? 'exclamation-circle' : 'info-circle'}"></i>
-        <span>${message}</span>
-        <button onclick="this.parentElement.remove()">&times;</button>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        if (notification.parentElement) {
-            notification.style.animation = 'slideOut 0.3s ease-out';
-            setTimeout(() => notification.remove(), 300);
-        }
-    }, 5000);
-}
-
-function showSection(sectionId) {
-    const sections = ['home', 'movies', 'series', 'shqip', 'trending'];
-    sections.forEach(id => {
-        const section = document.getElementById(id);
-        if(section) section.style.display = 'none';
-    });
-    
-    const section = document.getElementById(sectionId);
-    if(section) section.style.display = 'block';
-    
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.classList.remove('active');
-    });
-    
-    document.querySelectorAll('.nav-link').forEach(link => {
-        if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(sectionId)) {
-            link.classList.add('active');
-        }
-    });
-}
-
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-function animateCounter(elementId, target, duration) {
-    const element = document.getElementById(elementId);
-    if (!element) return;
-    
-    let start = 0;
-    const increment = target / (duration / 16);
-    let current = 0;
-    
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            element.textContent = target.toLocaleString() + '+';
-            clearInterval(timer);
-        } else {
-            element.textContent = Math.floor(current).toLocaleString() + '+';
-        }
-    }, 16);
-}
-
-function addToWatchHistory(title, year, type, id) {
-    try {
-        let watchHistory = JSON.parse(localStorage.getItem('albatv_watch_history')) || [];
-        
-        const watchItem = {
-            title: title,
-            year: year,
-            type: type,
-            id: id,
-            timestamp: new Date().toISOString()
-        };
-        
-        watchHistory.unshift(watchItem);
-        watchHistory = watchHistory.slice(0, 50);
-        
-        localStorage.setItem('albatv_watch_history', JSON.stringify(watchHistory));
-        
-        console.log(`Shtuar në historik: ${title}`);
-    } catch (error) {
-        console.error("Gabim në ruajtjen e historikut:", error);
-    }
-}
-
-// ==================== FUNKSIONET PËR API ====================
-async function fetchTMDBData(endpoint, params = {}) {
-    try {
-        const defaultParams = {
-            api_key: TMDB_API_KEY,
-            language: 'en-US',
-            ...params
-        };
-        
-        const queryString = new URLSearchParams(defaultParams).toString();
-        const url = `${TMDB_BASE_URL}${endpoint}?${queryString}`;
-        
-        console.log(`Duke kërkuar: ${url}`);
-        
-        const response = await fetch(url);
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        return await response.json();
-    } catch (error) {
-        console.error(`Gabim në fetchTMDBData për ${endpoint}:`, error);
-        throw error;
-    }
-}
-
-// ==================== NGARKIMI I TË DHËNAVE ====================
-async function loadFeaturedContent() {
-    try {
-        showNotification('Duke ngarkuar përmbajtjen...', 'info');
-        
-        // Ngarko filmat e popullarizuara
-        const moviesData = await fetchTMDBData('/movie/popular', { page: 1 });
-        
-        const featuredMoviesGrid = document.getElementById('featuredMovies');
-        if (featuredMoviesGrid) {
-            featuredMoviesGrid.innerHTML = moviesData.results.slice(0, 6).map(movie => `
-                <div class="featured-card" onclick="playMovie(${movie.id}, '${escapeQuote(movie.title)}', '${movie.release_date?.slice(0,4) || ''}')">
-                    <img src="${getImageUrl(movie.poster_path)}" alt="${movie.title}" loading="lazy">
-                    <div class="rating"><i class="fas fa-star"></i> ${movie.vote_average.toFixed(1)}</div>
-                    <div class="type-badge">FILM</div>
-                    <div class="card-content">
-                        <div class="card-title">${movie.title}</div>
-                        <div class="card-year">${movie.release_date?.slice(0,4) || 'N/A'}</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        // Ngarko serialet e popullarizuara
-        const seriesData = await fetchTMDBData('/tv/popular', { page: 1 });
-        
-        const featuredSeriesGrid = document.getElementById('featuredSeries');
-        if (featuredSeriesGrid) {
-            featuredSeriesGrid.innerHTML = seriesData.results.slice(0, 6).map(series => `
-                <div class="featured-card" onclick="playTVSeries(${series.id}, '${escapeQuote(series.name)}', '${series.first_air_date?.slice(0,4) || ''}')">
-                    <img src="${getImageUrl(series.poster_path)}" alt="${series.name}" loading="lazy">
-                    <div class="rating"><i class="fas fa-star"></i> ${series.vote_average.toFixed(1)}</div>
-                    <div class="type-badge">SERI</div>
-                    <div class="card-content">
-                        <div class="card-title">${series.name}</div>
-                        <div class="card-year">${series.first_air_date?.slice(0,4) || 'N/A'}</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        showNotification('Përmbajtja u ngarkua me sukses!', 'info');
-        
-    } catch(error) {
-        console.error("Gabim në ngarkimin e përmbajtjes kryesore:", error);
-        showNotification('Gabim në ngarkimin e të dhënave. Ju lutem kontrolloni API Key.', 'error');
-        showDemoContent();
-    }
-}
-
-async function loadAllMovies(page = 1) {
-    try {
-        const moviesGrid = document.getElementById('moviesGrid');
-        if (!moviesGrid) return;
-        
-        moviesGrid.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar filmat...</div>';
-        
-        const moviesData = await fetchTMDBData('/movie/popular', { page: page });
-        
-        allMovies = moviesData.results;
-        
-        moviesGrid.innerHTML = allMovies.map(movie => `
-            <div class="movie-card" onclick="playMovie(${movie.id}, '${escapeQuote(movie.title)}', '${movie.release_date?.slice(0,4) || ''}')">
-                <img src="${getImageUrl(movie.poster_path)}" alt="${movie.title}" loading="lazy">
-                <div class="rating"><i class="fas fa-star"></i> ${movie.vote_average.toFixed(1)}</div>
-                <div class="type-badge">FILM</div>
-                <div class="card-content">
-                    <div class="card-title">${movie.title}</div>
-                    <div class="card-year">${movie.release_date?.slice(0,4) || 'N/A'}</div>
-                </div>
-            </div>
-        `).join('');
-        
-    } catch(error) {
-        console.error("Gabim në ngarkimin e filmave:", error);
-        showError('moviesGrid', 'Gabim në ngarkim të filmave. Ju lutem kontrolloni API Key.');
-    }
-}
-
-async function loadAllSeries(page = 1) {
-    try {
-        const seriesGrid = document.getElementById('seriesGrid');
-        if (!seriesGrid) return;
-        
-        seriesGrid.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar serialet...</div>';
-        
-        const seriesData = await fetchTMDBData('/tv/popular', { page: page });
-        
-        allSeries = seriesData.results;
-        
-        seriesGrid.innerHTML = allSeries.map(series => `
-            <div class="movie-card" onclick="playTVSeries(${series.id}, '${escapeQuote(series.name)}', '${series.first_air_date?.slice(0,4) || ''}')">
-                <img src="${getImageUrl(series.poster_path)}" alt="${series.name}" loading="lazy">
-                <div class="rating"><i class="fas fa-star"></i> ${series.vote_average.toFixed(1)}</div>
-                <div class="type-badge">SERI</div>
-                <div class="card-content">
-                    <div class="card-title">${series.name}</div>
-                    <div class="card-year">${series.first_air_date?.slice(0,4) || 'N/A'}</div>
-                </div>
-            </div>
-        `).join('');
-        
-    } catch(error) {
-        console.error("Gabim në ngarkimin e serialeve:", error);
-        showError('seriesGrid', 'Gabim në ngarkim të serialeve. Ju lutem kontrolloni API Key.');
-    }
-}
-
-// ==================== FILMAT SHQIPTARE ====================
-function getDemoShqipMovies() {
-    return [
-        {
-            videoId: 'cbhgvrJfLx8',
-            title: "BESNIKERIA DHE BUJARIA- ( WITH ENGLISH SUBTITLES ) OFFICIAL MOVIE [HD]",
-            year: '2019',
-            thumbnail: 'https://i.ytimg.com/vi/cbhgvrJfLx8/hqdefault.jpg',
-            rating: '8.2',
-            description: "BESNIKERIA DHE BUJARIA- ( WITH ENGLISH SUBTITLES ) OFFICIAL MOVIE [HD]",
-            duration: '98 min'
-        },
-        {
-            videoId: 'a8Ol-g13zAQ',
-            title: "Zonja nga qyteti / Madam from the city",
-            year: '1980',
-            thumbnail: 'https://i.ytimg.com/vi/a8Ol-g13zAQ/hqdefault.jpg',
-            rating: '8.2',
-            description: 'Zonja nga qyteti / Madam from the city (Film Shqiptar)',
-            duration: '98 min'
-        },
-        {
-            videoId: 'Q8aFkR5VKuM',
-            title: 'A friend from Village / Movie Year 1980',
-            year: '1980',
-            thumbnail: 'https://i.ytimg.com/vi/Q8aFkR5VKuM/hqdefault.jpg',
-            rating: '7.8',
-            description: 'A friend from Village / Movie Year 1980',
-            duration: '105 min'
-        },
-        {
-            videoId: 'wHDRtwM6gUU',
-            title: 'Cifti i lumtur (Film Shqiptar)',
-            year: '1976',
-            thumbnail: 'https://img.youtube.com/vi/wHDRtwM6gUU/maxresdefault.jpg',
-            rating: '8.0',
-            description: 'Cifti i lumtur (Film Shqiptar)',
-            duration: '112 min'
-        },
-        {
-            videoId: 'eAUOydt6H44',
-            title: 'Feste e madhe (Film Dokumentar)',
-            year: '1981',
-            thumbnail: 'https://img.youtube.com/vi/eAUOydt6H44/maxresdefault.jpg',
-            rating: '8.5',
-            description: 'Feste e madhe (Film Dokumentar)',
-            duration: '95 min'
-        },
-        {
-            videoId: 'FktxciPxG54',
-            title: 'Besa e kuqe (Film Shqiptar)',
-            year: '1982',
-            thumbnail: 'https://img.youtube.com/vi/FktxciPxG54/maxresdefault.jpg',
-            rating: '7.5',
-            description: 'Besa e kuqe (Film Shqiptar)',
-            duration: '88 min'
-        },
-        {
-            videoId: 'eB_lZBCfe9Y',
-            title: 'Fraktura (Film Shqiptar)',
-            year: '1983',
-            thumbnail: 'https://img.youtube.com/vi/eB_lZBCfe9Y/maxresdefault.jpg',
-            rating: '8.1',
-            description: 'Fraktura (Film Shqiptar)',
-            duration: '102 min'
-        },
-        {
-            videoId: 'xi3va550WP4',
-            title: 'Kur zbardhi nje dite',
-            year: '2016',
-            thumbnail: 'https://img.youtube.com/vi/xi3va550WP4/maxresdefault.jpg',
-            rating: '7.9',
-            description: 'Kur zbardhi nje dite',
-            duration: '96 min'
-        }
-    ];
-}
-
-function loadShqipContentFromPlaylist() {
-    const shqipGrid = document.getElementById('shqipGrid');
-    if (!shqipGrid) return;
-    
-    shqipGrid.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar filmat shqiptare...</div>';
-    
-    shqipMovies = getDemoShqipMovies();
-    
-    setTimeout(() => {
-        shqipGrid.innerHTML = shqipMovies.map((movie, index) => `
-            <div class="movie-card" onclick="playShqipMovie('${movie.videoId}', '${escapeQuote(movie.title)}', '${movie.year}', ${index})">
-                <img src="${movie.thumbnail}" alt="${movie.title}" loading="lazy">
-                <div class="rating"><i class="fas fa-star"></i> ${movie.rating}</div>
-                <div class="type-badge shqip-badge"><i class="fas fa-flag"></i> SHQIP</div>
-                <div class="card-content">
-                    <div class="card-title">${movie.title}</div>
-                    <div class="card-year">${movie.year}</div>
-                </div>
-            </div>
-        `).join('');
-    }, 500);
-}
-
-// ==================== PLAYER FUNKSIONET ====================
-async function playMovie(movieId, movieTitle, movieYear = '') {
-    console.log(`Duke luajtur filmin: ${movieTitle} (ID: ${movieId})`);
-    
-    currentMovieData = { id: movieId, title: movieTitle, year: movieYear, type: 'movie' };
-    currentSeriesData = null;
-    
-    const modal = document.getElementById('playerModal');
-    const playerTitle = document.getElementById('playerTitle');
-    const seriesControls = document.getElementById('seriesControls');
-    const sourcesContainer = document.getElementById('sourcesContainer');
-    
-    seriesControls.style.display = 'none';
-    sourcesContainer.style.display = 'block';
-    
-    playerTitle.textContent = movieTitle;
-    
-    modal.style.display = 'block';
-    document.body.style.overflow = 'hidden';
-    
-    await loadMovieSources(movieId, movieTitle, movieYear);
-}
-
-async function playTVSeries(seriesId, seriesTitle, seriesYear = '') {
-    console.log(`Duke luajtur serialin: ${seriesTitle} (ID: ${seriesId})`);
-    
-    currentSeriesData = { id: seriesId, title: seriesTitle, year: seriesYear, type: 'series' };
-    currentMovieData = null;
-    
-    const modal = document.getElementById('playerModal');
-    const playerTitle = document.getElementById('playerTitle');
-    const seriesControls = document.getElementById('seriesControls');
-    const sourcesContainer = document.getElementById('sourcesContainer');
-    
-    seriesControls.style.display = 'flex';
-    sourcesContainer.style.display = 'block';
-    
-    playerTitle.textContent = seriesTitle;
-    
-    modal.style.display = 'block';
-    document.body.style.overflow = 'hidden';
-    
-    await loadSeriesSources(seriesId, seriesTitle, seriesYear);
-}
-
-function playShqipMovie(videoId, title, year, index = 0) {
-    console.log(`Duke luajtur filmin shqiptar: ${title} (${year})`);
-    
-    currentMovieData = { id: videoId, title: title, year: year, type: 'shqip' };
-    currentSeriesData = null;
-    
-    const modal = document.getElementById('playerModal');
-    const playerTitle = document.getElementById('playerTitle');
-    const seriesControls = document.getElementById('seriesControls');
-    const sourcesContainer = document.getElementById('sourcesContainer');
-    
-    seriesControls.style.display = 'none';
-    sourcesContainer.style.display = 'none';
-    
-    playerTitle.textContent = `${title} (${year}) - FILM SHQIP`;
-    
-    const playerFrame = document.getElementById('playerFrame');
-    
-    playerFrame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3`;
-    
-    modal.style.display = 'block';
-    document.body.style.overflow = 'hidden';
-    
-    addToWatchHistory(title, year, 'shqip', videoId);
-}
-
-async function loadMovieSources(movieId, movieTitle, movieYear) {
-    const sourcesButtons = document.getElementById('sourcesButtons');
-    sourcesButtons.innerHTML = '<div style="color:#ccc; padding:10px;">Duke ngarkuar burimet...</div>';
-    
-    currentSources = [
-        {
-            id: 'vidsrc',
-            name: 'VidSrc',
-            url: `${VIDEO_SOURCES.vidsrc.baseUrl}${movieId}`,
-            type: 'embed'
-        },
-        {
-            id: 'smashy',
-            name: 'Smashy',
-            url: `${VIDEO_SOURCES.smashy.baseUrl}${movieId}`,
-            type: 'embed'
-        },
-        {
-            id: 'vidsrcme',
-            name: 'VidSrc.me',
-            url: `${VIDEO_SOURCES.vidsrcme.baseUrl}?tmdb=${movieId}`,
-            type: 'embed'
-        }
-    ];
-    
-    sourcesButtons.innerHTML = currentSources.map((source, index) => `
-        <button class="source-btn ${index === 0 ? 'active' : ''}" 
-                onclick="loadSource('${source.id}', '${source.type}')">
-            <i class="fas fa-play-circle"></i> ${source.name}
-        </button>
-    `).join('');
-    
-    if (currentSources.length > 0) {
-        loadSource(currentSources[0].id, currentSources[0].type);
-    }
-}
-
-async function loadSeriesSources(seriesId, seriesTitle, seriesYear) {
-    const sourcesButtons = document.getElementById('sourcesButtons');
-    sourcesButtons.innerHTML = '<div style="color:#ccc; padding:10px;">Duke ngarkuar burimet...</div>';
-    
-    currentSources = [
-        {
-            id: 'vidsrc',
-            name: 'VidSrc',
-            url: `${VIDEO_SOURCES.vidsrc.baseUrlTv}${seriesId}/1/1`,
-            type: 'embed'
-        },
-        {
-            id: 'smashy',
-            name: 'Smashy',
-            url: `${VIDEO_SOURCES.smashy.baseUrlTv}${seriesId}/1/1`,
-            type: 'embed'
-        },
-        {
-            id: 'vidsrcme',
-            name: 'VidSrc.me',
-            url: `${VIDEO_SOURCES.vidsrcme.baseUrl}?tmdb=${seriesId}`,
-            type: 'embed'
-        }
-    ];
-    
-    sourcesButtons.innerHTML = currentSources.map((source, index) => `
-        <button class="source-btn ${index === 0 ? 'active' : ''}" 
-                onclick="loadSource('${source.id}', '${source.type}')">
-            <i class="fas fa-play-circle"></i> ${source.name}
-        </button>
-    `).join('');
-    
-    if (currentSources.length > 0) {
-        loadSource(currentSources[0].id, currentSources[0].type);
-    }
-}
-
-function loadSource(sourceId, sourceType) {
-    const playerFrame = document.getElementById('playerFrame');
-    const source = currentSources.find(s => s.id === sourceId);
-    
-    if (!source) return;
-    
-    document.querySelectorAll('.source-btn').forEach(btn => btn.classList.remove('active'));
-    const sourceBtn = document.querySelector(`.source-btn[onclick*="${sourceId}"]`);
-    if (sourceBtn) {
-        sourceBtn.classList.add('active');
-    }
-    
-    if (sourceType === 'embed') {
-        playerFrame.src = source.url;
-    } else {
-        window.open(source.url, '_blank');
-    }
-    
-    console.log(`Duke ngarkuar burimin: ${source.name}`);
-}
-
-function playSelectedEpisode() {
-    if (!currentSeriesData) return;
-    
-    const seasonSelect = document.getElementById('seasonSelect');
-    const episodeSelect = document.getElementById('episodeSelect');
-    const playerFrame = document.getElementById('playerFrame');
-    
-    const season = seasonSelect.value;
-    const episode = episodeSelect.value;
-    
-    const activeSource = currentSources.find(source => {
-        const btn = document.querySelector(`.source-btn[onclick*="${source.id}"]`);
-        return btn && btn.classList.contains('active');
-    });
-    
-    if (activeSource && activeSource.id === 'vidsrc') {
-        playerFrame.src = `${VIDEO_SOURCES.vidsrc.baseUrlTv}${currentSeriesData.id}/${season}/${episode}`;
-    } else if (activeSource && activeSource.id === 'smashy') {
-        playerFrame.src = `${VIDEO_SOURCES.smashy.baseUrlTv}${currentSeriesData.id}/${season}/${episode}`;
-    }
-    
-    console.log(`Duke luajtur Sezon ${season}, Episod ${episode}`);
-}
-
-function closePlayer() {
-    const modal = document.getElementById('playerModal');
-    if (modal) {
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-        
-        const playerFrame = document.getElementById('playerFrame');
-        playerFrame.src = '';
-        
-        currentMovieData = null;
-        currentSeriesData = null;
-        currentSources = [];
-    }
-}
-
-// ==================== SEARCH FUNKSIONET ====================
-function setupSearch() {
-    const searchInputs = ['mainSearch', 'movieSearch', 'seriesSearch', 'trendingSearch', 'shqipSearch'];
-    
-    searchInputs.forEach(inputId => {
-        const input = document.getElementById(inputId);
-        if (input) {
-            input.addEventListener('input', debounce(function() {
-                performSearch(this.value, inputId);
-            }, 500));
-            
-            input.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    performSearch(this.value, inputId);
-                }
-            });
-        }
-    });
-}
-
-async function performSearch(query, sourceId) {
-    if (!query || query.length < 2) {
-        resetSearchView(sourceId);
-        return;
-    }
-    
-    console.log(`Kërkim për: "${query}" në ${sourceId}`);
-    
-    try {
-        let searchResults = [];
-        
-        if (sourceId === 'movieSearch' || sourceId === 'mainSearch') {
-            const data = await fetchTMDBData('/search/movie', { query: query });
-            searchResults = data.results || [];
-            
-            const grid = document.getElementById('moviesGrid');
-            if (grid) {
-                displaySearchResults(searchResults, grid, 'movie');
-            }
-        }
-        else if (sourceId === 'seriesSearch') {
-            const data = await fetchTMDBData('/search/tv', { query: query });
-            searchResults = data.results || [];
-            
-            const grid = document.getElementById('seriesGrid');
-            if (grid) {
-                displaySearchResults(searchResults, grid, 'series');
-            }
-        }
-        else if (sourceId === 'shqipSearch') {
-            searchResults = shqipMovies.filter(movie => 
-                movie.title.toLowerCase().includes(query.toLowerCase()) ||
-                movie.description.toLowerCase().includes(query.toLowerCase())
-            );
-            
-            const grid = document.getElementById('shqipGrid');
-            if (grid) {
-                if (searchResults.length === 0) {
-                    grid.innerHTML = `
-                        <div style="grid-column: 1/-1; text-align:center; padding:60px; color:#ff6b6b;">
-                            <i class="fas fa-search" style="font-size:48px;"></i>
-                            <h3>Nuk u gjet asnjë film shqiptar</h3>
-                        </div>
-                    `;
-                } else {
-                    grid.innerHTML = searchResults.map((movie, index) => `
-                        <div class="movie-card" onclick="playShqipMovie('${movie.videoId}', '${escapeQuote(movie.title)}', '${movie.year}', ${index})">
-                            <img src="${movie.thumbnail}" alt="${movie.title}" loading="lazy">
-                            <div class="rating"><i class="fas fa-star"></i> ${movie.rating}</div>
-                            <div class="type-badge shqip-badge"><i class="fas fa-flag"></i> SHQIP</div>
-                            <div class="card-content">
-                                <div class="card-title">${movie.title}</div>
-                                <div class="card-year">${movie.year}</div>
-                            </div>
-                        </div>
-                    `).join('');
-                }
-            }
-        }
-        
-    } catch(error) {
-        console.error("Gabim në kërkim:", error);
-        showNotification('Gabim në kërkim. Ju lutem provoni përsëri.', 'error');
-    }
-}
-
-function displaySearchResults(results, grid, type) {
-    if (results.length === 0) {
-        grid.innerHTML = `
-            <div style="grid-column: 1/-1; text-align:center; padding:60px; color:#ff6b6b;">
-                <i class="fas fa-search" style="font-size:48px;"></i>
-                <h3>Nuk u gjet asnjë rezultat</h3>
-            </div>
-        `;
-        return;
-    }
-    
-    grid.innerHTML = results.map(item => {
-        const isMovie = type === 'movie';
-        const title = item.title || item.name;
-        const year = (item.release_date || item.first_air_date)?.slice(0,4) || 'N/A';
-        const posterPath = item.poster_path || '';
-        
-        return `
-            <div class="movie-card" onclick="${isMovie ? `playMovie(${item.id}, '${escapeQuote(title)}', '${year}')` : `playTVSeries(${item.id}, '${escapeQuote(title)}', '${year}')`}">
-                <img src="${getImageUrl(posterPath)}" alt="${title}" loading="lazy">
-                <div class="rating"><i class="fas fa-star"></i> ${item.vote_average?.toFixed(1) || 'N/A'}</div>
-                <div class="type-badge">${isMovie ? 'FILM' : 'SERI'}</div>
-                <div class="card-content">
-                    <div class="card-title">${title}</div>
-                    <div class="card-year">${year}</div>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-
-function resetSearchView(sourceId) {
-    switch(sourceId) {
-        case 'movieSearch':
-            loadAllMovies();
-            break;
-        case 'seriesSearch':
-            loadAllSeries();
-            break;
-        case 'shqipSearch':
-            loadShqipContentFromPlaylist();
-            break;
-        case 'trendingSearch':
-            loadTrending();
-            break;
-    }
-}
-
-// ==================== FILTRIMI ====================
-function filterMovies(category) {
-    const filterBtns = document.querySelectorAll('#movies + .movies-container .filter-buttons .filter-btn');
-    
-    filterBtns.forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
-    
-    console.log(`Duke filtruar filmat sipas: ${category}`);
-}
-
-function filterSeries(category) {
-    const filterBtns = document.querySelectorAll('#series + .movies-container .filter-buttons .filter-btn');
-    
-    filterBtns.forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
-    
-    console.log(`Duke filtruar serialet sipas: ${category}`);
-}
-
-function filterShqip(category) {
-    const filterBtns = document.querySelectorAll('#shqip + .movies-container .filter-buttons .filter-btn');
-    
-    filterBtns.forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
-    
-    setTimeout(() => {
-        loadShqipContentFromPlaylist();
-    }, 300);
-}
-
-function filterTrending(category) {
-    const filterBtns = document.querySelectorAll('#trending + .movies-container .filter-buttons .filter-btn');
-    
-    filterBtns.forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
-    
-    console.log(`Duke filtruar trending sipas: ${category}`);
-}
-
-// ==================== TRENDING ====================
-async function loadTrending() {
-    try {
-        const trendingGrid = document.getElementById('trendingGrid');
-        if (!trendingGrid) return;
-        
-        trendingGrid.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar trendin...</div>';
-        
-        const data = await fetchTMDBData('/trending/all/day');
-        
-        trendingGrid.innerHTML = data.results.slice(0, 12).map(item => {
-            const isMovie = item.media_type === 'movie';
-            const title = item.title || item.name;
-            const year = (item.release_date || item.first_air_date)?.slice(0,4) || 'N/A';
-            
-            return `
-                <div class="movie-card" onclick="${isMovie ? `playMovie(${item.id}, '${escapeQuote(title)}', '${year}')` : `playTVSeries(${item.id}, '${escapeQuote(title)}', '${year}')`}">
-                    <img src="${getImageUrl(item.poster_path)}" alt="${title}" loading="lazy">
-                    <div class="rating"><i class="fas fa-fire" style="color: #ff6b6b;"></i> ${item.vote_average.toFixed(1)}</div>
-                    <div class="type-badge" style="background: #ff6b6b;">TRENDING</div>
-                    <div class="card-content">
-                        <div class="card-title">${title}</div>
-                        <div class="card-year">${year} • ${isMovie ? 'FILM' : 'SERIAL'}</div>
-                    </div>
-                </div>
-            `;
-        }).join('');
-        
-    } catch(error) {
-        console.error("Gabim në ngarkimin e trendit:", error);
-        showError('trendingGrid', 'Gabim në ngarkimin e trendit');
-    }
-}
-
-// ==================== FUNKSIONE DEMO ====================
-function showDemoContent() {
-    const featuredMoviesGrid = document.getElementById('featuredMovies');
-    const featuredSeriesGrid = document.getElementById('featuredSeries');
-    
-    if (featuredMoviesGrid) {
-        featuredMoviesGrid.innerHTML = `
-            <div class="featured-card" onclick="showNotification('Funksioni demo - Ju lutem vendosni API Key të vërtetë', 'warning')">
-                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Demo">
-                <div class="rating"><i class="fas fa-star"></i> 8.0</div>
-                <div class="type-badge">FILM</div>
-                <div class="card-content">
-                    <div class="card-title">Vendosni API Key për të dhëna reale</div>
-                    <div class="card-year">Demo</div>
-                </div>
-            </div>
-        `;
-    }
-}
-
-function showError(elementId, message) {
-    const element = document.getElementById(elementId);
-    if (element) {
-        element.innerHTML = `
-            <div style="grid-column: 1/-1; text-align:center; padding:60px; color:#ff6b6b;">
-                <i class="fas fa-exclamation-triangle" style="font-size:48px;"></i>
-                <h3>${message}</h3>
-                <p style="color:#999; margin-top:10px;">Ju lutem vendosni API Key të vërtetë në kod</p>
-                <p style="color:#999; font-size:12px;">Hapni console (F12) për më shumë detaje</p>
-            </div>
-        `;
-    }
-}
-
-// ==================== INICIALIZIMI ====================
-document.addEventListener('DOMContentLoaded', function() {
-    console.log("ALBATV Premium Streaming u ngarkua");
-    
-    // Kontrollo për API Key
-    if (!TMDB_API_KEY || TMDB_API_KEY === "YOUR_TMDB_API_KEY_HERE") {
-        console.error("API Key nuk është vendosur!");
-        showNotification('API Key nuk është vendosur. Ju lutem vendosni TMDB API Key tuaj.', 'error');
-        showDemoContent();
-    } else {
-        console.log("API Key u gjet, duke ngarkuar të dhënat...");
-        loadFeaturedContent();
-        loadAllMovies();
-        loadAllSeries();
-        loadTrending();
-    }
-    
-    loadShqipContentFromPlaylist();
-    setupEventListeners();
-    setupSearch();
-    
-    // Animoj statistikat
-    setTimeout(() => {
-        animateCounter('movieCount', 10000, 3000);
-        animateCounter('seriesCount', 2000, 2500);
-        animateCounter('userCount', 50000, 3500);
-    }, 1000);
-});
-
-function setupEventListeners() {
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closePlayer();
-        }
-    });
-    
-    document.getElementById('playerModal')?.addEventListener('click', function(e) {
-        if (e.target === this) {
-            closePlayer();
-        }
-    });
-    
-    window.addEventListener('click', function(e) {
-        const modal = document.getElementById('playerModal');
-        if (e.target === modal) {
-            closePlayer();
-        }
-    });
-}
-
-console.log("ALBATV Premium Streaming u ngarkua me sukses!");
-console.log("Versioni: 3.0 - Me API të vërtetë");
-</script>
-</body>  
+<script src="script.js"></script>
+</body>
 </html>
