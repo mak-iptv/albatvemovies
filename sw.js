@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'albatv-cache-v1';
+const CACHE_NAME = 'alba-film.vercel.app';
 const urlsToCache = [
   '/',
   '/index.html',
