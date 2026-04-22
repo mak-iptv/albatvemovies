@@ -6,8 +6,8 @@ const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 const VIDEO_SOURCES = {
     vidsrc: {
         name: "VidSrc",
-        baseUrl: "https://vidsrc.to/embed/movie/",
-        baseUrlTv: "https://vidsrc.to/embed/tv/",
+        baseUrl: "https://vsembed.ru/embed/movie/",
+        baseUrlTv: "https://vsembed.ru/embed/tv/",
         type: "embed"
     },
     smashy: {
@@ -18,7 +18,7 @@ const VIDEO_SOURCES = {
     },
     vidsrcme: {
         name: "VidSrc.me",
-        baseUrl: "https://vidsrc.me/embed/",
+        baseUrl: "https://vsembed.ru/embed/",
         type: "embed"
     }
 };
