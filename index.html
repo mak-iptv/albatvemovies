@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>ALBATV Premium | Filma & Seriale HD Shqip + Jugosllav</title>
     
-    <!-- PWA Meta - versioni i ri (mobile-web-app-capable) -->
+    <!-- PWA Meta -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -81,14 +81,9 @@
 
 <script src="script.js"></script>
 <script>
-    // Regjistrimi i Service Worker për PWA
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js').then(reg => {
-                console.log('Service Worker registered:', reg);
-            }).catch(err => {
-                console.log('Service Worker registration failed:', err);
-            });
+            navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration failed:', err));
         });
     }
 </script>
