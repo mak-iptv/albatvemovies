@@ -398,3 +398,11 @@ body {
     .movies-grid, .featured-grid { grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); }
     .search-input { width: 100%; }
 }
+
+/* ... pjesa tjetër e CSS ... */
+@media (max-width: 768px) {
+    .header-content { flex-direction: column; align-items: stretch; }
+    .hero-title { font-size: 2rem; }
+    .movies-grid, .featured-grid { grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); }
+    .search-input { width: 100%; }
+}
