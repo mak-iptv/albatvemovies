@@ -22,6 +22,11 @@
 </head>
 <body>
 
+<!-- Butoni i instalimit (i fshehur fillimisht) -->
+<div id="installButton" class="install-btn" style="display: none;">
+    <i class="fas fa-download"></i> Instalo Aplikacionin
+</div>
+
 <div class="header">
     <div class="header-content">
         <div class="logo" onclick="showSection('home')">
@@ -46,7 +51,7 @@
     </div>
 </div>
 
-<!-- Seksionet -->
+<!-- Seksionet (i njëjti kod si më parë) -->
 <div id="home" class="section">
     <div class="hero-section">
         <h1 class="hero-title">ALBATV Premium Streaming</h1>
@@ -81,9 +86,34 @@
 
 <script src="script.js"></script>
 <script>
+    // PWA Installation prompt
+    let deferredPrompt;
+    const installBtn = document.getElementById('installButton');
+    
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        if (installBtn) installBtn.style.display = 'flex';
+        console.log('beforeinstallprompt triggered');
+    });
+    
+    if (installBtn) {
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response: ${outcome}`);
+                deferredPrompt = null;
+                installBtn.style.display = 'none';
+            }
+        });
+    }
+    
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration failed:', err));
+            navigator.serviceWorker.register('/sw.js').then(reg => {
+                console.log('SW registered:', reg);
+            }).catch(err => console.log('SW failed:', err));
         });
     }
 </script>
