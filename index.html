@@ -1,16 +1,78 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>ALBATV Premium | Filma & Seriale HD Shqip + Jugosllav</title>
-    <link rel="stylesheet" href="style.css">
+    <title>ALBATV - Premium Streaming Shqiptar | Filma & Seriale HD</title>
+    
+    <!-- Meta Tags për SEO -->
+    <meta name="description" content="Shijoni mijëra filma dhe seriale HD në shqip me titra të plotë. ALBATV është platforma më e mirë për streaming shqiptar me kontent të përditësuar çdo ditë.">
+    <meta name="keywords" content="filma shqip, seriale shqip, streaming shqiptar, filma me titra shqip, ALBATV, film online, seriale online, HD shqip, film jugosllav, ex yu filmovi">
+    <meta name="author" content="ALBATV">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alba-film.vercel.app/">
+    <meta property="og:title" content="ALBATV - Premium Streaming Shqiptar">
+    <meta property="og:description" content="Shijoni mijëra filma dhe seriale HD në shqip me titra të plotë. Platforma më e mirë për streaming shqiptar me filmat jugosllavë.">
+    <meta property="og:image" content="https://alba-film.vercel.app/images/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="sq_AL">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://albatv.com/">
+    <meta name="twitter:title" content="ALBATV - Premium Streaming Shqiptar">
+    <meta name="twitter:description" content="Shijoni mijëra filma dhe seriale HD në shqip me titra të plotë. Me filmat klasikë jugosllavë.">
+    <meta name="twitter:image" content="https://albatv.com/images/twitter-image.jpg">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#e50914">
+    <meta name="msapplication-TileColor" content="#000000">
+    <meta name="theme-color" content="#000000">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://alba-film.vercel.app/">
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+     <link rel="stylesheet" href="style.css">
+    
+  <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "ALBATV Premium Streaming",
+      "url": "https://alba-film.vercel.app/",
+      "description": "Platforma më e mirë për streaming të filmit dhe serialeve në gjuhën shqipe me filmat klasikë jugosllavë",
+      "publisher": {
+        "@type": "Organization",
+        "name": "ALBATV",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://alba-film.vercel.app/logo.png"
+        }
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://alba-film.vercel.app/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
 </head>
-<body>
 
+<body>
 <div class="header">
     <div class="header-content">
         <div class="logo" onclick="showSection('home')">
@@ -26,47 +88,276 @@
         </div>
     </div>
     <div class="main-nav">
-        <a class="nav-link active" onclick="showSection('home')"><i class="fas fa-home"></i> Kryefaqja</a>
-        <a class="nav-link" onclick="showSection('movies')"><i class="fas fa-film"></i> Filma</a>
-        <a class="nav-link" onclick="showSection('series')"><i class="fas fa-tv"></i> Serialet</a>
-        <a class="nav-link" onclick="showSection('shqip')"><i class="fas fa-flag"></i> Shqip</a>
-        <a class="nav-link" onclick="showSection('yu')"><i class="fas fa-star"></i> Jugosllav</a>
-        <a class="nav-link" onclick="showSection('trending')"><i class="fas fa-fire"></i> Trending</a>
+        <a href="#" class="nav-link active" onclick="showSection('home')"><i class="fas fa-home"></i> Kryefaqja</a>
+        <a href="#" class="nav-link" onclick="showSection('movies')"><i class="fas fa-film"></i> Filma</a>
+        <a href="#" class="nav-link" onclick="showSection('series')"><i class="fas fa-tv"></i> Serialet</a>
+        <a href="#" class="nav-link" onclick="showSection('shqip')"><i class="fas fa-flag"></i> Shqip</a>
+        <a href="#" class="nav-link" onclick="showSection('yu')"><i class="fas fa-star"></i> Jugosllav</a>
+        <a href="#" class="nav-link" onclick="showSection('trending')"><i class="fas fa-fire"></i> Trending</a>
     </div>
 </div>
 
-<!-- Seksionet -->
+<!-- Home Section -->
 <div id="home" class="section">
     <div class="hero-section">
         <h1 class="hero-title">ALBATV Premium Streaming</h1>
         <p class="hero-subtitle">Shijoni mijëra filma dhe seriale HD të reja dhe klasike, të titulluara në shqip. Platforma më e mirë për argëtim shqiptar me filmat klasikë jugosllavë!</p>
+        
         <div class="cta-buttons">
-            <button class="cta-button primary" onclick="showSection('movies')"><i class="fas fa-play"></i> Filloni Tani</button>
-            <button class="cta-button secondary" onclick="showSection('yu')"><i class="fas fa-star"></i> Film Jugosllavë</button>
+            <button class="cta-button primary" onclick="showSection('movies')">
+                <i class="fas fa-play"></i> Filloni Tani
+            </button>
+            <button class="cta-button secondary" onclick="showSection('yu')">
+                <i class="fas fa-star"></i> Film Jugosllavë
+            </button>
         </div>
+        
         <div class="stats">
-            <div class="stat-item"><div class="stat-number" id="movieCount">0</div><div class="stat-label">Filma</div></div>
-            <div class="stat-item"><div class="stat-number" id="seriesCount">0</div><div class="stat-label">Serialet</div></div>
-            <div class="stat-item"><div class="stat-number" id="yuCount">0</div><div class="stat-label">Film Jugosllavë</div></div>
-            <div class="stat-item"><div class="stat-number">24/7</div><div class="stat-label">Disponueshmëri</div></div>
+            <div class="stat-item">
+                <div class="stat-number" id="movieCount">10,000+</div>
+                <div class="stat-label">Filma</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="seriesCount">2,000+</div>
+                <div class="stat-label">Serialet</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="yuCount">500+</div>
+                <div class="stat-label">Film Jugosllavë</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Disponueshmëri</div>
+            </div>
         </div>
     </div>
-    <div class="categories-section"><h2 class="section-title"><i class="fas fa-bolt"></i> Film të kërkuar</h2><div class="featured-grid" id="featuredMovies"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar...</div></div></div>
-    <div class="categories-section"><h2 class="section-title"><i class="fas fa-tv"></i> Serialet më të shikuara</h2><div class="featured-grid" id="featuredSeries"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar...</div></div></div>
-    <div class="categories-section"><h2 class="section-title"><i class="fas fa-star"></i> Klasikë Jugosllavë</h2><div class="featured-grid" id="featuredYU"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar filmat jugosllavë...</div></div></div>
+
+    <div class="categories-section">
+        <h2 class="section-title"><i class="fas fa-bolt"></i> Film të kërkuar</h2>
+        <div class="featured-grid" id="featuredMovies">
+            <div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar...</div>
+        </div>
+    </div>
+
+    <div class="categories-section">
+        <h2 class="section-title"><i class="fas fa-tv"></i> Serialet më të shikuara</h2>
+        <div class="featured-grid" id="featuredSeries">
+            <div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar...</div>
+        </div>
+    </div>
+
+    <div class="categories-section">
+        <h2 class="section-title"><i class="fas fa-star"></i> Klasikë Jugosllavë</h2>
+        <div class="featured-grid" id="featuredYU">
+            <div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar filmat jugosllavë...</div>
+        </div>
+    </div>
 </div>
 
-<div id="movies" class="section" style="display:none;"><div class="movies-container"><div class="movies-header"><h2>Të gjitha Filmat</h2><div class="search-container"><input type="text" class="search-input" id="movieSearch" placeholder="Kërko film..."><i class="fas fa-search search-icon" onclick="performSearch(document.getElementById('movieSearch').value, 'movieSearch')"></i></div></div><div class="filter-buttons" id="moviesFilters"></div><div class="movies-grid" id="moviesGrid"></div></div></div>
-<div id="series" class="section" style="display:none;"><div class="movies-container"><div class="movies-header"><h2>Të gjitha Serialet</h2><div class="search-container"><input type="text" class="search-input" id="seriesSearch" placeholder="Kërko serial..."><i class="fas fa-search search-icon" onclick="performSearch(document.getElementById('seriesSearch').value, 'seriesSearch')"></i></div></div><div class="filter-buttons" id="seriesFilters"></div><div class="movies-grid" id="seriesGrid"></div></div></div>
-<div id="shqip" class="section" style="display:none;"><div class="movies-container"><div class="movies-header"><h2><i class="fas fa-flag"></i> Kontent Shqiptar</h2><div class="search-container"><input type="text" class="search-input" id="shqipSearch" placeholder="Kërko kontent shqiptar..."><i class="fas fa-search search-icon" onclick="performSearch(document.getElementById('shqipSearch').value, 'shqipSearch')"></i></div></div><div class="filter-buttons" id="shqipFilters"></div><div class="movies-grid" id="shqipGrid"></div></div></div>
-<div id="yu" class="section" style="display:none;"><div class="movies-container"><div class="movies-header"><h2><i class="fas fa-star"></i> Jugoslovenski filmovi (Ex Yu)</h2><div class="search-container"><input type="text" class="search-input" id="yuSearch" placeholder="Kërko film jugosllav..."><i class="fas fa-search search-icon" onclick="performSearch(document.getElementById('yuSearch').value, 'yuSearch')"></i></div></div><div class="filter-buttons" id="yuFilters"></div><div class="movies-grid" id="yuGrid"></div></div></div>
-<div id="trending" class="section" style="display:none;"><div class="movies-container"><div class="movies-header"><h2><i class="fas fa-fire"></i> Trending sot</h2><div class="search-container"><input type="text" class="search-input" id="trendingSearch" placeholder="Kërko në trending..."><i class="fas fa-search search-icon" onclick="performSearch(document.getElementById('trendingSearch').value, 'trendingSearch')"></i></div></div><div class="filter-buttons" id="trendingFilters"></div><div class="movies-grid" id="trendingGrid"></div></div></div>
+<!-- Movies Section -->
+<div id="movies" class="section" style="display:none;">
+    <div class="movies-container">
+        <div class="movies-header">
+            <h2>Të gjitha Filmat</h2>
+            <div class="search-container">
+                <input type="text" class="search-input" id="movieSearch" placeholder="Kërko film...">
+                <i class="fas fa-search search-icon" onclick="performSearch(document.getElementById('movieSearch').value, 'movieSearch')"></i>
+            </div>
+        </div>
+        <div class="filter-buttons">
+            <button class="filter-btn active" onclick="filterContent('movies', 'all')">Të gjitha</button>
+            <button class="filter-btn" onclick="filterContent('movies', 'action')">Aksion</button>
+            <button class="filter-btn" onclick="filterContent('movies', 'comedy')">Komedi</button>
+            <button class="filter-btn" onclick="filterContent('movies', 'drama')">Dramë</button>
+            <button class="filter-btn" onclick="filterContent('movies', 'horror')">Horror</button>
+        </div>
+        <div class="movies-grid" id="moviesGrid">
+            <div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar filmat...</div>
+        </div>
+    </div>
+</div>
 
-<!-- Player Modals -->
-<div class="player-modal" id="playerModal"><div class="modal-content"><div class="modal-header"><h2 class="modal-title" id="playerTitle">ALBATV Player</h2><button class="close-modal" onclick="closePlayer()">&times;</button></div><div class="sources-container" id="sourcesContainer"><div class="sources-title">Zgjidhni burimin:</div><div class="sources-buttons" id="sourcesButtons"></div></div><div class="series-controls" id="seriesControls" style="display:none;"><div class="controls-container"><div class="control-group"><div class="control-label">Sezoni</div><select class="control-select" id="seasonSelect"></select></div><div class="control-group"><div class="control-label">Episodi</div><select class="control-select" id="episodeSelect"></select></div><button class="play-btn" onclick="playSelectedEpisode()"><i class="fas fa-play"></i> Luaj Episodin</button></div></div><div class="modal-body"><iframe id="playerFrame" allowfullscreen></iframe></div></div></div>
-<div class="youtube-modal" id="youtubeModal"><div class="youtube-content"><div class="youtube-header"><h2 class="youtube-title" id="youtubeTitle">FILM SHQIP</h2><button class="close-modal" onclick="closeYouTubePlayer()">&times;</button></div><div class="youtube-body"><iframe class="youtube-iframe" id="youtubeIframe" allowfullscreen></iframe></div></div></div>
+<!-- Series Section -->
+<div id="series" class="section" style="display:none;">
+    <div class="movies-container">
+        <div class="movies-header">
+            <h2>Të gjitha Serialet</h2>
+            <div class="search-container">
+                <input type="text" class="search-input" id="seriesSearch" placeholder="Kërko serial...">
+                <i class="fas fa-search search-icon" onclick="performSearch(document.getElementById('seriesSearch').value, 'seriesSearch')"></i>
+            </div>
+        </div>
+        <div class="filter-buttons">
+            <button class="filter-btn active" onclick="filterContent('series', 'all')">Të gjitha</button>
+            <button class="filter-btn" onclick="filterContent('series', 'drama')">Dramë</button>
+            <button class="filter-btn" onclick="filterContent('series', 'comedy')">Komedi</button>
+            <button class="filter-btn" onclick="filterContent('series', 'crime')">Krim</button>
+            <button class="filter-btn" onclick="filterContent('series', 'fantasy')">Fantazi</button>
+        </div>
+        <div class="movies-grid" id="seriesGrid">
+            <div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar serialet...</div>
+        </div>
+    </div>
+</div>
 
-<div class="footer"><div class="footer-content"><div class="footer-section"><h3>ALBATV</h3><p>Platforma më e mirë për streaming shqiptar. Mbi 10,000 filma dhe seriale.</p></div><div class="footer-section"><h3>Kategoritë</h3><ul class="footer-links"><li><a onclick="showSection('movies')">Filma</a></li><li><a onclick="showSection('series')">Serialet</a></li><li><a onclick="showSection('yu')">Jugosllavë</a></li></ul></div><div class="footer-section"><h3>Kontakt</h3><p><i class="fas fa-envelope"></i> info@albatv.com</p></div></div><div class="footer-bottom"><p>&copy; 2024 ALBATV Premium Streaming.</p></div></div>
+<!-- Shqip Section -->
+<div id="shqip" class="section" style="display:none;">
+    <div class="movies-container">
+        <div class="movies-header">
+            <h2><i class="fas fa-flag"></i> Kontent Shqiptar</h2>
+            <div class="search-container">
+                <input type="text" class="search-input" id="shqipSearch" placeholder="Kërko kontent shqiptar...">
+                <i class="fas fa-search search-icon" onclick="performSearch(document.getElementById('shqipSearch').value, 'shqipSearch')"></i>
+            </div>
+        </div>
+        <div class="filter-buttons">
+            <button class="filter-btn active" onclick="filterShqip('all')">Të gjitha</button>
+            <button class="filter-btn" onclick="filterShqip('movies')">Filma</button>
+            <button class="filter-btn" onclick="filterShqip('series')">Serialet</button>
+            <button class="filter-btn" onclick="filterShqip('classic')">Klasikë</button>
+        </div>
+        <div class="movies-grid" id="shqipGrid">
+            <div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar kontentin shqiptar...</div>
+        </div>
+    </div>
+</div>
+
+<!-- Jugosllav Section -->
+<div id="yu" class="section" style="display:none;">
+    <div class="movies-container">
+        <div class="movies-header">
+            <h2><i class="fas fa-star"></i> Jugoslovenski filmovi (Ex Yu movies)</h2>
+            <div class="search-container">
+                <input type="text" class="search-input" id="yuSearch" placeholder="Kërko film jugosllav...">
+                <i class="fas fa-search search-icon" onclick="performSearch(document.getElementById('yuSearch').value, 'yuSearch')"></i>
+            </div>
+        </div>
+        <div class="filter-buttons">
+            <button class="filter-btn active" onclick="filterYU('all')">Të gjitha</button>
+            <button class="filter-btn" onclick="filterYU('classic')">Klasikë</button>
+            <button class="filter-btn" onclick="filterYU('war')">Luftë</button>
+            <button class="filter-btn" onclick="filterYU('comedy')">Komedi</button>
+            <button class="filter-btn" onclick="filterYU('drama')">Dramë</button>
+        </div>
+        <div class="movies-grid" id="yuGrid">
+            <div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar filmat jugosllavë...</div>
+        </div>
+    </div>
+</div>
+
+<!-- Trending Section -->
+<div id="trending" class="section" style="display:none;">
+    <div class="movies-container">
+        <div class="movies-header">
+            <h2><i class="fas fa-fire"></i> Trending sot</h2>
+            <div class="search-container">
+                <input type="text" class="search-input" id="trendingSearch" placeholder="Kërko në trending...">
+                <i class="fas fa-search search-icon" onclick="performSearch(document.getElementById('trendingSearch').value, 'trendingSearch')"></i>
+            </div>
+        </div>
+        <div class="filter-buttons">
+            <button class="filter-btn active" onclick="filterTrending('all')">Të gjitha</button>
+            <button class="filter-btn" onclick="filterTrending('today')">Sot</button>
+            <button class="filter-btn" onclick="filterTrending('week')">Këtë javë</button>
+            <button class="filter-btn" onclick="filterTrending('month')">Këtë muaj</button>
+        </div>
+        <div class="movies-grid" id="trendingGrid">
+            <div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar trendin...</div>
+        </div>
+    </div>
+</div>
+
+<!-- Player Modal për filmat/serialet -->
+<div class="player-modal" id="playerModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title" id="playerTitle">ALBATV Player</h2>
+            <button class="close-modal" onclick="closePlayer()">&times;</button>
+        </div>
+        
+        <!-- Source Selection -->
+        <div class="sources-container" id="sourcesContainer">
+            <div class="sources-title">Zgjidhni burimin:</div>
+            <div class="sources-buttons" id="sourcesButtons">
+                <!-- Butonat e burimeve do të shtohen këtu -->
+            </div>
+        </div>
+        
+        <!-- Series Controls -->
+        <div class="series-controls" id="seriesControls">
+            <div class="controls-container">
+                <div class="control-group">
+                    <div class="control-label">Sezoni</div>
+                    <select class="control-select" id="seasonSelect">
+                        <option value="1">Sezoni 1</option>
+                        <option value="2">Sezoni 2</option>
+                        <option value="3">Sezoni 3</option>
+                        <option value="4">Sezoni 4</option>
+                        <option value="5">Sezoni 5</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">Episodi</div>
+                    <select class="control-select" id="episodeSelect">
+                        <option value="1">Episodi 1</option>
+                        <option value="2">Episodi 2</option>
+                        <option value="3">Episodi 3</option>
+                        <option value="4">Episodi 4</option>
+                        <option value="5">Episodi 5</option>
+                    </select>
+                </div>
+                <button class="play-btn" onclick="playSelectedEpisode()">
+                    <i class="fas fa-play"></i> Luaj Episodin
+                </button>
+            </div>
+        </div>
+        
+        <div class="modal-body">
+            <iframe id="playerFrame" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+<!-- YouTube Player Modal për filmat shqiptar -->
+<div class="youtube-modal" id="youtubeModal">
+    <div class="youtube-content">
+        <div class="youtube-header">
+            <h2 class="youtube-title" id="youtubeTitle">FILM SHQIP</h2>
+            <button class="close-modal" onclick="closeYouTubePlayer()">&times;</button>
+        </div>
+        <div class="youtube-body">
+            <iframe class="youtube-iframe" id="youtubeIframe" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h3>ALBATV</h3>
+            <p>Platforma më e mirë për streaming të filmit dhe serialeve në gjuhën shqipe. Kontent i pasur dhe i përditësuar çdo ditë me filmat klasikë jugosllavë.</p>
+        </div>
+        <div class="footer-section">
+            <h3>Kategoritë</h3>
+            <ul class="footer-links">
+                <li><a href="#" onclick="showSection('movies')">Filma</a></li>
+                <li><a href="#" onclick="showSection('series')">Serialet</a></li>
+                <li><a href="#" onclick="showSection('shqip')">Kontent Shqiptar</a></li>
+                <li><a href="#" onclick="showSection('yu')">Film Jugosllavë</a></li>
+                <li><a href="#" onclick="showSection('trending')">Trending</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Kontakt</h3>
+            <p><i class="fas fa-envelope"></i> info@albatv.com</p>
+            <p><i class="fas fa-phone"></i> +355 00 000 0000</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2024 ALBATV Premium Streaming. Të gjitha të drejtat e rezervuara.</p>
+    </div>
+</div>
 
 <script src="script.js"></script>
 </body>
