@@ -3,8 +3,8 @@ const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 
 const VIDEO_SOURCES = {
     vidsrc: { name: "VidSrc", baseUrl: "https://vsembed.ru/embed/movie/", baseUrlTv: "https://vsembed.ru/embed/tv/", type: "embed" },
-    smashy: { name: "Smashy", baseUrl: "https://smashy.stream/movie/", baseUrlTv: "https://smashy.stream/tv/", type: "embed" },
-    vidsrcme: { name: "VidSrc.me", baseUrl: "https://vsembed.ru/embed/", type: "embed" }
+    vidsrc: { name: "Smashy", baseUrl: "https://vidsrc.su/movie/", baseUrlTv: "https://vidsrc.su/tv/", type: "embed" },
+    vidsrcme: { name: "VidSrc.me", baseUrl: "https://vidsrc.su/embed/", type: "embed" }
 };
 
 let allMovies = [], allSeries = [], shqipMovies = [], yuMovies = [];
