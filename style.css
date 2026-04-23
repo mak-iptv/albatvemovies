@@ -379,12 +379,11 @@ body {
     color: #777;
 }
 
-
-/* Swiper custom styling - FIX */
+/* Swiper custom styling */
 .new-movies-swiper {
     width: 100%;
-    padding: 10px 0 50px 0;
-    overflow: visible;
+    padding: 10px 0 40px 0;
+    overflow: hidden;
 }
 .new-movies-swiper .swiper-slide {
     width: auto;
@@ -397,11 +396,10 @@ body {
 }
 .swiper-button-next, .swiper-button-prev {
     color: #e50914;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.5);
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    top: 40%;
 }
 .swiper-button-next:after, .swiper-button-prev:after {
     font-size: 20px;
@@ -409,10 +407,11 @@ body {
 .swiper-pagination-bullet-active {
     background: #e50914;
 }
-.swiper-pagination {
-    bottom: 0;
-}
 @media (max-width: 768px) {
+    .header { padding: 15px; }
+    .hero-title { font-size: 32px; }
+    .stats { gap: 25px; }
+    .categories-section, .movies-container { padding: 15px; }
     .new-movies-swiper .swiper-slide {
         max-width: 150px;
     }
