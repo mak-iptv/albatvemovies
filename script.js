@@ -10,6 +10,7 @@ const VIDEO_SOURCES = {
 let allMovies = [], allSeries = [], shqipMovies = [], yuMovies = [];
 let currentMovieData = null, currentSeriesData = null, currentSources = [];
 let currentSeason = 1, currentEpisode = 1;
+let newMoviesSwiper = null;
 
 function getImageUrl(path, size = 'w500') {
     return path ? `https://image.tmdb.org/t/p/${size}${path}` : 'https://images.unsplash.com/photo-1535016120720-40c646be5580?w=500&q=80';
@@ -147,6 +148,40 @@ async function populateEpisodes(seriesId, seasonNum) {
             currentEpisode = 1;
         }
     } catch (e) { console.error(e); }
+}
+
+// ========== NEW MOVIES SLIDER ==========
+async function loadNewMoviesSlider() {
+    const wrapper = document.getElementById('newMoviesSliderWrapper');
+    if (!wrapper) return;
+    try {
+        const data = await fetchTMDBData('/movie/now_playing', { page: 1 });
+        const movies = data.results.slice(0, 15);
+        wrapper.innerHTML = movies.map(m => `
+            <div class="swiper-slide">
+                <div class="movie-card" onclick="playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0, 4) || ''}')">
+                    <img src="${getImageUrl(m.poster_path)}" loading="lazy">
+                    <div class="rating"><i class="fas fa-star"></i> ${m.vote_average?.toFixed(1) || 'N/A'}</div>
+                    <div class="type-badge" style="background:#2c3e66;">NEW</div>
+                    <div class="card-content">
+                        <div class="card-title">${m.title}</div>
+                        <div class="card-year">${m.release_date?.slice(0, 4) || 'N/A'}</div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        if (window.newMoviesSwiper) window.newMoviesSwiper.destroy(true, true);
+        window.newMoviesSwiper = new Swiper('.new-movies-swiper', {
+            slidesPerView: 'auto',
+            spaceBetween: 20,
+            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+            pagination: { el: '.swiper-pagination', clickable: true },
+            breakpoints: { 0: { slidesPerView: 2, spaceBetween: 12 }, 640: { slidesPerView: 3 }, 1024: { slidesPerView: 5 } }
+        });
+    } catch (error) {
+        console.error(error);
+        wrapper.innerHTML = '<div class="loading">Dështoi ngarkimi i filmave të rinj</div>';
+    }
 }
 
 // ========== MAIN RENDERING ==========
@@ -390,8 +425,13 @@ function showSection(sectionId) {
     document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
     const activeLink = Array.from(document.querySelectorAll('.nav-link')).find(link => link.getAttribute('onclick')?.includes(`'${sectionId}'`));
     if (activeLink) activeLink.classList.add('active');
-    if (sectionId === 'home') { loadFeaturedContent(); animateCounter('movieCount', 10000, 3000); animateCounter('seriesCount', 2000, 2500); animateCounter('yuCount', 500, 2000); }
-    else if (sectionId === 'movies') loadAllMovies();
+    if (sectionId === 'home') {
+        loadFeaturedContent();
+        animateCounter('movieCount', 10000, 3000);
+        animateCounter('seriesCount', 2000, 2500);
+        animateCounter('yuCount', 500, 2000);
+        loadNewMoviesSlider();
+    } else if (sectionId === 'movies') loadAllMovies();
     else if (sectionId === 'series') loadAllSeries();
     else if (sectionId === 'shqip') loadShqipContent();
     else if (sectionId === 'yu') loadYUContent();
@@ -461,6 +501,7 @@ window.onload = () => {
     loadShqipContent();
     loadYUContent();
     loadTrending();
+    loadNewMoviesSlider();
     showSection('home');
     setupSearchEnter();
     ['movies', 'series', 'shqip', 'yu', 'trending'].forEach(s => {
