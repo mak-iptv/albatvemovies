@@ -2,7 +2,7 @@ const TMDB_API_KEY = "dc375cc5d8355f3483fe6fa990736b0e";
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 
 const VIDEO_SOURCES = {
-    vidsrc: { name: "VidSrc", baseUrl: "https://vidsrc.icu/embed/movie/", baseUrlTv: "https://vidsrc.icu/embed/tv/", type: "embed" },
+    vidsrc: { name: "VidSrc", baseUrl: "https://vidsrc-embed.ru/embed/movie/", baseUrlTv: "https://vidsrc-embed.ru/embed/tv/", type: "embed" },
     smashy: { name: "Smashy", baseUrl: "https://vidlink.pro/movie/", baseUrlTv: "https://vidlink.pro/tv/", type: "embed" },
     vidsrcme: { name: "VidSrc.me", baseUrl: "https://vidsrc.icu/embed/", type: "embed" }
 };
