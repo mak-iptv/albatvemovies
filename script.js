@@ -16,11 +16,52 @@ function getImageUrl(path, size = 'w500') {
     return path ? `https://image.tmdb.org/t/p/${size}${path}` : 'https://images.unsplash.com/photo-1535016120720-40c646be5580?w=500&q=80';
 }
 
-function escapeQuote(text) { ... }
-function showNotification(message, type = 'info') { ... }
-function animateCounter(elementId, target, duration) { ... }
-function addToWatchHistory(title, year, type, id) { ... }
-async function fetchTMDBData(endpoint, params = {}) { ... }
+function escapeQuote(text) {
+    if (!text) return '';
+    return text.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
+}
+
+function showNotification(message, type = 'info') {
+    const existing = document.querySelector('.notification');
+    if (existing) existing.remove();
+    const notif = document.createElement('div');
+    notif.className = `notification ${type}`;
+    notif.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i><span>${message}</span><button onclick="this.parentElement.remove()">&times;</button>`;
+    document.body.appendChild(notif);
+    setTimeout(() => { if (notif.parentElement) notif.remove(); }, 5000);
+}
+
+function animateCounter(elementId, target, duration) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    let start = 0, increment = target / (duration / 16), current = 0;
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+            el.textContent = target.toLocaleString() + '+';
+            clearInterval(timer);
+        } else {
+            el.textContent = Math.floor(current).toLocaleString() + '+';
+        }
+    }, 16);
+}
+
+function addToWatchHistory(title, year, type, id) {
+    try {
+        let history = JSON.parse(localStorage.getItem('albatv_watch_history')) || [];
+        history.unshift({ title, year, type, id, timestamp: new Date().toISOString() });
+        history = history.slice(0, 50);
+        localStorage.setItem('albatv_watch_history', JSON.stringify(history));
+    } catch (e) { }
+}
+
+async function fetchTMDBData(endpoint, params = {}) {
+    const defaultParams = { api_key: TMDB_API_KEY, language: 'en-US', ...params };
+    const url = `${TMDB_BASE_URL}${endpoint}?${new URLSearchParams(defaultParams)}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+}
 
 // ==================== FILMAT SHQIPTARE ====================
 function getShqipMovies() {
