@@ -104,8 +104,51 @@ function getYUMovies() {
 }
 
 // ========== SEASONS & EPISODES ==========
-async function loadSeriesSeasonsEpisodes(seriesId) { ... } // i njëjtë
-async function populateEpisodes(seriesId, seasonNum) { ... }
+sync function loadSeriesSeasonsEpisodes(seriesId) {
+    try {
+        const details = await fetchTMDBData(`/tv/${seriesId}`);
+        const seasonSelect = document.getElementById('seasonSelect');
+        const episodeSelect = document.getElementById('episodeSelect');
+        if (!seasonSelect) return;
+        seasonSelect.innerHTML = '';
+        details.seasons.forEach(season => {
+            if (season.season_number > 0 || season.season_number === 0) {
+                const option = document.createElement('option');
+                option.value = season.season_number;
+                option.textContent = `Sezoni ${season.season_number} (${season.episode_count} episode)`;
+                seasonSelect.appendChild(option);
+            }
+        });
+        if (seasonSelect.options.length) {
+            seasonSelect.value = 1;
+            await populateEpisodes(seriesId, 1);
+        }
+        seasonSelect.addEventListener('change', async () => {
+            const newSeason = parseInt(seasonSelect.value);
+            await populateEpisodes(seriesId, newSeason);
+        });
+    } catch (e) { console.error(e); showNotification('Dështoi ngarkimi i sezoneve', 'error'); }
+}
+
+async function populateEpisodes(seriesId, seasonNum) {
+    try {
+        const seasonData = await fetchTMDBData(`/tv/${seriesId}/season/${seasonNum}`);
+        const episodeSelect = document.getElementById('episodeSelect');
+        if (!episodeSelect) return;
+        episodeSelect.innerHTML = '';
+        seasonData.episodes.forEach(ep => {
+            const option = document.createElement('option');
+            option.value = ep.episode_number;
+            option.textContent = `Episodi ${ep.episode_number}: ${ep.name}`;
+            episodeSelect.appendChild(option);
+        });
+        if (episodeSelect.options.length) {
+            episodeSelect.value = 1;
+            currentSeason = seasonNum;
+            currentEpisode = 1;
+        }
+    } catch (e) { console.error(e); }
+}
 
 // ========== NEW MOVIES SLIDER (ME GABIME) ==========
 async function loadNewMoviesSlider() {
