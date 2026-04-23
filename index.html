@@ -4,25 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>ALBATV Premium | Filma & Seriale HD Shqip + Jugosllav</title>
-    
-    <!-- PWA Meta -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ALBATV">
     <meta name="application-name" content="ALBATV">
     <meta name="theme-color" content="#e50914">
-    
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icons/icon-192x192.png">
-    
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<!-- Butoni i instalimit (i fshehur fillimisht) -->
 <div id="installButton" class="install-btn" style="display: none;">
     <i class="fas fa-download"></i> Instalo Aplikacionin
 </div>
@@ -51,7 +46,6 @@
     </div>
 </div>
 
-<!-- Seksionet (i njëjti kod si më parë) -->
 <div id="home" class="section">
     <div class="hero-section">
         <h1 class="hero-title">ALBATV Premium Streaming</h1>
@@ -85,37 +79,5 @@
 <div class="footer"><div class="footer-content"><div class="footer-section"><h3>ALBATV</h3><p>Platforma më e mirë për streaming shqiptar. Mbi 10,000 filma dhe seriale.</p></div><div class="footer-section"><h3>Kategoritë</h3><ul class="footer-links"><li><a onclick="showSection('movies')">Filma</a></li><li><a onclick="showSection('series')">Serialet</a></li><li><a onclick="showSection('yu')">Jugosllavë</a></li></ul></div><div class="footer-section"><h3>Kontakt</h3><p><i class="fas fa-envelope"></i> info@albatv.com</p></div></div><div class="footer-bottom"><p>&copy; 2024 ALBATV Premium Streaming.</p></div></div>
 
 <script src="script.js"></script>
-<script>
-    // PWA Installation prompt
-    let deferredPrompt;
-    const installBtn = document.getElementById('installButton');
-    
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        if (installBtn) installBtn.style.display = 'flex';
-        console.log('beforeinstallprompt triggered');
-    });
-    
-    if (installBtn) {
-        installBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                console.log(`User response: ${outcome}`);
-                deferredPrompt = null;
-                installBtn.style.display = 'none';
-            }
-        });
-    }
-    
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js').then(reg => {
-                console.log('SW registered:', reg);
-            }).catch(err => console.log('SW failed:', err));
-        });
-    }
-</script>
 </body>
 </html>
