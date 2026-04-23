@@ -378,9 +378,41 @@ body {
     border-top: 1px solid #222;
     color: #777;
 }
+
+/* Swiper custom styling */
+.new-movies-swiper {
+    width: 100%;
+    padding: 10px 0 40px 0;
+    overflow: hidden;
+}
+.new-movies-swiper .swiper-slide {
+    width: auto;
+    max-width: 220px;
+    height: auto;
+}
+.new-movies-swiper .swiper-slide .movie-card {
+    margin: 0;
+    width: 100%;
+}
+.swiper-button-next, .swiper-button-prev {
+    color: #e50914;
+    background: rgba(0,0,0,0.5);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+.swiper-button-next:after, .swiper-button-prev:after {
+    font-size: 20px;
+}
+.swiper-pagination-bullet-active {
+    background: #e50914;
+}
 @media (max-width: 768px) {
     .header { padding: 15px; }
     .hero-title { font-size: 32px; }
     .stats { gap: 25px; }
     .categories-section, .movies-container { padding: 15px; }
+    .new-movies-swiper .swiper-slide {
+        max-width: 150px;
+    }
 }
