@@ -168,8 +168,10 @@ function displayYUPlayerInfo(movie) {
 }
 function playTrailerInPlayer(trailerKey) {
     const playerFrame = document.getElementById('playerFrame');
-    playerFrame.src = `https://www.youtube-nocookie.com/embed/${trailerKey}?autoplay=1`;
-    showNotification("Traileri po luhet. Mbyll player-in dhe rifresko për të vazhduar filmin.", "info");
+    if (playerFrame) {
+        playerFrame.src = `https://www.youtube-nocookie.com/embed/${trailerKey}?autoplay=1`;
+        showNotification("Traileri po luhet. Mbyll player-in dhe rifresko për të vazhduar filmin.", "info");
+    }
 }
 
 // ==================== PLAYER & SOURCES ====================
@@ -259,20 +261,28 @@ async function loadSeriesSeasonsEpisodes(seriesId) {
 function playMovie(id, title, year) {
     currentMovieData = { id, title, year, type: 'movie' };
     currentSeriesData = null;
-    document.getElementById('seriesControls').style.display = 'none';
-    document.getElementById('playerTitle').innerHTML = title;
-    document.getElementById('playerModal').style.display = 'flex';
-    document.getElementById('playerInfo').style.display = 'none';
+    const seriesControls = document.getElementById('seriesControls');
+    if (seriesControls) seriesControls.style.display = 'none';
+    const playerTitle = document.getElementById('playerTitle');
+    if (playerTitle) playerTitle.innerHTML = title;
+    const playerModal = document.getElementById('playerModal');
+    if (playerModal) playerModal.style.display = 'flex';
+    const playerInfo = document.getElementById('playerInfo');
+    if (playerInfo) playerInfo.style.display = 'none';
     loadMovieSources(id);
     addToWatchHistory(title, year, 'movie', id);
     displayPlayerInfo('movie', id, title);
 }
 function playTVSeries(id, title, year) {
     currentSeriesData = { id, title, year, type: 'series' };
-    document.getElementById('seriesControls').style.display = 'flex';
-    document.getElementById('playerTitle').innerHTML = title;
-    document.getElementById('playerModal').style.display = 'flex';
-    document.getElementById('playerInfo').style.display = 'none';
+    const seriesControls = document.getElementById('seriesControls');
+    if (seriesControls) seriesControls.style.display = 'flex';
+    const playerTitle = document.getElementById('playerTitle');
+    if (playerTitle) playerTitle.innerHTML = title;
+    const playerModal = document.getElementById('playerModal');
+    if (playerModal) playerModal.style.display = 'flex';
+    const playerInfo = document.getElementById('playerInfo');
+    if (playerInfo) playerInfo.style.display = 'none';
     loadSeriesSources(id);
     loadSeriesSeasonsEpisodes(id);
     addToWatchHistory(title, year, 'series', id);
@@ -284,15 +294,21 @@ function playShqipMovie(id) {
     let src = movie.sources[0];
     currentMovieData = { id: movie.id, title: movie.title, year: movie.year, type: 'shqip' };
     currentSeriesData = null;
-    document.getElementById('seriesControls').style.display = 'none';
-    document.getElementById('playerTitle').innerHTML = movie.title;
-    document.getElementById('playerModal').style.display = 'flex';
-    document.getElementById('playerInfo').style.display = 'none';
+    const seriesControls = document.getElementById('seriesControls');
+    if (seriesControls) seriesControls.style.display = 'none';
+    const playerTitle = document.getElementById('playerTitle');
+    if (playerTitle) playerTitle.innerHTML = movie.title;
+    const playerModal = document.getElementById('playerModal');
+    if (playerModal) playerModal.style.display = 'flex';
+    const playerInfo = document.getElementById('playerInfo');
+    if (playerInfo) playerInfo.style.display = 'none';
     const playerFrame = document.getElementById('playerFrame');
-    if (src.type === 'youtube') {
-        playerFrame.src = `https://www.youtube-nocookie.com/embed/${src.videoId}?autoplay=1`;
-    } else if (src.type === 'dailymotion') {
-        playerFrame.src = src.url;
+    if (playerFrame) {
+        if (src.type === 'youtube') {
+            playerFrame.src = `https://www.youtube-nocookie.com/embed/${src.videoId}?autoplay=1`;
+        } else if (src.type === 'dailymotion') {
+            playerFrame.src = src.url;
+        }
     }
     addToWatchHistory(movie.title, movie.year, 'shqip', id);
     displayShqipPlayerInfo(movie);
@@ -303,33 +319,46 @@ function playYUMovie(id) {
     let src = movie.sources[0];
     currentMovieData = { id: movie.id, title: movie.title, year: movie.year, type: 'yu' };
     currentSeriesData = null;
-    document.getElementById('seriesControls').style.display = 'none';
-    document.getElementById('playerTitle').innerHTML = movie.title;
-    document.getElementById('playerModal').style.display = 'flex';
-    document.getElementById('playerInfo').style.display = 'none';
+    const seriesControls = document.getElementById('seriesControls');
+    if (seriesControls) seriesControls.style.display = 'none';
+    const playerTitle = document.getElementById('playerTitle');
+    if (playerTitle) playerTitle.innerHTML = movie.title;
+    const playerModal = document.getElementById('playerModal');
+    if (playerModal) playerModal.style.display = 'flex';
+    const playerInfo = document.getElementById('playerInfo');
+    if (playerInfo) playerInfo.style.display = 'none';
     const playerFrame = document.getElementById('playerFrame');
-    if (src.type === 'youtube') {
-        playerFrame.src = `https://www.youtube-nocookie.com/embed/${src.videoId}?autoplay=1`;
-    } else if (src.type === 'dailymotion') {
-        playerFrame.src = src.url;
+    if (playerFrame) {
+        if (src.type === 'youtube') {
+            playerFrame.src = `https://www.youtube-nocookie.com/embed/${src.videoId}?autoplay=1`;
+        } else if (src.type === 'dailymotion') {
+            playerFrame.src = src.url;
+        }
     }
     addToWatchHistory(movie.title, movie.year, 'yu', id);
     displayYUPlayerInfo(movie);
 }
 function closePlayer() {
-    document.getElementById('playerModal').style.display = 'none';
-    document.getElementById('playerFrame').src = '';
-    document.getElementById('playerInfo').style.display = 'none';
-    document.getElementById('playerInfo').innerHTML = '';
+    const playerModal = document.getElementById('playerModal');
+    if (playerModal) playerModal.style.display = 'none';
+    const playerFrame = document.getElementById('playerFrame');
+    if (playerFrame) playerFrame.src = '';
+    const playerInfo = document.getElementById('playerInfo');
+    if (playerInfo) {
+        playerInfo.style.display = 'none';
+        playerInfo.innerHTML = '';
+    }
     currentMovieData = null;
     currentSeriesData = null;
 }
 function closeYouTubePlayer() {
-    document.getElementById('youtubeModal').style.display = 'none';
-    document.getElementById('youtubeIframe').src = '';
+    const youtubeModal = document.getElementById('youtubeModal');
+    if (youtubeModal) youtubeModal.style.display = 'none';
+    const youtubeIframe = document.getElementById('youtubeIframe');
+    if (youtubeIframe) youtubeIframe.src = '';
 }
 
-// ==================== RENDER FUNCTIONS (play icon center, info button) ====================
+// ==================== RENDER FUNCTIONS ====================
 async function loadNewMoviesSlider() {
     let wrapper = document.getElementById('newMoviesSliderWrapper');
     if (!wrapper) return;
@@ -488,10 +517,19 @@ async function loadTrending() {
     }).join('');
 }
 function showSection(sectionId) {
-    ['home','movies','series','shqip','yu','trending'].forEach(s => { let el = document.getElementById(s); if(el) el.style.display = 'none'; });
-    document.getElementById(sectionId).style.display = 'block';
+    const sections = ['home', 'movies', 'series', 'shqip', 'yu', 'trending'];
+    sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    });
+    const activeSection = document.getElementById(sectionId);
+    if (!activeSection) {
+        console.error(`Seksioni "${sectionId}" nuk u gjet në HTML.`);
+        return;
+    }
+    activeSection.style.display = 'block';
     document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-    let activeLink = Array.from(document.querySelectorAll('.nav-link')).find(link => link.getAttribute('onclick')?.includes(`'${sectionId}'`));
+    const activeLink = Array.from(document.querySelectorAll('.nav-link')).find(link => link.getAttribute('onclick')?.includes(`'${sectionId}'`));
     if (activeLink) activeLink.classList.add('active');
     if (sectionId === 'home') { loadFeaturedContent(); animateCounter('movieCount', 10000, 3000); animateCounter('seriesCount', 2000, 2500); animateCounter('yuCount', 500, 2000); loadNewMoviesSlider(); }
     else if (sectionId === 'movies') loadAllMovies();
@@ -559,9 +597,11 @@ function setupSearchEnter() {
         if (input) input.addEventListener('keypress', e => { if (e.key === 'Enter') performSearch(e.target.value, id); });
     });
 }
-window.onload = () => {
+document.addEventListener('DOMContentLoaded', () => {
     loadFeaturedContent(); loadAllMovies(); loadAllSeries(); loadShqipContent(); loadYUContent(); loadTrending(); loadNewMoviesSlider();
     showSection('home'); setupSearchEnter();
+});
+window.onload = () => {
     let deferredPrompt;
     window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; let btn = document.getElementById('installButton'); if(btn) btn.style.display = 'flex'; });
     document.getElementById('installButton')?.addEventListener('click', async () => { if(deferredPrompt) { deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; document.getElementById('installButton').style.display = 'none'; } });
