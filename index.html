@@ -98,23 +98,19 @@
                     <div id="sourcesButtons" class="source-buttons"></div>
                     <iframe id="playerFrame" src="" frameborder="0" allowfullscreen></iframe>
                 </div>
+                <!-- INFO POSHTE PLAYER -->
+                <div id="playerInfo" style="margin-top: 25px; background: #1e1f2c; border-radius: 16px; padding: 20px; display: none;">
+                    <!-- Dinamikisht shtohen aktorët, përshkrimi, traileri -->
+                </div>
             </div>
         </div>
 
-        <!-- YouTube Modal (trailer / shqip) -->
+        <!-- YouTube Modal (për trailer backup, por tani përdoret kryesisht brenda playerInfo) -->
         <div id="youtubeModal" class="modal" style="display:none;">
             <div class="modal-content">
                 <span class="close" onclick="closeYouTubePlayer()">&times;</span>
                 <div id="youtubeTitle"></div>
                 <iframe id="youtubeIframe" width="100%" height="400" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-        </div>
-
-        <!-- Details Modal (Actor, Trailer, Info) -->
-        <div id="detailsModal" class="modal" style="display:none;">
-            <div class="modal-content" style="max-width:900px;">
-                <span class="close" onclick="closeDetailsModal()">&times;</span>
-                <div id="detailsContent"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar...</div></div>
             </div>
         </div>
     </div>
