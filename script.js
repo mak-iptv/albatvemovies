@@ -10,7 +10,6 @@ let allMovies = [], allSeries = [], shqipMovies = [], yuMovies = [];
 let currentMovieData = null, currentSeriesData = null, currentSources = [];
 let newMoviesSwiper = null;
 
-// ==================== UTILS ====================
 function getImageUrl(path, size = 'w500') {
     return path ? `https://image.tmdb.org/t/p/${size}${path}` : 'https://images.unsplash.com/photo-1535016120720-40c646be5580?w=500&q=80';
 }
@@ -51,7 +50,6 @@ async function fetchTMDBData(endpoint, params = {}) {
     return res.json();
 }
 
-// ==================== LOCAL MOVIES ====================
 function getShqipMovies() {
     return [
         { id: '1', title: "BESNIKERIA DHE BUJARIA", year: '2019', thumbnail: 'https://i.ytimg.com/vi/cbhgvrJfLx8/hqdefault.jpg', rating: '8.2', sources: [{ type: 'youtube', videoId: 'cbhgvrJfLx8' }] },
@@ -89,7 +87,6 @@ function getYUMovies() {
     ];
 }
 
-// ==================== INFO POSHTE PLAYER ====================
 async function displayPlayerInfo(type, id, title) {
     const infoDiv = document.getElementById('playerInfo');
     if (!infoDiv) return;
@@ -102,33 +99,35 @@ async function displayPlayerInfo(type, id, title) {
             fetchTMDBData(`${endpoint}/credits`),
             fetchTMDBData(`${endpoint}/videos`)
         ]);
-        const cast = credits.cast ? credits.cast.slice(0, 6) : [];
+        
+        let cast = (credits && credits.cast && credits.cast.length) ? credits.cast.slice(0, 6) : [];
         const trailer = videos.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
         const year = (details.release_date || details.first_air_date)?.slice(0,4) || 'N/A';
         const runtime = details.runtime ? `${details.runtime} min` : (details.episode_run_time?.[0] ? `${details.episode_run_time[0]} min` : 'N/A');
-        const genres = details.genres.map(g => g.name).join(', ');
+        const genres = details.genres && details.genres.length ? details.genres.map(g => g.name).join(', ') : 'N/A';
         
         let castHtml = '';
-        if (cast.length) {
+        if (cast.length > 0) {
             castHtml = `<div style="margin-top: 20px;"><h3><i class="fas fa-users"></i> Aktorët kryesorë</h3>
                         <div style="display: flex; flex-wrap: wrap; gap: 15px;">` + 
                         cast.map(actor => `
                             <div style="text-align: center; width: 90px;">
                                 <img src="${getImageUrl(actor.profile_path, 'w185')}" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover;" onerror="this.src='https://via.placeholder.com/70x70?text=No+Image'">
-                                <div style="font-size: 12px;">${actor.name}</div>
+                                <div style="font-size: 12px; margin-top: 5px;">${actor.name}</div>
                                 <small style="font-size: 10px; color: #aaa;">${actor.character || ''}</small>
                             </div>
                         `).join('') + `</div></div>`;
         } else {
-            castHtml = `<p><i>Nuk ka informacion për aktorët.</i></p>`;
+            castHtml = `<div style="margin-top: 20px;"><h3><i class="fas fa-users"></i> Aktorët kryesorë</h3>
+                        <p><i>Nuk ka informacion për aktorët për këtë titull.</i></p></div>`;
         }
         
         infoDiv.innerHTML = `
             <div style="display: flex; flex-wrap: wrap; gap: 20px;">
                 <div style="flex: 2; min-width: 200px;">
                     <h2><i class="fas fa-info-circle"></i> ${details.title || details.name} (${year})</h2>
-                    <p><strong>Vlerësim:</strong> ⭐ ${details.vote_average?.toFixed(1)}/10 (${details.vote_count} vota)</p>
-                    <p><strong>Zhanri:</strong> ${genres || 'N/A'}</p>
+                    <p><strong>Vlerësim:</strong> ⭐ ${details.vote_average?.toFixed(1) || 'N/A'}/10 (${details.vote_count || 0} vota)</p>
+                    <p><strong>Zhanri:</strong> ${genres}</p>
                     <p><strong>Kohëzgjatja:</strong> ${runtime}</p>
                     <p><strong>Përmbajtja:</strong> ${details.overview || 'Nuk ka përshkrim.'}</p>
                     ${trailer ? `<button class="trailer-btn" onclick="playTrailerInPlayer('${trailer.key}')"><i class="fab fa-youtube"></i> Shiko Trailer</button>` : '<p><i>Trailer nuk disponohet</i></p>'}
@@ -140,9 +139,10 @@ async function displayPlayerInfo(type, id, title) {
         `;
     } catch(e) {
         console.error(e);
-        infoDiv.innerHTML = '<p style="color:red;">Dështoi ngarkimi i informacionit. Kontrollo lidhjen.</p>';
+        infoDiv.innerHTML = '<p style="color:red;">Dështoi ngarkimi i informacionit. Kontrollo lidhjen ose provo përsëri.</p>';
     }
 }
+
 function displayShqipPlayerInfo(movie) {
     const infoDiv = document.getElementById('playerInfo');
     if (!infoDiv) return;
@@ -174,7 +174,6 @@ function playTrailerInPlayer(trailerKey) {
     }
 }
 
-// ==================== PLAYER & SOURCES ====================
 async function loadMovieSources(movieId) {
     let sources = [
         { id: 'vidsrc', name: 'VidSrc', url: `${VIDEO_SOURCES.vidsrc.baseUrl}${movieId}` },
@@ -358,7 +357,6 @@ function closeYouTubePlayer() {
     if (youtubeIframe) youtubeIframe.src = '';
 }
 
-// ==================== RENDER FUNCTIONS ====================
 async function loadNewMoviesSlider() {
     let wrapper = document.getElementById('newMoviesSliderWrapper');
     if (!wrapper) return;
