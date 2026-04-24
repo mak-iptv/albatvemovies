@@ -13,14 +13,131 @@
 </head>
 <body>
     <div id="app">
-        <header>...</header> <!-- i njëjtë si më parë -->
-        <div class="search-container">...</div>
-        <main>...</main>
-        <div id="playerModal" class="modal">
+        <header>
+            <div class="logo">
+                <i class="fas fa-tv"></i> Alba<span>TV</span>
+            </div>
+            <nav>
+                <a href="#" class="nav-link active" onclick="showSection('home'); return false;"><i class="fas fa-home"></i> Kreu</a>
+                <a href="#" class="nav-link" onclick="showSection('movies'); return false;"><i class="fas fa-film"></i> Filma</a>
+                <a href="#" class="nav-link" onclick="showSection('series'); return false;"><i class="fas fa-tv"></i> Seriale</a>
+                <a href="#" class="nav-link" onclick="showSection('shqip'); return false;"><i class="fas fa-flag"></i> Shqip</a>
+                <a href="#" class="nav-link" onclick="showSection('yu'); return false;"><i class="fas fa-landmark"></i> Ex Yu</a>
+                <a href="#" class="nav-link" onclick="showSection('trending'); return false;"><i class="fas fa-fire"></i> Trending</a>
+            </nav>
+            <button id="installButton" class="install-btn" style="display:none;"><i class="fas fa-download"></i> Instalo</button>
+        </header>
+
+        <div class="search-container">
+            <input type="text" id="mainSearch" placeholder="Kërko filma, seriale..." class="search-input">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+
+        <main>
+            <!-- HOME SECTION -->
+            <div id="home" class="section">
+                <div class="hero">
+                    <h1>AlbaTV</h1>
+                    <p>Filma shqip, jugosllavë dhe ndërkombëtarë – Pa pagesë, pa reklama.</p>
+                    <div class="stats">
+                        <div class="stat"><i class="fas fa-film"></i> <span id="movieCount">0+</span> Filma</div>
+                        <div class="stat"><i class="fas fa-tv"></i> <span id="seriesCount">0+</span> Seriale</div>
+                        <div class="stat"><i class="fas fa-landmark"></i> <span id="yuCount">0+</span> Ex Yu</div>
+                    </div>
+                </div>
+                <div class="section-title">
+                    <h2><i class="fas fa-star-of-life"></i> Të sapoardhurit</h2>
+                    <div class="swiper new-movies-swiper">
+                        <div class="swiper-wrapper" id="newMoviesSliderWrapper"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+                <div class="section-title">
+                    <h2><i class="fas fa-fire"></i> Të preferuarat</h2>
+                    <div class="featured-grid" id="featuredMovies"></div>
+                </div>
+                <div class="section-title">
+                    <h2><i class="fas fa-tv"></i> Seriale më të shikuara</h2>
+                    <div class="featured-grid" id="featuredSeries"></div>
+                </div>
+                <div class="section-title">
+                    <h2><i class="fas fa-landmark"></i> Klasikët jugosllavë</h2>
+                    <div class="featured-grid" id="featuredYU"></div>
+                </div>
+            </div>
+
+            <!-- MOVIES SECTION -->
+            <div id="movies" class="section" style="display:none;">
+                <div class="section-header">
+                    <h2><i class="fas fa-film"></i> Të gjithë filmat</h2>
+                    <div class="filter-buttons" id="moviesFilters"></div>
+                    <div class="search-mini">
+                        <input type="text" id="movieSearch" placeholder="Kërko film...">
+                    </div>
+                </div>
+                <div class="movies-grid" id="moviesGrid"></div>
+            </div>
+
+            <!-- SERIES SECTION -->
+            <div id="series" class="section" style="display:none;">
+                <div class="section-header">
+                    <h2><i class="fas fa-tv"></i> Serialet</h2>
+                    <div class="filter-buttons" id="seriesFilters"></div>
+                    <div class="search-mini">
+                        <input type="text" id="seriesSearch" placeholder="Kërko serial...">
+                    </div>
+                </div>
+                <div class="movies-grid" id="seriesGrid"></div>
+            </div>
+
+            <!-- SHQIP SECTION -->
+            <div id="shqip" class="section" style="display:none;">
+                <div class="section-header">
+                    <h2><i class="fas fa-flag"></i> Filmat Shqiptarë</h2>
+                    <div class="filter-buttons" id="shqipFilters"></div>
+                    <div class="search-mini">
+                        <input type="text" id="shqipSearch" placeholder="Kërko film shqip...">
+                    </div>
+                </div>
+                <div class="movies-grid" id="shqipGrid"></div>
+            </div>
+
+            <!-- YU SECTION -->
+            <div id="yu" class="section" style="display:none;">
+                <div class="section-header">
+                    <h2><i class="fas fa-landmark"></i> Filmat Jugosllavë</h2>
+                    <div class="filter-buttons" id="yuFilters"></div>
+                    <div class="search-mini">
+                        <input type="text" id="yuSearch" placeholder="Kërko film ex-yu...">
+                    </div>
+                </div>
+                <div class="movies-grid" id="yuGrid"></div>
+            </div>
+
+            <!-- TRENDING SECTION -->
+            <div id="trending" class="section" style="display:none;">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-line"></i> Më të diskutuara</h2>
+                    <div class="search-mini">
+                        <input type="text" id="trendingSearch" placeholder="Kërko...">
+                    </div>
+                </div>
+                <div class="movies-grid" id="trendingGrid"></div>
+            </div>
+        </main>
+
+        <!-- Player Modal -->
+        <div id="playerModal" class="modal" style="display:none;">
             <div class="modal-content modal-large">
                 <span class="close" onclick="closePlayer()">&times;</span>
                 <div id="playerTitle"></div>
-                <div id="seriesControls" style="display:none; margin-bottom:15px;">...</div>
+                <div id="seriesControls" style="display:none; margin-bottom:15px;">
+                    <select id="seasonSelect"></select>
+                    <select id="episodeSelect"></select>
+                    <button onclick="playSelectedEpisode()"><i class="fas fa-play"></i> Luaj Episodin</button>
+                </div>
                 <div id="sourcesContainer">
                     <div id="sourcesButtons" class="source-buttons"></div>
                     <iframe id="playerFrame" src="" frameborder="0" allowfullscreen></iframe>
@@ -28,8 +145,17 @@
                 <div id="playerInfo" style="margin-top: 25px; background: #1e1f2c; border-radius: 16px; padding: 20px; display: none;"></div>
             </div>
         </div>
-        <div id="youtubeModal" class="modal">...</div>
+
+        <!-- YouTube Modal (për trailer backup) -->
+        <div id="youtubeModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeYouTubePlayer()">&times;</span>
+                <div id="youtubeTitle"></div>
+                <iframe id="youtubeIframe" width="100%" height="400" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
