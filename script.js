@@ -1,1 +1,673 @@
-const TMDB_API_KEY="dc375cc5d8355f3483fe6fa990736b0e",TMDB_BASE_URL="https://api.themoviedb.org/3",VIDEO_SOURCES={vidsrc:{name:"VidSrc",baseUrl:"https://vidsrc-embed.ru/embed/movie/",baseUrlTv:"https://vidsrc-embed.ru/embed/tv/",type:"embed"},smashy:{name:"Smashy",baseUrl:"https://vidsrcme.su/movie/",baseUrlTv:"https://vidsrcme.su/tv/",type:"embed"},vidsrcme:{name:"VidSrc.me",baseUrl:"https://vidsrc.icu/embed/",type:"embed"}};let allMovies=[],allSeries=[],shqipMovies=[],yuMovies=[],currentMovieData=null,currentSeriesData=null,currentSources=[],newMoviesSwiper=null;function getImageUrl(e,t="w500"){return e?`https://image.tmdb.org/t/p/${t}${e}`:"https://images.unsplash.com/photo-1535016120720-40c646be5580?w=500&q=80"}function escapeQuote(e){return e?e.replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/"/g,'\\"'):""}function showNotification(e,t="info"){let n=document.createElement("div");n.className=`notification ${t}`,n.innerHTML=`<i class="fas fa-${t==="error"?"exclamation-triangle":"info-circle"}"></i><span>${e}</span><button onclick="this.parentElement.remove()">&times;</button>`,document.body.appendChild(n),setTimeout(()=>n.remove(),4e3)}function animateCounter(e,t,n){let o=document.getElementById(e);if(!o)return;let r=t/(n/16),i=0,a=setInterval(()=>{i+=r,i>=t?(o.textContent=t.toLocaleString()+"+",clearInterval(a)):o.textContent=Math.floor(i).toLocaleString()+"+"},16)}function addToWatchHistory(e,t,n,o){try{let r=JSON.parse(localStorage.getItem("albatv_watch_history"))||[];r.unshift({title:e,year:t,type:n,id:o,timestamp:new Date().toISOString()}),r=r.slice(0,50),localStorage.setItem("albatv_watch_history",JSON.stringify(r))}catch(e){}}async function fetchTMDBData(e,t={}){let n={api_key:TMDB_API_KEY,language:"en-US",...t},o=`${TMDB_BASE_URL}${e}?${new URLSearchParams(n)}`,r=await fetch(o);if(!r.ok)throw new Error(`HTTP ${r.status}`);return r.json()}function getShqipMovies(){return[{id:"1",title:"BESNIKERIA DHE BUJARIA",year:"2019",thumbnail:"https://i.ytimg.com/vi/cbhgvrJfLx8/hqdefault.jpg",rating:"8.2",sources:[{type:"youtube",videoId:"cbhgvrJfLx8"}]},{id:"13",title:"EGO - Filmi i plote | 4K",year:"2019",thumbnail:"https://i.ytimg.com/vi/-OzYN6oUjNQ/hqdefault.jpg",rating:"8.2",sources:[{type:"youtube",videoId:"-OzYN6oUjNQ"}]},{id:"2",title:"ZONJA NGA QYTETI",year:"1980",thumbnail:"https://i.ytimg.com/vi/a8Ol-g13zAQ/hqdefault.jpg",rating:"8.2",sources:[{type:"youtube",videoId:"a8Ol-g13zAQ"}]},{id:"3",title:"A FRIEND FROM VILLAGE",year:"1980",thumbnail:"https://i.ytimg.com/vi/Q8aFkR5VKuM/hqdefault.jpg",rating:"7.8",sources:[{type:"youtube",videoId:"Q8aFkR5VKuM"}]},{id:"4",title:"ÇIFTI I LUMTUR",year:"1975",thumbnail:"https://i.ytimg.com/vi/wHDRtwM6gUU/hqdefault.jpg",rating:"8.0",sources:[{type:"youtube",videoId:"wHDRtwM6gUU"}]},{id:"5",title:"BESA E KUQE",year:"1982",thumbnail:"https://i.ytimg.com/vi/FktxciPxG54/hqdefault.jpg",rating:"7.5",sources:[{type:"youtube",videoId:"FktxciPxG54"}]},{id:"6",title:"FESTA E MADHE",year:"1981",thumbnail:"https://i.ytimg.com/vi/eAUOydt6H44/hqdefault.jpg",rating:"8.5",sources:[{type:"youtube",videoId:"eAUOydt6H44"}]},{id:"7",title:"FRAKTURA",year:"1983",thumbnail:"https://i.ytimg.com/vi/eB_lZBCfe9Y/hqdefault.jpg",rating:"8.1",sources:[{type:"youtube",videoId:"eB_lZBCfe9Y"}]},{id:"8",title:"TANA",year:"1958",thumbnail:"https://i.ytimg.com/vi/En051KxETvw/hqdefault.jpg",rating:"8.5",sources:[{type:"youtube",videoId:"En051KxETvw"}]},{id:"9",title:"DEBATIK",year:"1961",thumbnail:"https://i.ytimg.com/vi/mYaNJiVUGPQ/hqdefault.jpg",rating:"8.0",sources:[{type:"youtube",videoId:"mYaNJiVUGPQ"}]},{id:"10",title:"NJË DJALË DHE NJË VAJZË",year:"1980",thumbnail:"https://i.ytimg.com/vi/xi3va550WP4/hqdefault.jpg",rating:"7.9",sources:[{type:"youtube",videoId:"xi3va550WP4"}]},{id:"11",title:"Dashuria s'mjafton",year:"2019",thumbnail:"https://i.ytimg.com/vi/fabFTlOQD_k/hqdefault.jpg",rating:"8.1",sources:[{type:"youtube",videoId:"fabFTlOQD_k"}]},{id:"14",title:"Filmi Rikonstruksioni",year:"1988",thumbnail:"https://i.ytimg.com/vi/OK99Ast0sSE/hqdefault.jpg",rating:"8.1",sources:[{type:"youtube",videoId:"OK99Ast0sSE"}]},{id:"15",title:"Unë e dua Erën",year:"1991",thumbnail:"https://s1.dmcdn.net/1/Z3sIA1elov-uFoUyY/856x480f",rating:"8.1",sources:[{type:"dailymotion",videoId:"x9q7eru",url:"https://www.dailymotion.com/embed/video/x9q7eru"}]},{id:"16",title:"Yjet e neteve te gjata",year:"1972",thumbnail:"https://image.tmdb.org/t/p/w500/4B2XRnN0YyX6caqp5VAPFkn3rmq.jpg",rating:"8.1",sources:[{type:"dailymotion",videoId:"x9qbsdu",url:"https://www.dailymotion.com/embed/video/x9qbsdu"}]},{id:"12",title:"BALLË PËR BALLË",year:"1979",thumbnail:"https://i.ytimg.com/vi/cjFE0aOVv5w/hqdefault.jpg",rating:"8.3",sources:[{type:"youtube",videoId:"cjFE0aOVv5w"}]}]}function getYUMovies(){return[{id:"yu1",title:"BALKAN EKSPRES",year:"1983",thumbnail:"https://i.ytimg.com/vi/s1QoFXgzVpU/hqdefault.jpg",rating:"8.7",genre:["comedy"],sources:[{type:"youtube",videoId:"s1QoFXgzVpU"}]},{id:"yu2",title:"KO TO TAMO PEVA",year:"1980",thumbnail:"https://i.ytimg.com/vi/ZwozSLas8DM/hqdefault.jpg",rating:"9.0",genre:["war","comedy"],sources:[{type:"youtube",videoId:"ZwozSLas8DM"}]},{id:"yu3",title:"BITKA NA NERETVI",year:"1969",thumbnail:"https://i.ytimg.com/vi/rOAlNgxKVHk/hqdefault.jpg",rating:"7.8",genre:["war"],sources:[{type:"youtube",videoId:"rOAlNgxKVHk"}]},{id:"yu4",title:"MARATONCI TRCE PASTASNI KRUG",year:"1982",thumbnail:"https://m.media-amazon.com/images/M/MV5BODViMmFmMmMtYTViNS00OGY3LTkwYzQtNzk5ZTVhNTZhZWZlXkEyXkFqcGc@._V1_FMjpg_UY3492_.jpg",rating:"8.5",genre:["comedy"],sources:[{type:"dailymotion",videoId:"x9mtnqq",url:"https://www.dailymotion.com/embed/video/x9mtnqq"}]},{id:"yu5",title:"SUTJESKA",year:"1973",thumbnail:"https://i.ytimg.com/vi/At4tQRmduB4/hqdefault.jpg",rating:"7.5",genre:["war"],sources:[{type:"youtube",videoId:"At4tQRmduB4"}]},{id:"yu6",title:"DOM ZA VESANJE",year:"1988",thumbnail:"https://i.ytimg.com/vi/9rOoX3PDZzY/hqdefault.jpg",rating:"8.7",genre:["drama"],sources:[{type:"youtube",videoId:"9rOoX3PDZzY"}]},{id:"yu7",title:"OTAC NA SLUZBENOM PUTU",year:"1985",thumbnail:"https://i.ytimg.com/vi/YdTdLIVk7pU/hqdefault.jpg",rating:"8.3",genre:["drama"],sources:[{type:"youtube",videoId:"YdTdLIVk7pU"}]},{id:"yu8",title:"VALTER BRANI SARAJEVO",year:"1972",thumbnail:"https://i.ytimg.com/vi/ZVHMocrBurQ/hqdefault.jpg",rating:"8.2",genre:["war","action"],sources:[{type:"youtube",videoId:"ZVHMocrBurQ"}]},{id:"yu9",title:"TITO I JA",year:"1972",thumbnail:"https://i0.wp.com/easterneuropeanmovies.com/wp-content/uploads/449-2.jpg?fit=740%2C1040&ssl=1",rating:"7.9",genre:["comedy","war"],sources:[{type:"dailymotion",videoId:"x90pw9g",url:"https://www.dailymotion.com/embed/video/x90pw9g"}]},{id:"yu10",title:"Nema problema - HD",year:"1984",thumbnail:"https://i.ytimg.com/vi/2GliQKXYg_c/hqdefault.jpg",rating:"8.1",genre:["comedy","romance"],sources:[{type:"youtube",videoId:"2GliQKXYg_c"}]},{id:"yu11",title:"Ludi dani",year:"1974",thumbnail:"https://i.ytimg.com/vi/PvRtv3GgYR8/hqdefault.jpg",rating:"7.7",genre:["crime","drama"],sources:[{type:"youtube",videoId:"PvRtv3GgYR8"}]},{id:"yu12",title:"UZICKA REPUBLIKA",year:"1974",thumbnail:"https://i.ytimg.com/vi/tWn8-LoFIi8/hqdefault.jpg",rating:"7.8",genre:["war","history"],sources:[{type:"youtube",videoId:"tWn8-LoFIi8"}]}]}async function displayPlayerInfo(e,t,n){let o=document.getElementById("playerInfo");if(!o)return;o.style.display="block",o.innerHTML='<div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar informacionin...</div>';try{let r=e==="movie"?`/movie/${t}`:`/tv/${t}`,[i,a,s]=await Promise.all([fetchTMDBData(r),fetchTMDBData(`${r}/credits`),fetchTMDBData(`${r}/videos`)]),c=a.cast?a.cast.slice(0,8):[],l=s.results.find(v=>v.type==="Trailer"&&v.site==="YouTube"),d=(i.release_date||i.first_air_date)?.slice(0,4)||"N/A",u=i.runtime?`${i.runtime} min`:i.episode_run_time?.[0]?`${i.episode_run_time[0]} min`:"N/A",p=i.genres.map(g=>g.name).join(", "),m="";m=c.length?`<h3><i class="fas fa-users"></i> Aktorët kryesorë</h3><div class="cast-horizontal">${c.map(actor=>`<div class="cast-card"><img src="${getImageUrl(actor.profile_path,"w185")}" onerror="this.src='https://via.placeholder.com/80x80?text=No+Image'"><div class="name">${actor.name}</div><div class="character">${actor.character||""}</div></div>`).join("")}</div>`:"<p><i>Nuk ka informacion për aktorët.</i></p>";o.innerHTML=`<div class="player-info-container"><div class="player-info-left"><h2><i class="fas fa-info-circle"></i> ${i.title||i.name} (${d})</h2><p><strong>Vlerësim:</strong> ⭐ ${i.vote_average?.toFixed(1)}/10 (${i.vote_count} vota)</p><p><strong>Zhanri:</strong> ${p||"N/A"}</p><p><strong>Kohëzgjatja:</strong> ${u}</p><p><strong>Përmbajtja:</strong> ${i.overview||"Nuk ka përshkrim."}</p>${l?`<button class="trailer-btn" onclick="playTrailerInPlayer('${l.key}')"><i class="fab fa-youtube"></i> Shiko Trailer</button>`:"<p><i>Trailer nuk disponohet</i></p>"}</div><div class="player-info-right">${m}</div></div>`}catch(e){console.error(e),o.innerHTML="<p style='color:red;'>Dështoi ngarkimi i informacionit.</p>"}}function displayShqipPlayerInfo(e){let t=document.getElementById("playerInfo");t&&(t.style.display="block",t.innerHTML=`<div class="player-info-container"><div class="player-info-left"><h2><i class="fas fa-flag"></i> ${e.title} (${e.year})</h2><p><strong>Vlerësim:</strong> ⭐ ${e.rating}/10</p><p><strong>Përshkrimi:</strong> Film shqiptar i vitit ${e.year}.</p></div><div class="player-info-right"><p><i>Aktorët kryesorë: do të shtohen së shpejti.</i></p></div></div>`)}function displayYUPlayerInfo(e){let t=document.getElementById("playerInfo");t&&(t.style.display="block",t.innerHTML=`<div class="player-info-container"><div class="player-info-left"><h2><i class="fas fa-landmark"></i> ${e.title} (${e.year})</h2><p><strong>Vlerësim:</strong> ⭐ ${e.rating}/10</p><p><strong>Zhanri:</strong> ${e.genre?.join(", ")}</p><p><strong>Përshkrimi:</strong> Film klasik jugosllav.</p></div><div class="player-info-right"><p><i>Aktorët: Velimir Bata Živojinović, Ljubiša Samardžić etj.</i></p></div></div>`)}function playTrailerInPlayer(e){let t=document.getElementById("playerFrame");t&&(t.src=`https://www.youtube-nocookie.com/embed/${e}?autoplay=1`,showNotification("Traileri po luhet. Mbyll player-in për të vazhduar filmin.","info"))}async function loadMovieSources(e){let t=[{id:"vidsrc",name:"VidSrc",url:`${VIDEO_SOURCES.vidsrc.baseUrl}${e}`},{id:"smashy",name:"Smashy",url:`${VIDEO_SOURCES.smashy.baseUrl}${e}`},{id:"vidsrcme",name:"VidSrc.me",url:`${VIDEO_SOURCES.vidsrcme.baseUrl}?tmdb=${e}`}];currentSources=t;let n=document.getElementById("sourcesButtons");n&&(n.innerHTML=t.map((e,t)=>`<button class="source-btn ${t===0?"active-source":""}" onclick="loadSource('${e.id}')">${e.name}</button>`).join("")),t.length&&loadSource(t[0].id)}async function loadSeriesSources(e){let t=[{id:"vidsrc",name:"VidSrc",url:`${VIDEO_SOURCES.vidsrc.baseUrlTv}${e}/1/1`},{id:"smashy",name:"Smashy",url:`${VIDEO_SOURCES.smashy.baseUrlTv}${e}/1/1`}];currentSources=t;let n=document.getElementById("sourcesButtons");n&&(n.innerHTML=t.map((e,t)=>`<button class="source-btn ${t===0?"active-source":""}" onclick="loadSource('${e.id}')">${e.name}</button>`).join("")),t.length&&loadSource(t[0].id)}function loadSource(e){let t=currentSources.find(t=>t.id===e);if(!t)return;let n=document.getElementById("playerFrame");if(!n)return;if(currentSeriesData){let o=document.getElementById("seasonSelect")?.value||1,r=document.getElementById("episodeSelect")?.value||1;e==="vidsrc"?n.src=`${VIDEO_SOURCES.vidsrc.baseUrlTv}${currentSeriesData.id}/${o}/${r}`:e==="smashy"?n.src=`${VIDEO_SOURCES.smashy.baseUrlTv}${currentSeriesData.id}/${o}/${r}`:n.src=t.url}else n.src=t.url;document.querySelectorAll(".source-btn").forEach(e=>e.classList.remove("active-source"));let o=document.querySelector(`.source-btn[onclick*="${e}"]`);o&&o.classList.add("active-source")}function playSelectedEpisode(){if(currentSeriesData){let e=document.getElementById("seasonSelect")?.value,t=document.getElementById("episodeSelect")?.value;if(e&&t){let n=document.querySelector(".source-btn.active-source");if(n){let o=n.getAttribute("onclick")?.match(/loadSource\('([^']+)'\)/);o&&loadSource(o[1])}}}}async function populateEpisodes(e,t){let n=await fetchTMDBData(`/tv/${e}/season/${t}`),o=document.getElementById("episodeSelect");if(o){o.innerHTML="",n.episodes.forEach(e=>{let t=document.createElement("option");t.value=e.episode_number,t.textContent=`Episodi ${e.episode_number}: ${e.name}`,o.appendChild(t)}),o.options.length&&(o.value=1)}}async function loadSeriesSeasonsEpisodes(e){let t=await fetchTMDBData(`/tv/${e}`),n=document.getElementById("seasonSelect");if(n){n.innerHTML="",t.seasons.forEach(t=>{t.season_number>=0&&(n.options[n.options.length]=new Option(`Sezoni ${t.season_number} (${t.episode_count} episode)`,t.season_number))}),n.options.length&&(n.value=1,await populateEpisodes(e,1)),n.onchange=async()=>{await populateEpisodes(e,n.value),playSelectedEpisode()}}}function playMovie(e,t,n){currentMovieData={id:e,title:t,year:n,type:"movie"},currentSeriesData=null;let o=document.getElementById("seriesControls");o&&(o.style.display="none");let r=document.getElementById("playerTitle");r&&(r.innerHTML=t);let i=document.getElementById("playerModal");i&&(i.style.display="flex");let a=document.getElementById("playerInfo");a&&(a.style.display="none"),loadMovieSources(e),addToWatchHistory(t,n,"movie",e),displayPlayerInfo("movie",e,t)}function playTVSeries(e,t,n){currentSeriesData={id:e,title:t,year:n,type:"series"};let o=document.getElementById("seriesControls");o&&(o.style.display="flex");let r=document.getElementById("playerTitle");r&&(r.innerHTML=t);let i=document.getElementById("playerModal");i&&(i.style.display="flex");let a=document.getElementById("playerInfo");a&&(a.style.display="none"),loadSeriesSources(e),loadSeriesSeasonsEpisodes(e),addToWatchHistory(t,n,"series",e),displayPlayerInfo("tv",e,t)}function playShqipMovie(e){let t=getShqipMovies().find(t=>t.id===e);if(t){let n=t.sources[0];currentMovieData={id:t.id,title:t.title,year:t.year,type:"shqip"},currentSeriesData=null;let o=document.getElementById("seriesControls");o&&(o.style.display="none");let r=document.getElementById("playerTitle");r&&(r.innerHTML=t.title);let i=document.getElementById("playerModal");i&&(i.style.display="flex");let a=document.getElementById("playerInfo");a&&(a.style.display="none");let s=document.getElementById("playerFrame");s&&(n.type==="youtube"?s.src=`https://www.youtube-nocookie.com/embed/${n.videoId}?autoplay=1`:n.type==="dailymotion"&&(s.src=n.url)),addToWatchHistory(t.title,t.year,"shqip",e),displayShqipPlayerInfo(t)}}function playYUMovie(e){let t=getYUMovies().find(t=>t.id===e);if(t){let n=t.sources[0];currentMovieData={id:t.id,title:t.title,year:t.year,type:"yu"},currentSeriesData=null;let o=document.getElementById("seriesControls");o&&(o.style.display="none");let r=document.getElementById("playerTitle");r&&(r.innerHTML=t.title);let i=document.getElementById("playerModal");i&&(i.style.display="flex");let a=document.getElementById("playerInfo");a&&(a.style.display="none");let s=document.getElementById("playerFrame");s&&(n.type==="youtube"?s.src=`https://www.youtube-nocookie.com/embed/${n.videoId}?autoplay=1`:n.type==="dailymotion"&&(s.src=n.url)),addToWatchHistory(t.title,t.year,"yu",e),displayYUPlayerInfo(t)}}function closePlayer(){let e=document.getElementById("playerModal");e&&(e.style.display="none");let t=document.getElementById("playerFrame");t&&(t.src="");let n=document.getElementById("playerInfo");n&&(n.style.display="none",n.innerHTML=""),currentMovieData=null,currentSeriesData=null}function closeYouTubePlayer(){let e=document.getElementById("youtubeModal");e&&(e.style.display="none");let t=document.getElementById("youtubeIframe");t&&(t.src="")}async function loadNewMoviesSlider(){let e=document.getElementById("newMoviesSliderWrapper");if(e)try{let t=await fetchTMDBData("/movie/now_playing",{page:1}),n=t.results.slice(0,15);e.innerHTML=n.map(t=>`<div class="swiper-slide"><div class="movie-card"><img src="${getImageUrl(t.poster_path)}" loading="lazy"><div class="rating"><i class="fas fa-star"></i> ${t.vote_average?.toFixed(1)||"N/A"}</div><div class="type-badge" style="background:#2c3e66;">NEW</div><div class="card-content"><div class="card-title">${t.title}</div><div class="card-year">${t.release_date?.slice(0,4)||"N/A"}</div></div><button class="info-btn" onclick="event.stopPropagation(); playMovie(${t.id},'${escapeQuote(t.title)}','${t.release_date?.slice(0,4)||""}')"><i class="fas fa-info-circle"></i></button><div class="play-center" onclick="event.stopPropagation(); playMovie(${t.id},'${escapeQuote(t.title)}','${t.release_date?.slice(0,4)||""}')"><i class="fas fa-play"></i></div></div></div>`).join(""),window.newMoviesSwiper&&window.newMoviesSwiper.destroy(!0,!0),window.newMoviesSwiper=new Swiper(".new-movies-swiper",{slidesPerView:"auto",spaceBetween:20,navigation:{nextEl:".swiper-button-next",prevEl:".swiper-button-prev"},pagination:{el:".swiper-pagination",clickable:!0},breakpoints:{0:{slidesPerView:2},640:{slidesPerView:3},1024:{slidesPerView:5}}})}catch(t){console.error(t),e.innerHTML='<div class="loading">Dështoi ngarkimi</div>'}}async function loadFeaturedContent(){try{let e=await fetchTMDBData("/movie/popular",{page:1}),t=await fetchTMDBData("/tv/popular",{page:1}),n=document.getElementById("featuredMovies"),o=document.getElementById("featuredSeries"),r=document.getElementById("featuredYU");n&&(n.innerHTML=e.results.slice(0,6).map(e=>`<div class="movie-card"><img src="${getImageUrl(e.poster_path)}"><div class="rating"><i class="fas fa-star"></i> ${e.vote_average.toFixed(1)}</div><div class="type-badge">FILM</div><div class="card-content"><div class="card-title">${e.title}</div><div class="card-year">${e.release_date?.slice(0,4)||"N/A"}</div></div><button class="info-btn" onclick="event.stopPropagation(); playMovie(${e.id},'${escapeQuote(e.title)}','${e.release_date?.slice(0,4)||""}')"><i class="fas fa-info-circle"></i></button><div class="play-center" onclick="event.stopPropagation(); playMovie(${e.id},'${escapeQuote(e.title)}','${e.release_date?.slice(0,4)||""}')"><i class="fas fa-play"></i></div></div>`).join("")),o&&(o.innerHTML=t.results.slice(0,6).map(e=>`<div class="movie-card"><img src="${getImageUrl(e.poster_path)}"><div class="rating"><i class="fas fa-star"></i> ${e.vote_average.toFixed(1)}</div><div class="type-badge">SERI</div><div class="card-content"><div class="card-title">${e.name}</div><div class="card-year">${e.first_air_date?.slice(0,4)||"N/A"}</div></div><button class="info-btn" onclick="event.stopPropagation(); playTVSeries(${e.id},'${escapeQuote(e.name)}','${e.first_air_date?.slice(0,4)||""}')"><i class="fas fa-info-circle"></i></button><div class="play-center" onclick="event.stopPropagation(); playTVSeries(${e.id},'${escapeQuote(e.name)}','${e.first_air_date?.slice(0,4)||""}')"><i class="fas fa-play"></i></div></div>`).join(""));let i=getYUMovies().slice(0,6);r&&(r.innerHTML=i.map(e=>`<div class="movie-card"><img src="${e.thumbnail}"><div class="rating"><i class="fas fa-star"></i> ${e.rating}</div><div class="type-badge yu-badge">EX YU</div><div class="card-content"><div class="card-title">${e.title}</div><div class="card-year">${e.year}</div></div><button class="info-btn" onclick="event.stopPropagation(); playYUMovie('${e.id}')"><i class="fas fa-info-circle"></i></button><div class="play-center" onclick="event.stopPropagation(); playYUMovie('${e.id}')"><i class="fas fa-play"></i></div></div>`).join(""))}catch(e){console.error(e)}}async function loadAllMovies(){let e=document.getElementById("moviesGrid");if(e){e.innerHTML='<div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar...</div>';let t=await fetchTMDBData("/movie/popular",{page:1});allMovies=t.results,e.innerHTML=allMovies.map(e=>`<div class="movie-card"><img src="${getImageUrl(e.poster_path)}"><div class="rating"><i class="fas fa-star"></i> ${e.vote_average.toFixed(1)}</div><div class="type-badge">FILM</div><div class="card-content"><div class="card-title">${e.title}</div><div class="card-year">${e.release_date?.slice(0,4)||"N/A"}</div></div><button class="info-btn" onclick="event.stopPropagation(); playMovie(${e.id},'${escapeQuote(e.title)}','${e.release_date?.slice(0,4)||""}')"><i class="fas fa-info-circle"></i></button><div class="play-center" onclick="event.stopPropagation(); playMovie(${e.id},'${escapeQuote(e.title)}','${e.release_date?.slice(0,4)||""}')"><i class="fas fa-play"></i></div></div>`).join("")}}async function loadAllSeries(){let e=document.getElementById("seriesGrid");if(e){e.innerHTML='<div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar...</div>';let t=await fetchTMDBData("/tv/popular",{page:1});allSeries=t.results,e.innerHTML=allSeries.map(e=>`<div class="movie-card"><img src="${getImageUrl(e.poster_path)}"><div class="rating"><i class="fas fa-star"></i> ${e.vote_average.toFixed(1)}</div><div class="type-badge">SERI</div><div class="card-content"><div class="card-title">${e.name}</div><div class="card-year">${e.first_air_date?.slice(0,4)||"N/A"}</div></div><button class="info-btn" onclick="event.stopPropagation(); playTVSeries(${e.id},'${escapeQuote(e.name)}','${e.first_air_date?.slice(0,4)||""}')"><i class="fas fa-info-circle"></i></button><div class="play-center" onclick="event.stopPropagation(); playTVSeries(${e.id},'${escapeQuote(e.name)}','${e.first_air_date?.slice(0,4)||""}')"><i class="fas fa-play"></i></div></div>`).join("")}}function loadShqipContent(){let e=document.getElementById("shqipGrid");if(e){shqipMovies=getShqipMovies(),e.innerHTML=shqipMovies.map(t=>`<div class="movie-card"><img src="${t.thumbnail}"><div class="rating"><i class="fas fa-star"></i> ${t.rating}</div><div class="type-badge shqip-badge">SHQIP</div><div class="card-content"><div class="card-title">${t.title}</div><div class="card-year">${t.year}</div></div><button class="info-btn" onclick="event.stopPropagation(); playShqipMovie('${t.id}')"><i class="fas fa-info-circle"></i></button><div class="play-center" onclick="event.stopPropagation(); playShqipMovie('${t.id}')"><i class="fas fa-play"></i></div></div>`).join("")}}function loadYUContent(){let e=document.getElementById("yuGrid");if(e){yuMovies=getYUMovies(),e.innerHTML=yuMovies.map(t=>`<div class="movie-card"><img src="${t.thumbnail}"><div class="rating"><i class="fas fa-star"></i> ${t.rating}</div><div class="type-badge yu-badge">EX YU</div><div class="card-content"><div class="card-title">${t.title}</div><div class="card-year">${t.year}</div></div><button class="info-btn" onclick="event.stopPropagation(); playYUMovie('${t.id}')"><i class="fas fa-info-circle"></i></button><div class="play-center" onclick="event.stopPropagation(); playYUMovie('${t.id}')"><i class="fas fa-play"></i></div></div>`).join("")}}async function loadTrending(){let e=document.getElementById("trendingGrid");if(e){e.innerHTML='<div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar...</div>';let t=await fetchTMDBData("/trending/all/day");e.innerHTML=t.results.slice(0,12).map(e=>{let t=e.media_type==="movie",n=e.title||e.name,o=(e.release_date||e.first_air_date)?.slice(0,4)||"N/A",r=e.id;return`<div class="movie-card"><img src="${getImageUrl(e.poster_path)}"><div class="rating"><i class="fas fa-fire"></i> ${e.vote_average?.toFixed(1)}</div><div class="type-badge">TRENDING</div><div class="card-content"><div class="card-title">${n}</div><div class="card-year">${o}</div></div><button class="info-btn" onclick="event.stopPropagation(); ${t?`playMovie(${r},'${escapeQuote(n)}','${o}')`:`playTVSeries(${r},'${escapeQuote(n)}','${o}')`}"><i class="fas fa-info-circle"></i></button><div class="play-center" onclick="event.stopPropagation(); ${t?`playMovie(${r},'${escapeQuote(n)}','${o}')`:`playTVSeries(${r},'${escapeQuote(n)}','${o}')`}"><i class="fas fa-play"></i></div></div>`}).join("")}}function showSection(e){let t=["home","movies","series","shqip","yu","trending"];t.forEach(e=>{let t=document.getElementById(e);t&&(t.style.display="none")});let n=document.getElementById(e);if(!n)return void console.error(`Seksioni "${e}" nuk u gjet në HTML.`);n.style.display="block",document.querySelectorAll(".nav-link").forEach(e=>e.classList.remove("active"));let o=Array.from(document.querySelectorAll(".nav-link")).find(t=>t.getAttribute("onclick")?.includes(`'${e}'`));o&&o.classList.add("active"),e==="home"?(loadFeaturedContent(),animateCounter("movieCount",1e4,3e3),animateCounter("seriesCount",2e3,2500),animateCounter("yuCount",500,2e3),loadNewMoviesSlider()):e==="movies"?loadAllMovies():e==="series"?loadAllSeries():e==="shqip"?loadShqipContent():e==="yu"?loadYUContent():e==="trending"&&loadTrending()}function performSearch(e,t){if(e&&e.length>=2){if(t==="movieSearch")fetchTMDBData("/search/movie",{query:e}).then(e=>{document.getElementById("moviesGrid").innerHTML=e.results.map(e=>`<div class="movie-card"><img src="${getImageUrl(e.poster_path)}"><div class="rating"><i class="fas fa-star"></i> ${e.vote_average?.toFixed(1)}</div><div class="type-badge">FILM</div><div class="card-content"><div class="card-title">${e.title}</div><div class="card-year">${e.release_date?.slice(0,4)||"N/A"}</div></div><button class="info-btn" onclick="event.stopPropagation(); playMovie(${e.id},'${escapeQuote(e.title)}','${e.release_date?.slice(0,4)||""}')"><i class="fas fa-info-circle"></i></button><div class="play-center" onclick="event.stopPropagation(); playMovie(${e.id},'${escapeQuote(e.title)}','${e.release_date?.slice(0,4)||""}')"><i class="fas fa-play"></i></div></div>`).join("")});if(t==="seriesSearch")fetchTMDBData("/search/tv",{query:e}).then(e=>{document.getElementById("seriesGrid").innerHTML=e.results.map(e=>`<div class="movie-card"><img src="${getImageUrl(e.poster_path)}"><div class="rating"><i class="fas fa-star"></i> ${e.vote_average?.toFixed(1)}</div><div class="type-badge">SERI</div><div class="card-content"><div class="card-title">${e.name}</div><div class="card-year">${e.first_air_date?.slice(0,4)||"N/A"}</div></div><button class="info-btn" onclick="event.stopPropagation(); playTVSeries(${e.id},'${escapeQuote(e.name)}','${e.first_air_date?.slice(0,4)||""}')"><i class="fas fa-info-circle"></i></button><div class="play-center" onclick="event.stopPropagation(); playTVSeries(${e.id},'${escapeQuote(e.name)}','${e.first_air_date?.slice(0,4)||""}')"><i class="fas fa-play"></i></div></div>`).join("")});if(t==="shqipSearch"){let n=getShqipMovies().filter(t=>t.title.toLowerCase().includes(e.toLowerCase()));document.getElementById("shqipGrid").innerHTML=n.map(e=>`<div class="movie-card"><img src="${e.thumbnail}"><div class="rating"><i class="fas fa-star"></i> ${e.rating}</div><div class="type-badge shqip-badge">SHQIP</div><div class="card-content"><div class="card-title">${e.title}</div><div class="card-year">${e.year}</div></div><button class="info-btn" onclick="event.stopPropagation(); playShqipMovie('${e.id}')"><i class="fas fa-info-circle"></i></button><div class="play-center" onclick="event.stopPropagation(); playShqipMovie('${e.id}')"><i class="fas fa-play"></i></div></div>`).join("")}if(t==="yuSearch"){let n=getYUMovies().filter(t=>t.title.toLowerCase().includes(e.toLowerCase()));document.getElementById("yuGrid").innerHTML=n.map(e=>`<div class="movie-card"><img src="${e.thumbnail}"><div class="rating"><i class="fas fa-star"></i> ${e.rating}</div><div class="type-badge yu-badge">EX YU</div><div class="card-content"><div class="card-title">${e.title}</div><div class="card-year">${e.year}</div></div><button class="info-btn" onclick="event.stopPropagation(); playYUMovie('${e.id}')"><i class="fas fa-info-circle"></i></button><div class="play-center" onclick="event.stopPropagation(); playYUMovie('${e.id}')"><i class="fas fa-play"></i></div></div>`).join("")}if(t==="trendingSearch")fetchTMDBData("/trending/all/day").then(t=>{let n=t.results.filter(t=>(t.title||t.name).toLowerCase().includes(e.toLowerCase()));document.getElementById("trendingGrid").innerHTML=n.map(e=>{let t=e.media_type==="movie",n=e.title||e.name,o=(e.release_date||e.first_air_date)?.slice(0,4)||"N/A",r=e.id;return`<div class="movie-card"><img src="${getImageUrl(e.poster_path)}"><div class="rating"><i class="fas fa-fire"></i> ${e.vote_average?.toFixed(1)}</div><div class="type-badge">TRENDING</div><div class="card-content"><div class="card-title">${n}</div><div class="card-year">${o}</div></div><button class="info-btn" onclick="event.stopPropagation(); ${t?`playMovie(${r},'${escapeQuote(n)}','${o}')`:`playTVSeries(${r},'${escapeQuote(n)}','${o}')`}"><i class="fas fa-info-circle"></i></button><div class="play-center" onclick="event.stopPropagation(); ${t?`playMovie(${r},'${escapeQuote(n)}','${o}')`:`playTVSeries(${r},'${escapeQuote(n)}','${o}')`}"><i class="fas fa-play"></i></div></div>`}).join("")})}}function setupSearchEnter(){["mainSearch","movieSearch","seriesSearch","shqipSearch","yuSearch","trendingSearch"].forEach(e=>{let t=document.getElementById(e);t&&t.addEventListener("keypress",t=>{t.key==="Enter"&&performSearch(t.target.value,e)})})}document.addEventListener("DOMContentLoaded",()=>{loadFeaturedContent(),loadAllMovies(),loadAllSeries(),loadShqipContent(),loadYUContent(),loadTrending(),loadNewMoviesSlider(),showSection("home"),setupSearchEnter()});let deferredPrompt;window.addEventListener("beforeinstallprompt",e=>{e.preventDefault(),deferredPrompt=e;let t=document.getElementById("installButton");t&&(t.style.display="flex")}),document.getElementById("installButton")?.addEventListener("click",async()=>{deferredPrompt&&(deferredPrompt.prompt(),await deferredPrompt.userChoice,deferredPrompt=null,document.getElementById("installButton").style.display="none")});
+// ==================== ANTI-DEVTOOLS (AUTO REFRESH) ====================
+(function() {
+    // Metoda 1: Zbulim nëpërmjet ndryshimit të dimensioneve
+    function detectBySize() {
+        const widthDiff = window.outerWidth - window.innerWidth;
+        const heightDiff = window.outerHeight - window.innerHeight;
+        // DevTools zakonisht e rrit këtë diferencë (> 100 px)
+        if (widthDiff > 100 || heightDiff > 100) {
+            return true;
+        }
+        return false;
+    }
+
+    // Metoda 2: Zbulim nëpërmjet kohës së ekzekutimit (pa debugger)
+    function detectByTiming() {
+        const start = performance.now();
+        // Një veprim i lehtë që mund të vonohet nëse DevTools është i hapur
+        for (let i = 0; i < 1000; i++) { Math.sqrt(i); }
+        const end = performance.now();
+        // Nëse koha është më e madhe se 5 ms (ndryshon sipas pajisjes, por në DevTools rritet ndjeshëm)
+        // Për siguri, vendosim 15 ms – nëse vonon, ka të ngjarë DevTools i hapur.
+        return (end - start) > 15;
+    }
+
+    let devToolsOpen = false;
+    setInterval(() => {
+        if (detectBySize() || detectByTiming()) {
+            if (!devToolsOpen) {
+                devToolsOpen = true;
+                // Pastro localStorage dhe sessionStorage opsional (për siguri)
+                // localStorage.clear();
+                // sessionStorage.clear();
+                // Refresh faqe
+                window.location.reload();
+            }
+        } else {
+            devToolsOpen = false;
+        }
+    }, 2000);
+
+    // Zbulim alternativ për inspektim të elementeve
+    const element = document.createElement('div');
+    Object.defineProperty(element, 'id', {
+        get: function() {
+            window.location.reload();
+        }
+    });
+    console.log(element); // kjo linjë nuk shkakton reload nëse nuk hapet devtools
+})();
+
+// ==================== VAZHDON KODI I APLIKACIONIT ====================
+const TMDB_API_KEY = "dc375cc5d8355f3483fe6fa990736b0e";
+const TMDB_BASE_URL = "https://api.themoviedb.org/3";
+const VIDEO_SOURCES = {
+    vidsrc: { name: "VidSrc", baseUrl: "https://vidsrc-embed.ru/embed/movie/", baseUrlTv: "https://vidsrc-embed.ru/embed/tv/", type: "embed" },
+    smashy: { name: "Smashy", baseUrl: "https://vidsrcme.su/movie/", baseUrlTv: "https://vidsrcme.su/tv/", type: "embed" },
+    vidsrcme: { name: "VidSrc.me", baseUrl: "https://vidsrc.icu/embed/", type: "embed" }
+};
+
+let allMovies = [], allSeries = [], shqipMovies = [], yuMovies = [];
+let currentMovieData = null, currentSeriesData = null, currentSources = [];
+let newMoviesSwiper = null;
+
+function getImageUrl(path, size = 'w500') {
+    return path ? `https://image.tmdb.org/t/p/${size}${path}` : 'https://images.unsplash.com/photo-1535016120720-40c646be5580?w=500&q=80';
+}
+function escapeQuote(text) {
+    if (!text) return '';
+    return text.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
+}
+function showNotification(message, type = 'info') {
+    let notif = document.createElement('div');
+    notif.className = `notification ${type}`;
+    notif.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i><span>${message}</span><button onclick="this.parentElement.remove()">&times;</button>`;
+    document.body.appendChild(notif);
+    setTimeout(() => notif.remove(), 4000);
+}
+function animateCounter(elId, target, duration) {
+    let el = document.getElementById(elId);
+    if (!el) return;
+    let increment = target / (duration / 16), current = 0;
+    let timer = setInterval(() => {
+        current += increment;
+        if (current >= target) { el.textContent = target.toLocaleString() + '+'; clearInterval(timer); }
+        else el.textContent = Math.floor(current).toLocaleString() + '+';
+    }, 16);
+}
+function addToWatchHistory(title, year, type, id) {
+    try {
+        let history = JSON.parse(localStorage.getItem('albatv_watch_history')) || [];
+        history.unshift({ title, year, type, id, timestamp: new Date().toISOString() });
+        history = history.slice(0, 50);
+        localStorage.setItem('albatv_watch_history', JSON.stringify(history));
+    } catch(e) {}
+}
+async function fetchTMDBData(endpoint, params = {}) {
+    let defaultParams = { api_key: TMDB_API_KEY, language: 'en-US', ...params };
+    let url = `${TMDB_BASE_URL}${endpoint}?${new URLSearchParams(defaultParams)}`;
+    let res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+}
+
+// ==================== LOCAL MOVIES ====================
+function getShqipMovies() {
+    return [
+        { id: '1', title: "BESNIKERIA DHE BUJARIA", year: '2019', thumbnail: 'https://i.ytimg.com/vi/cbhgvrJfLx8/hqdefault.jpg', rating: '8.2', sources: [{ type: 'youtube', videoId: 'cbhgvrJfLx8' }] },
+        { id: '13', title: "EGO - Filmi i plote | 4K", year: '2019', thumbnail: 'https://i.ytimg.com/vi/-OzYN6oUjNQ/hqdefault.jpg', rating: '8.2', sources: [{ type: 'youtube', videoId: '-OzYN6oUjNQ' }] },
+        { id: '2', title: "ZONJA NGA QYTETI", year: '1980', thumbnail: 'https://i.ytimg.com/vi/a8Ol-g13zAQ/hqdefault.jpg', rating: '8.2', sources: [{ type: 'youtube', videoId: 'a8Ol-g13zAQ' }] },
+        { id: '3', title: "A FRIEND FROM VILLAGE", year: '1980', thumbnail: 'https://i.ytimg.com/vi/Q8aFkR5VKuM/hqdefault.jpg', rating: '7.8', sources: [{ type: 'youtube', videoId: 'Q8aFkR5VKuM' }] },
+        { id: '4', title: "ÇIFTI I LUMTUR", year: '1975', thumbnail: 'https://i.ytimg.com/vi/wHDRtwM6gUU/hqdefault.jpg', rating: '8.0', sources: [{ type: 'youtube', videoId: 'wHDRtwM6gUU' }] },
+        { id: '5', title: "BESA E KUQE", year: '1982', thumbnail: 'https://i.ytimg.com/vi/FktxciPxG54/hqdefault.jpg', rating: '7.5', sources: [{ type: 'youtube', videoId: 'FktxciPxG54' }] },
+        { id: '6', title: "FESTA E MADHE", year: '1981', thumbnail: 'https://i.ytimg.com/vi/eAUOydt6H44/hqdefault.jpg', rating: '8.5', sources: [{ type: 'youtube', videoId: 'eAUOydt6H44' }] },
+        { id: '7', title: "FRAKTURA", year: '1983', thumbnail: 'https://i.ytimg.com/vi/eB_lZBCfe9Y/hqdefault.jpg', rating: '8.1', sources: [{ type: 'youtube', videoId: 'eB_lZBCfe9Y' }] },
+        { id: '8', title: "TANA", year: '1958', thumbnail: 'https://i.ytimg.com/vi/En051KxETvw/hqdefault.jpg', rating: '8.5', sources: [{ type: 'youtube', videoId: 'En051KxETvw' }] },
+        { id: '9', title: "DEBATIK", year: '1961', thumbnail: 'https://i.ytimg.com/vi/mYaNJiVUGPQ/hqdefault.jpg', rating: '8.0', sources: [{ type: 'youtube', videoId: 'mYaNJiVUGPQ' }] },
+        { id: '10', title: "NJË DJALË DHE NJË VAJZË", year: '1980', thumbnail: 'https://i.ytimg.com/vi/xi3va550WP4/hqdefault.jpg', rating: '7.9', sources: [{ type: 'youtube', videoId: 'xi3va550WP4' }] },
+        { id: '11', title: "Dashuria s'mjafton", year: '2019', thumbnail: 'https://i.ytimg.com/vi/fabFTlOQD_k/hqdefault.jpg', rating: '8.1', sources: [{ type: 'youtube', videoId: 'fabFTlOQD_k' }] },
+        { id: '14', title: "Filmi Rikonstruksioni", year: '1988', thumbnail: 'https://i.ytimg.com/vi/OK99Ast0sSE/hqdefault.jpg', rating: '8.1', sources: [{ type: 'youtube', videoId: 'OK99Ast0sSE' }] },
+        { id: '15', title: "Unë e dua Erën", year: '1991', thumbnail: 'https://s1.dmcdn.net/1/Z3sIA1elov-uFoUyY/856x480f', rating: '8.1', sources: [{ type: 'dailymotion', videoId: 'x9q7eru', url: 'https://www.dailymotion.com/embed/video/x9q7eru' }] },
+        { id: '16', title: "Yjet e neteve te gjata", year: '1972', thumbnail: 'https://image.tmdb.org/t/p/w500/4B2XRnN0YyX6caqp5VAPFkn3rmq.jpg', rating: '8.1', sources: [{ type: 'dailymotion', videoId: 'x9qbsdu', url: 'https://www.dailymotion.com/embed/video/x9qbsdu' }] },
+        { id: '12', title: "BALLË PËR BALLË", year: '1979', thumbnail: 'https://i.ytimg.com/vi/cjFE0aOVv5w/hqdefault.jpg', rating: '8.3', sources: [{ type: 'youtube', videoId: 'cjFE0aOVv5w' }] }
+    ];
+}
+function getYUMovies() {
+    return [
+        { id: 'yu1', title: "BALKAN EKSPRES", year: '1983', thumbnail: 'https://i.ytimg.com/vi/s1QoFXgzVpU/hqdefault.jpg', rating: '8.7', genre: ['comedy'], sources: [{ type: 'youtube', videoId: 's1QoFXgzVpU' }] },
+        { id: 'yu2', title: "KO TO TAMO PEVA", year: '1980', thumbnail: 'https://i.ytimg.com/vi/ZwozSLas8DM/hqdefault.jpg', rating: '9.0', genre: ['war','comedy'], sources: [{ type: 'youtube', videoId: 'ZwozSLas8DM' }] },
+        { id: 'yu3', title: "BITKA NA NERETVI", year: '1969', thumbnail: 'https://i.ytimg.com/vi/rOAlNgxKVHk/hqdefault.jpg', rating: '7.8', genre: ['war'], sources: [{ type: 'youtube', videoId: 'rOAlNgxKVHk' }] },
+        { id: 'yu4', title: "MARATONCI TRCE PASTASNI KRUG", year: '1982', thumbnail: 'https://m.media-amazon.com/images/M/MV5BODViMmFmMmMtYTViNS00OGY3LTkwYzQtNzk5ZTVhNTZhZWZlXkEyXkFqcGc@._V1_FMjpg_UY3492_.jpg', rating: '8.5', genre: ['comedy'], sources: [{ type: 'dailymotion', videoId: 'x9mtnqq', url: 'https://www.dailymotion.com/embed/video/x9mtnqq' }] },
+        { id: 'yu5', title: "SUTJESKA", year: '1973', thumbnail: 'https://i.ytimg.com/vi/At4tQRmduB4/hqdefault.jpg', rating: '7.5', genre: ['war'], sources: [{ type: 'youtube', videoId: 'At4tQRmduB4' }] },
+        { id: 'yu6', title: "DOM ZA VESANJE", year: '1988', thumbnail: 'https://i.ytimg.com/vi/9rOoX3PDZzY/hqdefault.jpg', rating: '8.7', genre: ['drama'], sources: [{ type: 'youtube', videoId: '9rOoX3PDZzY' }] },
+        { id: 'yu7', title: "OTAC NA SLUZBENOM PUTU", year: '1985', thumbnail: 'https://i.ytimg.com/vi/YdTdLIVk7pU/hqdefault.jpg', rating: '8.3', genre: ['drama'], sources: [{ type: 'youtube', videoId: 'YdTdLIVk7pU' }] },
+        { id: 'yu8', title: "VALTER BRANI SARAJEVO", year: '1972', thumbnail: 'https://i.ytimg.com/vi/ZVHMocrBurQ/hqdefault.jpg', rating: '8.2', genre: ['war','action'], sources: [{ type: 'youtube', videoId: 'ZVHMocrBurQ' }] },
+        { id: 'yu9', title: "TITO I JA", year: '1972', thumbnail: 'https://i0.wp.com/easterneuropeanmovies.com/wp-content/uploads/449-2.jpg?fit=740%2C1040&ssl=1', rating: '7.9', genre: ['comedy','war'], sources: [{ type: 'dailymotion', videoId: 'x90pw9g', url: 'https://www.dailymotion.com/embed/video/x90pw9g' }] },
+        { id: 'yu10', title: "Nema problema - HD", year: '1984', thumbnail: 'https://i.ytimg.com/vi/2GliQKXYg_c/hqdefault.jpg', rating: '8.1', genre: ['comedy','romance'], sources: [{ type: 'youtube', videoId: '2GliQKXYg_c' }] },
+        { id: 'yu11', title: "Ludi dani", year: '1974', thumbnail: 'https://i.ytimg.com/vi/PvRtv3GgYR8/hqdefault.jpg', rating: '7.7', genre: ['crime','drama'], sources: [{ type: 'youtube', videoId: 'PvRtv3GgYR8' }] },
+        { id: 'yu12', title: "UZICKA REPUBLIKA", year: '1974', thumbnail: 'https://i.ytimg.com/vi/tWn8-LoFIi8/hqdefault.jpg', rating: '7.8', genre: ['war','history'], sources: [{ type: 'youtube', videoId: 'tWn8-LoFIi8' }] }
+    ];
+}
+
+// ==================== INFO POSHTE PLAYER ====================
+async function displayPlayerInfo(type, id, title) {
+    const infoDiv = document.getElementById('playerInfo');
+    if (!infoDiv) return;
+    infoDiv.style.display = 'block';
+    infoDiv.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar informacionin...</div>';
+    try {
+        const endpoint = type === 'movie' ? `/movie/${id}` : `/tv/${id}`;
+        const [details, credits, videos] = await Promise.all([
+            fetchTMDBData(endpoint),
+            fetchTMDBData(`${endpoint}/credits`),
+            fetchTMDBData(`${endpoint}/videos`)
+        ]);
+        const cast = credits.cast ? credits.cast.slice(0, 8) : [];
+        const trailer = videos.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+        const year = (details.release_date || details.first_air_date)?.slice(0,4) || 'N/A';
+        const runtime = details.runtime ? `${details.runtime} min` : (details.episode_run_time?.[0] ? `${details.episode_run_time[0]} min` : 'N/A');
+        const genres = details.genres.map(g => g.name).join(', ');
+        
+        let castHtml = '';
+        if (cast.length) {
+            castHtml = `
+                <h3><i class="fas fa-users"></i> Aktorët kryesorë</h3>
+                <div class="cast-horizontal">
+                    ${cast.map(actor => `
+                        <div class="cast-card">
+                            <img src="${getImageUrl(actor.profile_path, 'w185')}" onerror="this.src='https://via.placeholder.com/80x80?text=No+Image'">
+                            <div class="name">${actor.name}</div>
+                            <div class="character">${actor.character || ''}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        } else {
+            castHtml = `<p><i>Nuk ka informacion për aktorët.</i></p>`;
+        }
+        
+        infoDiv.innerHTML = `
+            <div class="player-info-container">
+                <div class="player-info-left">
+                    <h2><i class="fas fa-info-circle"></i> ${details.title || details.name} (${year})</h2>
+                    <p><strong>Vlerësim:</strong> ⭐ ${details.vote_average?.toFixed(1)}/10 (${details.vote_count} vota)</p>
+                    <p><strong>Zhanri:</strong> ${genres || 'N/A'}</p>
+                    <p><strong>Kohëzgjatja:</strong> ${runtime}</p>
+                    <p><strong>Përmbajtja:</strong> ${details.overview || 'Nuk ka përshkrim.'}</p>
+                    ${trailer ? `<button class="trailer-btn" onclick="playTrailerInPlayer('${trailer.key}')"><i class="fab fa-youtube"></i> Shiko Trailer</button>` : '<p><i>Trailer nuk disponohet</i></p>'}
+                </div>
+                <div class="player-info-right">
+                    ${castHtml}
+                </div>
+            </div>
+        `;
+    } catch(e) {
+        console.error(e);
+        infoDiv.innerHTML = '<p style="color:red;">Dështoi ngarkimi i informacionit.</p>';
+    }
+}
+function displayShqipPlayerInfo(movie) {
+    const infoDiv = document.getElementById('playerInfo');
+    if (!infoDiv) return;
+    infoDiv.style.display = 'block';
+    infoDiv.innerHTML = `
+        <div class="player-info-container">
+            <div class="player-info-left">
+                <h2><i class="fas fa-flag"></i> ${movie.title} (${movie.year})</h2>
+                <p><strong>Vlerësim:</strong> ⭐ ${movie.rating}/10</p>
+                <p><strong>Përshkrimi:</strong> Film shqiptar i vitit ${movie.year}.</p>
+            </div>
+            <div class="player-info-right">
+                <p><i>Aktorët kryesorë: do të shtohen së shpejti.</i></p>
+            </div>
+        </div>
+    `;
+}
+function displayYUPlayerInfo(movie) {
+    const infoDiv = document.getElementById('playerInfo');
+    if (!infoDiv) return;
+    infoDiv.style.display = 'block';
+    infoDiv.innerHTML = `
+        <div class="player-info-container">
+            <div class="player-info-left">
+                <h2><i class="fas fa-landmark"></i> ${movie.title} (${movie.year})</h2>
+                <p><strong>Vlerësim:</strong> ⭐ ${movie.rating}/10</p>
+                <p><strong>Zhanri:</strong> ${movie.genre?.join(', ')}</p>
+                <p><strong>Përshkrimi:</strong> Film klasik jugosllav.</p>
+            </div>
+            <div class="player-info-right">
+                <p><i>Aktorët: Velimir Bata Živojinović, Ljubiša Samardžić etj.</i></p>
+            </div>
+        </div>
+    `;
+}
+function playTrailerInPlayer(trailerKey) {
+    const playerFrame = document.getElementById('playerFrame');
+    if (playerFrame) {
+        playerFrame.src = `https://www.youtube-nocookie.com/embed/${trailerKey}?autoplay=1`;
+        showNotification("Traileri po luhet. Mbyll player-in për të vazhduar filmin.", "info");
+    }
+}
+
+// ==================== PLAYER & SOURCES ====================
+async function loadMovieSources(movieId) {
+    let sources = [
+        { id: 'vidsrc', name: 'VidSrc', url: `${VIDEO_SOURCES.vidsrc.baseUrl}${movieId}` },
+        { id: 'smashy', name: 'Smashy', url: `${VIDEO_SOURCES.smashy.baseUrl}${movieId}` },
+        { id: 'vidsrcme', name: 'VidSrc.me', url: `${VIDEO_SOURCES.vidsrcme.baseUrl}?tmdb=${movieId}` }
+    ];
+    currentSources = sources;
+    let btnsDiv = document.getElementById('sourcesButtons');
+    if (btnsDiv) btnsDiv.innerHTML = sources.map((s, i) => `<button class="source-btn ${i === 0 ? 'active-source' : ''}" onclick="loadSource('${s.id}')">${s.name}</button>`).join('');
+    if (sources.length) loadSource(sources[0].id);
+}
+async function loadSeriesSources(seriesId) {
+    let sources = [
+        { id: 'vidsrc', name: 'VidSrc', url: `${VIDEO_SOURCES.vidsrc.baseUrlTv}${seriesId}/1/1` },
+        { id: 'smashy', name: 'Smashy', url: `${VIDEO_SOURCES.smashy.baseUrlTv}${seriesId}/1/1` }
+    ];
+    currentSources = sources;
+    let btnsDiv = document.getElementById('sourcesButtons');
+    if (btnsDiv) btnsDiv.innerHTML = sources.map((s, i) => `<button class="source-btn ${i === 0 ? 'active-source' : ''}" onclick="loadSource('${s.id}')">${s.name}</button>`).join('');
+    if (sources.length) loadSource(sources[0].id);
+}
+function loadSource(sourceId) {
+    let source = currentSources.find(s => s.id === sourceId);
+    if (!source) return;
+    let playerFrame = document.getElementById('playerFrame');
+    if (!playerFrame) return;
+    if (currentSeriesData) {
+        let season = document.getElementById('seasonSelect')?.value || 1;
+        let episode = document.getElementById('episodeSelect')?.value || 1;
+        if (sourceId === 'vidsrc') playerFrame.src = `${VIDEO_SOURCES.vidsrc.baseUrlTv}${currentSeriesData.id}/${season}/${episode}`;
+        else if (sourceId === 'smashy') playerFrame.src = `${VIDEO_SOURCES.smashy.baseUrlTv}${currentSeriesData.id}/${season}/${episode}`;
+        else playerFrame.src = source.url;
+    } else {
+        playerFrame.src = source.url;
+    }
+    document.querySelectorAll('.source-btn').forEach(btn => btn.classList.remove('active-source'));
+    let activeBtn = document.querySelector(`.source-btn[onclick*="${sourceId}"]`);
+    if (activeBtn) activeBtn.classList.add('active-source');
+}
+function playSelectedEpisode() {
+    if (!currentSeriesData) return;
+    let season = document.getElementById('seasonSelect')?.value;
+    let episode = document.getElementById('episodeSelect')?.value;
+    if (season && episode) {
+        let activeSrc = document.querySelector('.source-btn.active-source');
+        if (activeSrc) {
+            let match = activeSrc.getAttribute('onclick')?.match(/loadSource\('([^']+)'\)/);
+            if (match) loadSource(match[1]);
+        }
+    }
+}
+async function populateEpisodes(seriesId, seasonNum) {
+    let seasonData = await fetchTMDBData(`/tv/${seriesId}/season/${seasonNum}`);
+    let episodeSelect = document.getElementById('episodeSelect');
+    if (!episodeSelect) return;
+    episodeSelect.innerHTML = '';
+    seasonData.episodes.forEach(ep => {
+        let opt = document.createElement('option');
+        opt.value = ep.episode_number;
+        opt.textContent = `Episodi ${ep.episode_number}: ${ep.name}`;
+        episodeSelect.appendChild(opt);
+    });
+    if (episodeSelect.options.length) episodeSelect.value = 1;
+}
+async function loadSeriesSeasonsEpisodes(seriesId) {
+    let details = await fetchTMDBData(`/tv/${seriesId}`);
+    let seasonSelect = document.getElementById('seasonSelect');
+    if (!seasonSelect) return;
+    seasonSelect.innerHTML = '';
+    details.seasons.forEach(season => {
+        if (season.season_number >= 0) {
+            let opt = document.createElement('option');
+            opt.value = season.season_number;
+            opt.textContent = `Sezoni ${season.season_number} (${season.episode_count} episode)`;
+            seasonSelect.appendChild(opt);
+        }
+    });
+    if (seasonSelect.options.length) {
+        seasonSelect.value = 1;
+        await populateEpisodes(seriesId, 1);
+    }
+    seasonSelect.onchange = async () => { await populateEpisodes(seriesId, seasonSelect.value); playSelectedEpisode(); };
+}
+function playMovie(id, title, year) {
+    currentMovieData = { id, title, year, type: 'movie' };
+    currentSeriesData = null;
+    const seriesControls = document.getElementById('seriesControls');
+    if (seriesControls) seriesControls.style.display = 'none';
+    const playerTitle = document.getElementById('playerTitle');
+    if (playerTitle) playerTitle.innerHTML = title;
+    const playerModal = document.getElementById('playerModal');
+    if (playerModal) playerModal.style.display = 'flex';
+    const playerInfo = document.getElementById('playerInfo');
+    if (playerInfo) playerInfo.style.display = 'none';
+    loadMovieSources(id);
+    addToWatchHistory(title, year, 'movie', id);
+    displayPlayerInfo('movie', id, title);
+}
+function playTVSeries(id, title, year) {
+    currentSeriesData = { id, title, year, type: 'series' };
+    const seriesControls = document.getElementById('seriesControls');
+    if (seriesControls) seriesControls.style.display = 'flex';
+    const playerTitle = document.getElementById('playerTitle');
+    if (playerTitle) playerTitle.innerHTML = title;
+    const playerModal = document.getElementById('playerModal');
+    if (playerModal) playerModal.style.display = 'flex';
+    const playerInfo = document.getElementById('playerInfo');
+    if (playerInfo) playerInfo.style.display = 'none';
+    loadSeriesSources(id);
+    loadSeriesSeasonsEpisodes(id);
+    addToWatchHistory(title, year, 'series', id);
+    displayPlayerInfo('tv', id, title);
+}
+function playShqipMovie(id) {
+    let movie = getShqipMovies().find(m => m.id === id);
+    if (!movie) return;
+    let src = movie.sources[0];
+    currentMovieData = { id: movie.id, title: movie.title, year: movie.year, type: 'shqip' };
+    currentSeriesData = null;
+    const seriesControls = document.getElementById('seriesControls');
+    if (seriesControls) seriesControls.style.display = 'none';
+    const playerTitle = document.getElementById('playerTitle');
+    if (playerTitle) playerTitle.innerHTML = movie.title;
+    const playerModal = document.getElementById('playerModal');
+    if (playerModal) playerModal.style.display = 'flex';
+    const playerInfo = document.getElementById('playerInfo');
+    if (playerInfo) playerInfo.style.display = 'none';
+    const playerFrame = document.getElementById('playerFrame');
+    if (playerFrame) {
+        if (src.type === 'youtube') {
+            playerFrame.src = `https://www.youtube-nocookie.com/embed/${src.videoId}?autoplay=1`;
+        } else if (src.type === 'dailymotion') {
+            playerFrame.src = src.url;
+        }
+    }
+    addToWatchHistory(movie.title, movie.year, 'shqip', id);
+    displayShqipPlayerInfo(movie);
+}
+function playYUMovie(id) {
+    let movie = getYUMovies().find(m => m.id === id);
+    if (!movie) return;
+    let src = movie.sources[0];
+    currentMovieData = { id: movie.id, title: movie.title, year: movie.year, type: 'yu' };
+    currentSeriesData = null;
+    const seriesControls = document.getElementById('seriesControls');
+    if (seriesControls) seriesControls.style.display = 'none';
+    const playerTitle = document.getElementById('playerTitle');
+    if (playerTitle) playerTitle.innerHTML = movie.title;
+    const playerModal = document.getElementById('playerModal');
+    if (playerModal) playerModal.style.display = 'flex';
+    const playerInfo = document.getElementById('playerInfo');
+    if (playerInfo) playerInfo.style.display = 'none';
+    const playerFrame = document.getElementById('playerFrame');
+    if (playerFrame) {
+        if (src.type === 'youtube') {
+            playerFrame.src = `https://www.youtube-nocookie.com/embed/${src.videoId}?autoplay=1`;
+        } else if (src.type === 'dailymotion') {
+            playerFrame.src = src.url;
+        }
+    }
+    addToWatchHistory(movie.title, movie.year, 'yu', id);
+    displayYUPlayerInfo(movie);
+}
+function closePlayer() {
+    const playerModal = document.getElementById('playerModal');
+    if (playerModal) playerModal.style.display = 'none';
+    const playerFrame = document.getElementById('playerFrame');
+    if (playerFrame) playerFrame.src = '';
+    const playerInfo = document.getElementById('playerInfo');
+    if (playerInfo) {
+        playerInfo.style.display = 'none';
+        playerInfo.innerHTML = '';
+    }
+    currentMovieData = null;
+    currentSeriesData = null;
+}
+function closeYouTubePlayer() {
+    const youtubeModal = document.getElementById('youtubeModal');
+    if (youtubeModal) youtubeModal.style.display = 'none';
+    const youtubeIframe = document.getElementById('youtubeIframe');
+    if (youtubeIframe) youtubeIframe.src = '';
+}
+
+// ==================== RENDER FUNCTIONS ====================
+async function loadNewMoviesSlider() {
+    let wrapper = document.getElementById('newMoviesSliderWrapper');
+    if (!wrapper) return;
+    try {
+        let data = await fetchTMDBData('/movie/now_playing', { page: 1 });
+        let movies = data.results.slice(0, 15);
+        wrapper.innerHTML = movies.map(m => `
+            <div class="swiper-slide">
+                <div class="movie-card">
+                    <img src="${getImageUrl(m.poster_path)}" loading="lazy">
+                    <div class="rating"><i class="fas fa-star"></i> ${m.vote_average?.toFixed(1) || 'N/A'}</div>
+                    <div class="type-badge" style="background:#2c3e66;">NEW</div>
+                    <div class="card-content">
+                        <div class="card-title">${m.title}</div>
+                        <div class="card-year">${m.release_date?.slice(0,4) || 'N/A'}</div>
+                    </div>
+                    <button class="info-btn" onclick="event.stopPropagation(); playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><i class="fas fa-info-circle"></i></button>
+                    <div class="play-center" onclick="event.stopPropagation(); playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><i class="fas fa-play"></i></div>
+                </div>
+            </div>
+        `).join('');
+        if (window.newMoviesSwiper) window.newMoviesSwiper.destroy(true,true);
+        window.newMoviesSwiper = new Swiper('.new-movies-swiper', {
+            slidesPerView: 'auto',
+            spaceBetween: 20,
+            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+            pagination: { el: '.swiper-pagination', clickable: true },
+            breakpoints: { 0: { slidesPerView: 2 }, 640: { slidesPerView: 3 }, 1024: { slidesPerView: 5 } }
+        });
+    } catch(e) { console.error(e); wrapper.innerHTML = '<div class="loading">Dështoi ngarkimi</div>'; }
+}
+async function loadFeaturedContent() {
+    try {
+        let movies = await fetchTMDBData('/movie/popular', { page:1 });
+        let series = await fetchTMDBData('/tv/popular', { page:1 });
+        let featuredMovies = document.getElementById('featuredMovies');
+        let featuredSeries = document.getElementById('featuredSeries');
+        let featuredYU = document.getElementById('featuredYU');
+        if (featuredMovies) featuredMovies.innerHTML = movies.results.slice(0,6).map(m => `
+            <div class="movie-card">
+                <img src="${getImageUrl(m.poster_path)}">
+                <div class="rating"><i class="fas fa-star"></i> ${m.vote_average.toFixed(1)}</div>
+                <div class="type-badge">FILM</div>
+                <div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.release_date?.slice(0,4)||'N/A'}</div></div>
+                <button class="info-btn" onclick="event.stopPropagation(); playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><i class="fas fa-info-circle"></i></button>
+                <div class="play-center" onclick="event.stopPropagation(); playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><i class="fas fa-play"></i></div>
+            </div>
+        `).join('');
+        if (featuredSeries) featuredSeries.innerHTML = series.results.slice(0,6).map(s => `
+            <div class="movie-card">
+                <img src="${getImageUrl(s.poster_path)}">
+                <div class="rating"><i class="fas fa-star"></i> ${s.vote_average.toFixed(1)}</div>
+                <div class="type-badge">SERI</div>
+                <div class="card-content"><div class="card-title">${s.name}</div><div class="card-year">${s.first_air_date?.slice(0,4)||'N/A'}</div></div>
+                <button class="info-btn" onclick="event.stopPropagation(); playTVSeries(${s.id},'${escapeQuote(s.name)}','${s.first_air_date?.slice(0,4)||''}')"><i class="fas fa-info-circle"></i></button>
+                <div class="play-center" onclick="event.stopPropagation(); playTVSeries(${s.id},'${escapeQuote(s.name)}','${s.first_air_date?.slice(0,4)||''}')"><i class="fas fa-play"></i></div>
+            </div>
+        `).join('');
+        let yuFeatured = getYUMovies().slice(0,6);
+        if (featuredYU) featuredYU.innerHTML = yuFeatured.map(m => `
+            <div class="movie-card">
+                <img src="${m.thumbnail}">
+                <div class="rating"><i class="fas fa-star"></i> ${m.rating}</div>
+                <div class="type-badge yu-badge">EX YU</div>
+                <div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.year}</div></div>
+                <button class="info-btn" onclick="event.stopPropagation(); playYUMovie('${m.id}')"><i class="fas fa-info-circle"></i></button>
+                <div class="play-center" onclick="event.stopPropagation(); playYUMovie('${m.id}')"><i class="fas fa-play"></i></div>
+            </div>
+        `).join('');
+    } catch(e) { console.error(e); }
+}
+async function loadAllMovies() {
+    let grid = document.getElementById('moviesGrid');
+    if (!grid) return;
+    grid.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar...</div>';
+    let data = await fetchTMDBData('/movie/popular', { page:1 });
+    allMovies = data.results;
+    grid.innerHTML = allMovies.map(m => `
+        <div class="movie-card">
+            <img src="${getImageUrl(m.poster_path)}">
+            <div class="rating"><i class="fas fa-star"></i> ${m.vote_average.toFixed(1)}</div>
+            <div class="type-badge">FILM</div>
+            <div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.release_date?.slice(0,4)||'N/A'}</div></div>
+            <button class="info-btn" onclick="event.stopPropagation(); playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><i class="fas fa-info-circle"></i></button>
+            <div class="play-center" onclick="event.stopPropagation(); playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><i class="fas fa-play"></i></div>
+        </div>
+    `).join('');
+}
+async function loadAllSeries() {
+    let grid = document.getElementById('seriesGrid');
+    if (!grid) return;
+    grid.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar...</div>';
+    let data = await fetchTMDBData('/tv/popular', { page:1 });
+    allSeries = data.results;
+    grid.innerHTML = allSeries.map(s => `
+        <div class="movie-card">
+            <img src="${getImageUrl(s.poster_path)}">
+            <div class="rating"><i class="fas fa-star"></i> ${s.vote_average.toFixed(1)}</div>
+            <div class="type-badge">SERI</div>
+            <div class="card-content"><div class="card-title">${s.name}</div><div class="card-year">${s.first_air_date?.slice(0,4)||'N/A'}</div></div>
+            <button class="info-btn" onclick="event.stopPropagation(); playTVSeries(${s.id},'${escapeQuote(s.name)}','${s.first_air_date?.slice(0,4)||''}')"><i class="fas fa-info-circle"></i></button>
+            <div class="play-center" onclick="event.stopPropagation(); playTVSeries(${s.id},'${escapeQuote(s.name)}','${s.first_air_date?.slice(0,4)||''}')"><i class="fas fa-play"></i></div>
+        </div>
+    `).join('');
+}
+function loadShqipContent() {
+    let grid = document.getElementById('shqipGrid');
+    if (!grid) return;
+    shqipMovies = getShqipMovies();
+    grid.innerHTML = shqipMovies.map(m => `
+        <div class="movie-card">
+            <img src="${m.thumbnail}">
+            <div class="rating"><i class="fas fa-star"></i> ${m.rating}</div>
+            <div class="type-badge shqip-badge">SHQIP</div>
+            <div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.year}</div></div>
+            <button class="info-btn" onclick="event.stopPropagation(); playShqipMovie('${m.id}')"><i class="fas fa-info-circle"></i></button>
+            <div class="play-center" onclick="event.stopPropagation(); playShqipMovie('${m.id}')"><i class="fas fa-play"></i></div>
+        </div>
+    `).join('');
+}
+function loadYUContent() {
+    let grid = document.getElementById('yuGrid');
+    if (!grid) return;
+    yuMovies = getYUMovies();
+    grid.innerHTML = yuMovies.map(m => `
+        <div class="movie-card">
+            <img src="${m.thumbnail}">
+            <div class="rating"><i class="fas fa-star"></i> ${m.rating}</div>
+            <div class="type-badge yu-badge">EX YU</div>
+            <div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.year}</div></div>
+            <button class="info-btn" onclick="event.stopPropagation(); playYUMovie('${m.id}')"><i class="fas fa-info-circle"></i></button>
+            <div class="play-center" onclick="event.stopPropagation(); playYUMovie('${m.id}')"><i class="fas fa-play"></i></div>
+        </div>
+    `).join('');
+}
+async function loadTrending() {
+    let grid = document.getElementById('trendingGrid');
+    if (!grid) return;
+    grid.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar...</div>';
+    let data = await fetchTMDBData('/trending/all/day');
+    grid.innerHTML = data.results.slice(0,12).map(i => {
+        let isMovie = i.media_type === 'movie';
+        let title = i.title || i.name;
+        let year = (i.release_date || i.first_air_date)?.slice(0,4) || 'N/A';
+        let id = i.id;
+        return `
+            <div class="movie-card">
+                <img src="${getImageUrl(i.poster_path)}">
+                <div class="rating"><i class="fas fa-fire"></i> ${i.vote_average?.toFixed(1)}</div>
+                <div class="type-badge">TRENDING</div>
+                <div class="card-content"><div class="card-title">${title}</div><div class="card-year">${year}</div></div>
+                <button class="info-btn" onclick="event.stopPropagation(); ${isMovie ? `playMovie(${id},'${escapeQuote(title)}','${year}')` : `playTVSeries(${id},'${escapeQuote(title)}','${year}')`}"><i class="fas fa-info-circle"></i></button>
+                <div class="play-center" onclick="event.stopPropagation(); ${isMovie ? `playMovie(${id},'${escapeQuote(title)}','${year}')` : `playTVSeries(${id},'${escapeQuote(title)}','${year}')`}"><i class="fas fa-play"></i></div>
+            </div>
+        `;
+    }).join('');
+}
+function showSection(sectionId) {
+    const sections = ['home', 'movies', 'series', 'shqip', 'yu', 'trending'];
+    sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    });
+    const activeSection = document.getElementById(sectionId);
+    if (!activeSection) {
+        console.error(`Seksioni "${sectionId}" nuk u gjet në HTML.`);
+        return;
+    }
+    activeSection.style.display = 'block';
+    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+    const activeLink = Array.from(document.querySelectorAll('.nav-link')).find(link => link.getAttribute('onclick')?.includes(`'${sectionId}'`));
+    if (activeLink) activeLink.classList.add('active');
+    if (sectionId === 'home') { loadFeaturedContent(); animateCounter('movieCount', 10000, 3000); animateCounter('seriesCount', 2000, 2500); animateCounter('yuCount', 500, 2000); loadNewMoviesSlider(); }
+    else if (sectionId === 'movies') loadAllMovies();
+    else if (sectionId === 'series') loadAllSeries();
+    else if (sectionId === 'shqip') loadShqipContent();
+    else if (sectionId === 'yu') loadYUContent();
+    else if (sectionId === 'trending') loadTrending();
+}
+function performSearch(query, sourceId) {
+    if (!query || query.length < 2) return;
+    if (sourceId === 'movieSearch') fetchTMDBData('/search/movie', { query }).then(data => { document.getElementById('moviesGrid').innerHTML = data.results.map(m => `
+        <div class="movie-card">
+            <img src="${getImageUrl(m.poster_path)}">
+            <div class="rating"><i class="fas fa-star"></i> ${m.vote_average?.toFixed(1)}</div>
+            <div class="type-badge">FILM</div>
+            <div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.release_date?.slice(0,4)||'N/A'}</div></div>
+            <button class="info-btn" onclick="event.stopPropagation(); playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><i class="fas fa-info-circle"></i></button>
+            <div class="play-center" onclick="event.stopPropagation(); playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><i class="fas fa-play"></i></div>
+        </div>
+    `).join(''); });
+    else if (sourceId === 'seriesSearch') fetchTMDBData('/search/tv', { query }).then(data => { document.getElementById('seriesGrid').innerHTML = data.results.map(s => `
+        <div class="movie-card">
+            <img src="${getImageUrl(s.poster_path)}">
+            <div class="rating"><i class="fas fa-star"></i> ${s.vote_average?.toFixed(1)}</div>
+            <div class="type-badge">SERI</div>
+            <div class="card-content"><div class="card-title">${s.name}</div><div class="card-year">${s.first_air_date?.slice(0,4)||'N/A'}</div></div>
+            <button class="info-btn" onclick="event.stopPropagation(); playTVSeries(${s.id},'${escapeQuote(s.name)}','${s.first_air_date?.slice(0,4)||''}')"><i class="fas fa-info-circle"></i></button>
+            <div class="play-center" onclick="event.stopPropagation(); playTVSeries(${s.id},'${escapeQuote(s.name)}','${s.first_air_date?.slice(0,4)||''}')"><i class="fas fa-play"></i></div>
+        </div>
+    `).join(''); });
+    else if (sourceId === 'shqipSearch') { let filtered = getShqipMovies().filter(m => m.title.toLowerCase().includes(query.toLowerCase())); document.getElementById('shqipGrid').innerHTML = filtered.map(m => `
+        <div class="movie-card">
+            <img src="${m.thumbnail}">
+            <div class="rating"><i class="fas fa-star"></i> ${m.rating}</div>
+            <div class="type-badge shqip-badge">SHQIP</div>
+            <div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.year}</div></div>
+            <button class="info-btn" onclick="event.stopPropagation(); playShqipMovie('${m.id}')"><i class="fas fa-info-circle"></i></button>
+            <div class="play-center" onclick="event.stopPropagation(); playShqipMovie('${m.id}')"><i class="fas fa-play"></i></div>
+        </div>
+    `).join(''); }
+    else if (sourceId === 'yuSearch') { let filtered = getYUMovies().filter(m => m.title.toLowerCase().includes(query.toLowerCase())); document.getElementById('yuGrid').innerHTML = filtered.map(m => `
+        <div class="movie-card">
+            <img src="${m.thumbnail}">
+            <div class="rating"><i class="fas fa-star"></i> ${m.rating}</div>
+            <div class="type-badge yu-badge">EX YU</div>
+            <div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.year}</div></div>
+            <button class="info-btn" onclick="event.stopPropagation(); playYUMovie('${m.id}')"><i class="fas fa-info-circle"></i></button>
+            <div class="play-center" onclick="event.stopPropagation(); playYUMovie('${m.id}')"><i class="fas fa-play"></i></div>
+        </div>
+    `).join(''); }
+    else if (sourceId === 'trendingSearch') fetchTMDBData('/trending/all/day').then(data => { let filtered = data.results.filter(i => (i.title || i.name).toLowerCase().includes(query.toLowerCase())); document.getElementById('trendingGrid').innerHTML = filtered.map(i => { let isMovie = i.media_type === 'movie'; let title = i.title || i.name; let year = (i.release_date || i.first_air_date)?.slice(0,4)||'N/A'; return `
+        <div class="movie-card">
+            <img src="${getImageUrl(i.poster_path)}">
+            <div class="rating"><i class="fas fa-fire"></i> ${i.vote_average?.toFixed(1)}</div>
+            <div class="type-badge">TRENDING</div>
+            <div class="card-content"><div class="card-title">${title}</div><div class="card-year">${year}</div></div>
+            <button class="info-btn" onclick="event.stopPropagation(); ${isMovie ? `playMovie(${i.id},'${escapeQuote(title)}','${year}')` : `playTVSeries(${i.id},'${escapeQuote(title)}','${year}')`}"><i class="fas fa-info-circle"></i></button>
+            <div class="play-center" onclick="event.stopPropagation(); ${isMovie ? `playMovie(${i.id},'${escapeQuote(title)}','${year}')` : `playTVSeries(${i.id},'${escapeQuote(title)}','${year}')`}"><i class="fas fa-play"></i></div>
+        </div>
+    `; }).join(''); });
+}
+function setupSearchEnter() {
+    ['mainSearch', 'movieSearch', 'seriesSearch', 'shqipSearch', 'yuSearch', 'trendingSearch'].forEach(id => {
+        let input = document.getElementById(id);
+        if (input) input.addEventListener('keypress', e => { if (e.key === 'Enter') performSearch(e.target.value, id); });
+    });
+}
+document.addEventListener('DOMContentLoaded', () => {
+    loadFeaturedContent(); loadAllMovies(); loadAllSeries(); loadShqipContent(); loadYUContent(); loadTrending(); loadNewMoviesSlider();
+    showSection('home'); setupSearchEnter();
+});
+window.onload = () => {
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; let btn = document.getElementById('installButton'); if(btn) btn.style.display = 'flex'; });
+    document.getElementById('installButton')?.addEventListener('click', async () => { if(deferredPrompt) { deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; document.getElementById('installButton').style.display = 'none'; } });
+};
