@@ -160,8 +160,6 @@ nav {
     text-overflow: ellipsis;
 }
 .card-year { font-size: 0.8rem; color: #aaa; }
-
-/* Play ikona në qendër */
 .play-center {
     position: absolute;
     top: 50%;
@@ -193,8 +191,6 @@ nav {
     transform: translate(-50%, -50%) scale(1.1);
     background: #e50914;
 }
-
-/* Info button */
 .info-btn {
     position: absolute;
     bottom: 10px;
@@ -214,8 +210,6 @@ nav {
 .info-btn:hover {
     background: #e50914;
 }
-
-/* Modal */
 .modal {
     position: fixed;
     top: 0;
@@ -236,7 +230,7 @@ nav {
     padding: 20px;
     position: relative;
 }
-.modal-large { max-width: 1200px; height: 80vh; }
+.modal-large { max-width: 1200px; height: 80vh; display: flex; flex-direction: column; }
 .close {
     position: absolute;
     top: 15px;
@@ -272,6 +266,7 @@ nav {
     color: white;
     cursor: pointer;
     margin-top: 10px;
+    display: inline-block;
 }
 .trailer-btn:hover { background: #cc0000; }
 .loading {
@@ -293,14 +288,80 @@ nav {
     cursor: pointer;
 }
 .filter-btn.active { background: #e50914; }
+/* PËRMIRËSIMI I INFO POSHTE PLAYER */
 #playerInfo {
+    margin-top: 20px;
+    background: #1e1f2c;
+    border-radius: 16px;
+    padding: 20px;
     max-height: 400px;
     overflow-y: auto;
-    margin-top: 20px;
+    flex-shrink: 0;
 }
-#playerInfo h2, #playerInfo h3 {
+.player-info-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+}
+.player-info-left {
+    flex: 2;
+    min-width: 200px;
+}
+.player-info-left h2 {
     color: #e50914;
-    margin-bottom: 50px;
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+}
+.player-info-left p {
+    margin: 8px 0;
+    line-height: 1.4;
+}
+.player-info-right {
+    flex: 3;
+}
+.player-info-right h3 {
+    color: #e50914;
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+}
+.cast-horizontal {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 20px;
+    padding-bottom: 10px;
+}
+.cast-horizontal::-webkit-scrollbar {
+    height: 6px;
+}
+.cast-horizontal::-webkit-scrollbar-track {
+    background: #2c2e3e;
+    border-radius: 10px;
+}
+.cast-horizontal::-webkit-scrollbar-thumb {
+    background: #e50914;
+    border-radius: 10px;
+}
+.cast-card {
+    text-align: center;
+    width: 90px;
+    flex-shrink: 0;
+}
+.cast-card img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e50914;
+}
+.cast-card .name {
+    font-size: 12px;
+    margin-top: 6px;
+    font-weight: 500;
+}
+.cast-card .character {
+    font-size: 10px;
+    color: #aaa;
 }
 @media (max-width: 768px) {
     nav { gap: 0.8rem; }
@@ -309,4 +370,5 @@ nav {
     .hero h1 { font-size: 2rem; }
     .play-center { width: 40px; height: 40px; }
     .play-center i { font-size: 18px; }
+    .player-info-left, .player-info-right { flex: 1 1 100%; }
 }
