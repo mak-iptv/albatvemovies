@@ -5,7 +5,7 @@
         const start = performance.now();
         debugger;
         const end = performance.now();
-        if (end - start > 100) { // Nëse debugger ngadalëson ekzekutimin, DevTools mund të jetë i hapur
+        if (end - start > 100) {
             devToolsOpen = true;
             document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0a0c15;color:#e50914;flex-direction:column;"><i class="fas fa-shield-alt" style="font-size:80px;margin-bottom:20px;"></i><h2>AlbaTV është i mbrojtur</h2><p>DevTools i zbuluar. Faqja do të rifreskohet.</p></div>';
             setTimeout(() => { window.location.reload(); }, 2000);
@@ -13,7 +13,6 @@
     };
     setInterval(checkDevTools, 2000);
     
-    // Zbulim alternativ: kontrollo nëse elementet janë të inspektuara
     const element = document.createElement('div');
     Object.defineProperty(element, 'id', {
         get: function() {
@@ -22,13 +21,9 @@
             setTimeout(() => { window.location.reload(); }, 2000);
         }
     });
-    console.log(element);
+    // Nuk bëjmë log për të mos lënë gjurmë
 })();
 
-// VAZHDON KODI I MJEPARSHËM I SCRIPT.JS
-// (Pjesa tjetër e skriptit tuaj - e njëjtë si më parë)
-// Unë po e ripostoj të plotë për t'u siguruar që nuk ka gabime.
-// Por për shkak të gjatësisë, këtu vazhdon kodi që keni pasur.
 const TMDB_API_KEY = "dc375cc5d8355f3483fe6fa990736b0e";
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 const VIDEO_SOURCES = {
@@ -41,7 +36,6 @@ let allMovies = [], allSeries = [], shqipMovies = [], yuMovies = [];
 let currentMovieData = null, currentSeriesData = null, currentSources = [];
 let newMoviesSwiper = null;
 
-// ==================== UTILS ====================
 function getImageUrl(path, size = 'w500') {
     return path ? `https://image.tmdb.org/t/p/${size}${path}` : 'https://images.unsplash.com/photo-1535016120720-40c646be5580?w=500&q=80';
 }
@@ -82,7 +76,6 @@ async function fetchTMDBData(endpoint, params = {}) {
     return res.json();
 }
 
-// ==================== LOCAL MOVIES ====================
 function getShqipMovies() {
     return [
         { id: '1', title: "BESNIKERIA DHE BUJARIA", year: '2019', thumbnail: 'https://i.ytimg.com/vi/cbhgvrJfLx8/hqdefault.jpg', rating: '8.2', sources: [{ type: 'youtube', videoId: 'cbhgvrJfLx8' }] },
@@ -120,7 +113,6 @@ function getYUMovies() {
     ];
 }
 
-// ==================== INFO POSHTE PLAYER ====================
 async function displayPlayerInfo(type, id, title) {
     const infoDiv = document.getElementById('playerInfo');
     if (!infoDiv) return;
@@ -215,14 +207,11 @@ function displayYUPlayerInfo(movie) {
 function playTrailerInPlayer(trailerKey) {
     const playerFrame = document.getElementById('playerFrame');
     if (playerFrame) {
-        const originalSrc = playerFrame.src;
         playerFrame.src = `https://www.youtube-nocookie.com/embed/${trailerKey}?autoplay=1`;
         showNotification("Traileri po luhet. Mbyll player-in për të vazhduar filmin.", "info");
-        // Optionally restore after trailer ends? Not implemented for simplicity.
     }
 }
 
-// ==================== PLAYER & SOURCES ====================
 async function loadMovieSources(movieId) {
     let sources = [
         { id: 'vidsrc', name: 'VidSrc', url: `${VIDEO_SOURCES.vidsrc.baseUrl}${movieId}` },
@@ -406,7 +395,6 @@ function closeYouTubePlayer() {
     if (youtubeIframe) youtubeIframe.src = '';
 }
 
-// ==================== RENDER FUNCTIONS ====================
 async function loadNewMoviesSlider() {
     let wrapper = document.getElementById('newMoviesSliderWrapper');
     if (!wrapper) return;
