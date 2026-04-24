@@ -174,11 +174,12 @@ function playTrailerInPlayer(trailerKey) {
     }
 }
 
+// FIX 1: VidSrc.me URL e saktë
 async function loadMovieSources(movieId) {
     let sources = [
         { id: 'vidsrc', name: 'VidSrc', url: `${VIDEO_SOURCES.vidsrc.baseUrl}${movieId}` },
         { id: 'smashy', name: 'Smashy', url: `${VIDEO_SOURCES.smashy.baseUrl}${movieId}` },
-        { id: 'vidsrcme', name: 'VidSrc.me', url: `${VIDEO_SOURCES.vidsrcme.baseUrl}?tmdb=${movieId}` }
+        { id: 'vidsrcme', name: 'VidSrc.me', url: `${VIDEO_SOURCES.vidsrcme.baseUrl}movie/${movieId}` }  // ndrequr
     ];
     currentSources = sources;
     let btnsDiv = document.getElementById('sourcesButtons');
@@ -225,19 +226,29 @@ function playSelectedEpisode() {
         }
     }
 }
+// FIX 2: populateEpisodes me error handling dhe shtimin e onchange për episode
 async function populateEpisodes(seriesId, seasonNum) {
-    let seasonData = await fetchTMDBData(`/tv/${seriesId}/season/${seasonNum}`);
-    let episodeSelect = document.getElementById('episodeSelect');
-    if (!episodeSelect) return;
-    episodeSelect.innerHTML = '';
-    seasonData.episodes.forEach(ep => {
-        let opt = document.createElement('option');
-        opt.value = ep.episode_number;
-        opt.textContent = `Episodi ${ep.episode_number}: ${ep.name}`;
-        episodeSelect.appendChild(opt);
-    });
-    if (episodeSelect.options.length) episodeSelect.value = 1;
+    try {
+        let seasonData = await fetchTMDBData(`/tv/${seriesId}/season/${seasonNum}`);
+        let episodeSelect = document.getElementById('episodeSelect');
+        if (!episodeSelect) return;
+        episodeSelect.innerHTML = '';
+        seasonData.episodes.forEach(ep => {
+            let opt = document.createElement('option');
+            opt.value = ep.episode_number;
+            opt.textContent = `Episodi ${ep.episode_number}: ${ep.name}`;
+            episodeSelect.appendChild(opt);
+        });
+        if (episodeSelect.options.length) episodeSelect.value = 1;
+        // ndreqje: kur ndryshon episodi, të luhet menjëherë
+        episodeSelect.onchange = () => playSelectedEpisode();
+    } catch(e) {
+        console.error("Gabim në ngarkimin e episodeve", e);
+        let episodeSelect = document.getElementById('episodeSelect');
+        if(episodeSelect) episodeSelect.innerHTML = '<option>Gabim në ngarkim</option>';
+    }
 }
+// FIX 3: pas popullimit fillestar të sezoneve, luaj episodin e parë
 async function loadSeriesSeasonsEpisodes(seriesId) {
     let details = await fetchTMDBData(`/tv/${seriesId}`);
     let seasonSelect = document.getElementById('seasonSelect');
@@ -254,8 +265,13 @@ async function loadSeriesSeasonsEpisodes(seriesId) {
     if (seasonSelect.options.length) {
         seasonSelect.value = 1;
         await populateEpisodes(seriesId, 1);
+        // luaj episodin e parë pasi të jenë gati sezonet
+        playSelectedEpisode();
     }
-    seasonSelect.onchange = async () => { await populateEpisodes(seriesId, seasonSelect.value); playSelectedEpisode(); };
+    seasonSelect.onchange = async () => { 
+        await populateEpisodes(seriesId, seasonSelect.value); 
+        playSelectedEpisode(); 
+    };
 }
 function playMovie(id, title, year) {
     currentMovieData = { id, title, year, type: 'movie' };
@@ -536,8 +552,34 @@ function showSection(sectionId) {
     else if (sectionId === 'yu') loadYUContent();
     else if (sectionId === 'trending') loadTrending();
 }
+// FIX 4: Kërkimi global (mainSearch) tani funksionon
 function performSearch(query, sourceId) {
     if (!query || query.length < 2) return;
+    
+    // Rasti i kërkimit global nga navbar
+    if (sourceId === 'mainSearch') {
+        // Drejtohemi te seksioni i filmave dhe kryejmë kërkim aty
+        showSection('movies');
+        // Pastaj kërkojmë në filma
+        fetchTMDBData('/search/movie', { query }).then(data => { 
+            const grid = document.getElementById('moviesGrid');
+            if(grid) {
+                grid.innerHTML = data.results.map(m => `
+                    <div class="movie-card">
+                        <img src="${getImageUrl(m.poster_path)}">
+                        <div class="rating"><i class="fas fa-star"></i> ${m.vote_average?.toFixed(1)}</div>
+                        <div class="type-badge">FILM</div>
+                        <div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.release_date?.slice(0,4)||'N/A'}</div></div>
+                        <button class="info-btn" onclick="event.stopPropagation(); playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><i class="fas fa-info-circle"></i></button>
+                        <div class="play-center" onclick="event.stopPropagation(); playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><i class="fas fa-play"></i></div>
+                    </div>
+                `).join('');
+            }
+        }).catch(e => showNotification("Gabim në kërkim", "error"));
+        return;
+    }
+    
+    // Pjesa tjetër (si më parë)
     if (sourceId === 'movieSearch') fetchTMDBData('/search/movie', { query }).then(data => { document.getElementById('moviesGrid').innerHTML = data.results.map(m => `
         <div class="movie-card">
             <img src="${getImageUrl(m.poster_path)}">
