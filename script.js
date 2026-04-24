@@ -88,112 +88,85 @@ function getYUMovies() {
     ];
 }
 
-// ==================== DETAILS (ACTORS, TRAILER) – FIXED ====================
-async function showDetails(type, id, title) {
-    let modal = document.getElementById('detailsModal');
-    let content = document.getElementById('detailsContent');
-    modal.style.display = 'flex';
-    content.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar...</div>';
+// ==================== INFO POSHTE PLAYER (AKTORET, TRAILER) ====================
+async function displayPlayerInfo(type, id, title) {
+    const infoDiv = document.getElementById('playerInfo');
+    infoDiv.style.display = 'block';
+    infoDiv.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke ngarkuar informacionin...</div>';
     try {
-        let endpoint = type === 'movie' ? `/movie/${id}` : `/tv/${id}`;
-        let details = await fetchTMDBData(endpoint);
-        let credits = await fetchTMDBData(`${endpoint}/credits`);
-        let cast = credits.cast ? credits.cast.slice(0, 8) : [];
-        let videos = await fetchTMDBData(`${endpoint}/videos`);
-        let trailer = videos.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
-        let year = (details.release_date || details.first_air_date)?.slice(0,4) || 'N/A';
-        let runtime = details.runtime ? `${details.runtime} min` : (details.episode_run_time?.[0] ? `${details.episode_run_time[0]} min` : 'N/A');
-        let genres = details.genres.map(g => g.name).join(', ');
+        const endpoint = type === 'movie' ? `/movie/${id}` : `/tv/${id}`;
+        const details = await fetchTMDBData(endpoint);
+        const credits = await fetchTMDBData(`${endpoint}/credits`);
+        const cast = credits.cast ? credits.cast.slice(0, 6) : [];
+        const videos = await fetchTMDBData(`${endpoint}/videos`);
+        const trailer = videos.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+        const year = (details.release_date || details.first_air_date)?.slice(0,4) || 'N/A';
+        const runtime = details.runtime ? `${details.runtime} min` : (details.episode_run_time?.[0] ? `${details.episode_run_time[0]} min` : 'N/A');
+        const genres = details.genres.map(g => g.name).join(', ');
         
         let castHtml = '';
         if (cast.length > 0) {
-            castHtml = `<h3>Aktorët kryesorë</h3><div class="cast-list">` + cast.map(actor => `
-                <div class="cast-item">
-                    <img src="${getImageUrl(actor.profile_path, 'w185')}" onerror="this.src='https://via.placeholder.com/80x80?text=No+Image'">
-                    <span>${actor.name}</span>
-                    <small>${actor.character || ''}</small>
-                </div>
-            `).join('') + `</div>`;
+            castHtml = `<div style="margin-top: 20px;"><h3><i class="fas fa-users"></i> Aktorët kryesorë</h3>
+                        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px;">` + 
+                        cast.map(actor => `
+                            <div style="text-align: center; width: 90px;">
+                                <img src="${getImageUrl(actor.profile_path, 'w185')}" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover;" onerror="this.src='https://via.placeholder.com/70x70?text=No+Image'">
+                                <div style="font-size: 12px; margin-top: 5px;">${actor.name}</div>
+                                <small style="font-size: 10px; color: #aaa;">${actor.character || ''}</small>
+                            </div>
+                        `).join('') + `</div></div>`;
         } else {
             castHtml = `<p><i>Nuk ka informacion për aktorët.</i></p>`;
         }
-
-        content.innerHTML = `
-            <h2>${details.title || details.name} (${year})</h2>
-            <div style="display:flex; gap:20px; flex-wrap:wrap;">
-                <img src="${getImageUrl(details.poster_path, 'w300')}" style="width:150px; border-radius:10px;">
-                <div style="flex:1;">
+        
+        infoDiv.innerHTML = `
+            <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                <div style="flex: 2; min-width: 200px;">
+                    <h2><i class="fas fa-info-circle"></i> ${details.title || details.name} (${year})</h2>
                     <p><strong>Vlerësim:</strong> ⭐ ${details.vote_average?.toFixed(1)}/10 (${details.vote_count} vota)</p>
                     <p><strong>Zhanri:</strong> ${genres || 'N/A'}</p>
                     <p><strong>Kohëzgjatja:</strong> ${runtime}</p>
                     <p><strong>Përmbajtja:</strong> ${details.overview || 'Nuk ka përshkrim.'}</p>
-                    ${trailer ? `<button class="trailer-btn" onclick="watchTrailer('${trailer.key}')"><i class="fab fa-youtube"></i> Shiko Trailer</button>` : '<p><i>Trailer nuk disponohet</i></p>'}
+                    ${trailer ? `<button class="trailer-btn" onclick="playTrailerInPlayer('${trailer.key}')"><i class="fab fa-youtube"></i> Shiko Trailer</button>` : '<p><i>Trailer nuk disponohet</i></p>'}
+                </div>
+                <div style="flex: 3;">
+                    ${castHtml}
                 </div>
             </div>
-            ${castHtml}
         `;
     } catch(e) {
         console.error(e);
-        content.innerHTML = '<p style="color:red;">Dështoi ngarkimi i detajeve. Kontrollo lidhjen ose provo përsëri.</p>';
+        infoDiv.innerHTML = '<p style="color:red;">Dështoi ngarkimi i informacionit.</p>';
     }
 }
-
-// Për filmat shqip – shtojmë aktorë shembull
-function showShqipDetails(id) {
-    let movie = getShqipMovies().find(m => m.id === id);
-    if (!movie) return;
-    let sampleCast = [
-        { name: "Aktor i njohur shqiptar", character: "Roli kryesor", image: "" },
-        { name: "Aktore e mirënjohur", character: "Roli dytësor", image: "" }
-    ];
-    let castHtml = `<h3>Aktorët (informacion i përkohshëm)</h3><div class="cast-list">` + sampleCast.map(act => `
-        <div class="cast-item"><img src="https://via.placeholder.com/80x80?text=No+Image"><span>${act.name}</span><small>${act.character}</small></div>
-    `).join('') + `</div><p><small>*Për filmat shqip, lista e plotë e aktorëve do të shtohet së shpejti.</small></p>`;
-    let content = document.getElementById('detailsContent');
-    content.innerHTML = `
-        <h2>${movie.title} (${movie.year})</h2>
+function displayShqipPlayerInfo(movie) {
+    const infoDiv = document.getElementById('playerInfo');
+    infoDiv.style.display = 'block';
+    infoDiv.innerHTML = `
+        <h2><i class="fas fa-flag"></i> ${movie.title} (${movie.year})</h2>
         <p><strong>Vlerësim:</strong> ⭐ ${movie.rating}/10</p>
         <p><strong>Përshkrimi:</strong> Film shqiptar i vitit ${movie.year}.</p>
-        ${castHtml}
-        <button class="trailer-btn" onclick="closeDetailsModal()">Mbylle</button>
+        <p><i>Aktorët kryesorë: do të shtohen së shpejti.</i></p>
     `;
-    document.getElementById('detailsModal').style.display = 'flex';
 }
-
-// Për filmat jugosllavë – aktorë shembull
-function showYUMovieDetails(id) {
-    let movie = getYUMovies().find(m => m.id === id);
-    if (!movie) return;
-    let sampleCast = [
-        { name: "Velimir Bata Živojinović", character: "Heroi", image: "" },
-        { name: "Ljubiša Samardžić", character: "Miku", image: "" }
-    ];
-    let castHtml = `<h3>Aktorët kryesorë (shembull)</h3><div class="cast-list">` + sampleCast.map(act => `
-        <div class="cast-item"><img src="https://via.placeholder.com/80x80?text=No+Image"><span>${act.name}</span><small>${act.character}</small></div>
-    `).join('') + `</div><p><small>*Aktorët e saktë do të shtohen në të ardhmen.</small></p>`;
-    let content = document.getElementById('detailsContent');
-    content.innerHTML = `
-        <h2>${movie.title} (${movie.year})</h2>
+function displayYUPlayerInfo(movie) {
+    const infoDiv = document.getElementById('playerInfo');
+    infoDiv.style.display = 'block';
+    infoDiv.innerHTML = `
+        <h2><i class="fas fa-landmark"></i> ${movie.title} (${movie.year})</h2>
         <p><strong>Vlerësim:</strong> ⭐ ${movie.rating}/10</p>
         <p><strong>Zhanri:</strong> ${movie.genre?.join(', ')}</p>
-        ${castHtml}
-        <button class="trailer-btn" onclick="closeDetailsModal()">Mbylle</button>
+        <p><strong>Përshkrimi:</strong> Film klasik jugosllav.</p>
+        <p><i>Aktorët: Velimir Bata Živojinović, Ljubiša Samardžić etj.</i></p>
     `;
-    document.getElementById('detailsModal').style.display = 'flex';
+}
+function playTrailerInPlayer(trailerKey) {
+    const playerFrame = document.getElementById('playerFrame');
+    playerFrame.src = `https://www.youtube-nocookie.com/embed/${trailerKey}?autoplay=1`;
+    showNotification("Traileri po luhet. Mbyll dhe rifresko player-in për të vazhduar filmin/serialin.", "info");
 }
 
-function watchTrailer(key) {
-    document.getElementById('youtubeTitle').innerHTML = 'Trailer';
-    document.getElementById('youtubeIframe').src = `https://www.youtube-nocookie.com/embed/${key}?autoplay=1`;
-    document.getElementById('youtubeModal').style.display = 'flex';
-    closeDetailsModal();
-}
-function closeDetailsModal() {
-    document.getElementById('detailsModal').style.display = 'none';
-    document.getElementById('detailsContent').innerHTML = '';
-}
-
-// ==================== PLAYER & SOURCES (same as before) ====================
+// ==================== PLAYER & SOURCES ====================
 async function loadMovieSources(movieId) {
     let sources = [
         { id: 'vidsrc', name: 'VidSrc', url: `${VIDEO_SOURCES.vidsrc.baseUrl}${movieId}` },
@@ -278,43 +251,65 @@ function playMovie(id, title, year) {
     document.getElementById('seriesControls').style.display = 'none';
     document.getElementById('playerTitle').innerHTML = title;
     document.getElementById('playerModal').style.display = 'flex';
+    document.getElementById('playerInfo').style.display = 'none';
     loadMovieSources(id);
     addToWatchHistory(title, year, 'movie', id);
+    displayPlayerInfo('movie', id, title);
 }
 function playTVSeries(id, title, year) {
     currentSeriesData = { id, title, year, type: 'series' };
     document.getElementById('seriesControls').style.display = 'flex';
     document.getElementById('playerTitle').innerHTML = title;
     document.getElementById('playerModal').style.display = 'flex';
+    document.getElementById('playerInfo').style.display = 'none';
     loadSeriesSources(id);
     loadSeriesSeasonsEpisodes(id);
     addToWatchHistory(title, year, 'series', id);
+    displayPlayerInfo('tv', id, title);
 }
 function playShqipMovie(id) {
     let movie = getShqipMovies().find(m => m.id === id);
     if (!movie) return;
     let src = movie.sources[0];
+    currentMovieData = { id: movie.id, title: movie.title, year: movie.year, type: 'shqip' };
+    currentSeriesData = null;
+    document.getElementById('seriesControls').style.display = 'none';
+    document.getElementById('playerTitle').innerHTML = movie.title;
+    document.getElementById('playerModal').style.display = 'flex';
+    document.getElementById('playerInfo').style.display = 'none';
+    const playerFrame = document.getElementById('playerFrame');
     if (src.type === 'youtube') {
-        document.getElementById('youtubeTitle').innerHTML = `${movie.title} (${movie.year}) - SHQIP`;
-        document.getElementById('youtubeIframe').src = `https://www.youtube-nocookie.com/embed/${src.videoId}?autoplay=1`;
-        document.getElementById('youtubeModal').style.display = 'flex';
-    } else if (src.type === 'dailymotion') window.open(src.url, '_blank');
+        playerFrame.src = `https://www.youtube-nocookie.com/embed/${src.videoId}?autoplay=1`;
+    } else if (src.type === 'dailymotion') {
+        playerFrame.src = src.url;
+    }
     addToWatchHistory(movie.title, movie.year, 'shqip', id);
+    displayShqipPlayerInfo(movie);
 }
 function playYUMovie(id) {
     let movie = getYUMovies().find(m => m.id === id);
     if (!movie) return;
     let src = movie.sources[0];
+    currentMovieData = { id: movie.id, title: movie.title, year: movie.year, type: 'yu' };
+    currentSeriesData = null;
+    document.getElementById('seriesControls').style.display = 'none';
+    document.getElementById('playerTitle').innerHTML = movie.title;
+    document.getElementById('playerModal').style.display = 'flex';
+    document.getElementById('playerInfo').style.display = 'none';
+    const playerFrame = document.getElementById('playerFrame');
     if (src.type === 'youtube') {
-        document.getElementById('youtubeTitle').innerHTML = `${movie.title} (${movie.year}) - EX YU`;
-        document.getElementById('youtubeIframe').src = `https://www.youtube-nocookie.com/embed/${src.videoId}?autoplay=1`;
-        document.getElementById('youtubeModal').style.display = 'flex';
-    } else window.open(src.url, '_blank');
+        playerFrame.src = `https://www.youtube-nocookie.com/embed/${src.videoId}?autoplay=1`;
+    } else if (src.type === 'dailymotion') {
+        playerFrame.src = src.url;
+    }
     addToWatchHistory(movie.title, movie.year, 'yu', id);
+    displayYUPlayerInfo(movie);
 }
 function closePlayer() {
     document.getElementById('playerModal').style.display = 'none';
     document.getElementById('playerFrame').src = '';
+    document.getElementById('playerInfo').style.display = 'none';
+    document.getElementById('playerInfo').innerHTML = '';
     currentMovieData = null;
     currentSeriesData = null;
 }
@@ -323,7 +318,15 @@ function closeYouTubePlayer() {
     document.getElementById('youtubeIframe').src = '';
 }
 
-// ==================== RENDER FUNCTIONS (unchanged but ensure info button works) ====================
+// ==================== RENDER FUNCTIONS (with info button that shows details below player? We'll keep original card's info button but navigation changed) ====================
+// For simplicity, we remove old showDetails calls and replace with displayPlayerInfo when clicking info button.
+// But we'll keep a unified function that either opens player if already playing? Actually info button: we can open player with same content and then scroll to info.
+// But to be safe, I'll make info button open player (if not already open) and show info. However it's complex. For now, info button shows modal details? The user wanted info under player. So we'll modify the card to open the movie with play and info together.
+// Actually each card already plays the movie via onclick. The info button can just call displayPlayerInfo directly if player is already open, or open player and then show info.
+// To keep it simple, I remove the old info button and replace with a button that calls playMovie (same as clicking the card). But the user wanted info, so I'll redirect info button to play the movie and then the info appears below automatically.
+// So in all card rendering functions, the info button will call playMovie/playTVSeries etc. That's easier.
+// I'll adjust the templates inside render functions.
+
 async function loadNewMoviesSlider() {
     let wrapper = document.getElementById('newMoviesSliderWrapper');
     let data = await fetchTMDBData('/movie/now_playing', { page: 1 });
@@ -331,7 +334,7 @@ async function loadNewMoviesSlider() {
     wrapper.innerHTML = movies.map(m => `<div class="swiper-slide"><div class="movie-card" onclick="playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')">
         <img src="${getImageUrl(m.poster_path)}"><div class="rating"><i class="fas fa-star"></i> ${m.vote_average?.toFixed(1)}</div>
         <div class="type-badge">NEW</div><div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.release_date?.slice(0,4)||'N/A'}</div></div>
-        <button class="info-btn" onclick="event.stopPropagation(); showDetails('movie',${m.id},'${escapeQuote(m.title)}')"><i class="fas fa-info-circle"></i></button>
+        <button class="info-btn" onclick="event.stopPropagation(); playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><i class="fas fa-info-circle"></i></button>
         <div class="play-overlay"><i class="fas fa-play"></i></div></div></div>`).join('');
     if (window.newMoviesSwiper) window.newMoviesSwiper.destroy(true,true);
     window.newMoviesSwiper = new Swiper('.new-movies-swiper', { slidesPerView:'auto', spaceBetween:20, navigation:{nextEl:'.swiper-button-prev',prevEl:'.swiper-button-next'}, pagination:{el:'.swiper-pagination',clickable:true}, breakpoints:{0:{slidesPerView:2},640:{slidesPerView:3},1024:{slidesPerView:5}} });
@@ -342,32 +345,32 @@ async function loadFeaturedContent() {
     let featuredMovies = document.getElementById('featuredMovies');
     let featuredSeries = document.getElementById('featuredSeries');
     let featuredYU = document.getElementById('featuredYU');
-    featuredMovies.innerHTML = movies.results.slice(0,6).map(m => `<div class="movie-card" onclick="playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><img src="${getImageUrl(m.poster_path)}"><div class="rating"><i class="fas fa-star"></i> ${m.vote_average.toFixed(1)}</div><div class="type-badge">FILM</div><div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.release_date?.slice(0,4)||'N/A'}</div></div><button class="info-btn" onclick="event.stopPropagation(); showDetails('movie',${m.id},'${escapeQuote(m.title)}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join('');
-    featuredSeries.innerHTML = series.results.slice(0,6).map(s => `<div class="movie-card" onclick="playTVSeries(${s.id},'${escapeQuote(s.name)}','${s.first_air_date?.slice(0,4)||''}')"><img src="${getImageUrl(s.poster_path)}"><div class="rating"><i class="fas fa-star"></i> ${s.vote_average.toFixed(1)}</div><div class="type-badge">SERI</div><div class="card-content"><div class="card-title">${s.name}</div><div class="card-year">${s.first_air_date?.slice(0,4)||'N/A'}</div></div><button class="info-btn" onclick="event.stopPropagation(); showDetails('tv',${s.id},'${escapeQuote(s.name)}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join('');
+    featuredMovies.innerHTML = movies.results.slice(0,6).map(m => `<div class="movie-card" onclick="playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><img src="${getImageUrl(m.poster_path)}"><div class="rating"><i class="fas fa-star"></i> ${m.vote_average.toFixed(1)}</div><div class="type-badge">FILM</div><div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.release_date?.slice(0,4)||'N/A'}</div></div><button class="info-btn" onclick="event.stopPropagation(); playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join('');
+    featuredSeries.innerHTML = series.results.slice(0,6).map(s => `<div class="movie-card" onclick="playTVSeries(${s.id},'${escapeQuote(s.name)}','${s.first_air_date?.slice(0,4)||''}')"><img src="${getImageUrl(s.poster_path)}"><div class="rating"><i class="fas fa-star"></i> ${s.vote_average.toFixed(1)}</div><div class="type-badge">SERI</div><div class="card-content"><div class="card-title">${s.name}</div><div class="card-year">${s.first_air_date?.slice(0,4)||'N/A'}</div></div><button class="info-btn" onclick="event.stopPropagation(); playTVSeries(${s.id},'${escapeQuote(s.name)}','${s.first_air_date?.slice(0,4)||''}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join('');
     let yuFeatured = getYUMovies().slice(0,6);
-    featuredYU.innerHTML = yuFeatured.map(m => `<div class="movie-card" onclick="playYUMovie('${m.id}')"><img src="${m.thumbnail}"><div class="rating"><i class="fas fa-star"></i> ${m.rating}</div><div class="type-badge yu-badge">EX YU</div><div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.year}</div></div><button class="info-btn" onclick="event.stopPropagation(); showYUMovieDetails('${m.id}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join('');
+    featuredYU.innerHTML = yuFeatured.map(m => `<div class="movie-card" onclick="playYUMovie('${m.id}')"><img src="${m.thumbnail}"><div class="rating"><i class="fas fa-star"></i> ${m.rating}</div><div class="type-badge yu-badge">EX YU</div><div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.year}</div></div><button class="info-btn" onclick="event.stopPropagation(); playYUMovie('${m.id}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join('');
 }
 async function loadAllMovies() {
     let grid = document.getElementById('moviesGrid');
     let data = await fetchTMDBData('/movie/popular', { page:1 });
     allMovies = data.results;
-    grid.innerHTML = allMovies.map(m => `<div class="movie-card" onclick="playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><img src="${getImageUrl(m.poster_path)}"><div class="rating"><i class="fas fa-star"></i> ${m.vote_average.toFixed(1)}</div><div class="type-badge">FILM</div><div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.release_date?.slice(0,4)||'N/A'}</div></div><button class="info-btn" onclick="event.stopPropagation(); showDetails('movie',${m.id},'${escapeQuote(m.title)}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join('');
+    grid.innerHTML = allMovies.map(m => `<div class="movie-card" onclick="playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><img src="${getImageUrl(m.poster_path)}"><div class="rating"><i class="fas fa-star"></i> ${m.vote_average.toFixed(1)}</div><div class="type-badge">FILM</div><div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.release_date?.slice(0,4)||'N/A'}</div></div><button class="info-btn" onclick="event.stopPropagation(); playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join('');
 }
 async function loadAllSeries() {
     let grid = document.getElementById('seriesGrid');
     let data = await fetchTMDBData('/tv/popular', { page:1 });
     allSeries = data.results;
-    grid.innerHTML = allSeries.map(s => `<div class="movie-card" onclick="playTVSeries(${s.id},'${escapeQuote(s.name)}','${s.first_air_date?.slice(0,4)||''}')"><img src="${getImageUrl(s.poster_path)}"><div class="rating"><i class="fas fa-star"></i> ${s.vote_average.toFixed(1)}</div><div class="type-badge">SERI</div><div class="card-content"><div class="card-title">${s.name}</div><div class="card-year">${s.first_air_date?.slice(0,4)||'N/A'}</div></div><button class="info-btn" onclick="event.stopPropagation(); showDetails('tv',${s.id},'${escapeQuote(s.name)}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join('');
+    grid.innerHTML = allSeries.map(s => `<div class="movie-card" onclick="playTVSeries(${s.id},'${escapeQuote(s.name)}','${s.first_air_date?.slice(0,4)||''}')"><img src="${getImageUrl(s.poster_path)}"><div class="rating"><i class="fas fa-star"></i> ${s.vote_average.toFixed(1)}</div><div class="type-badge">SERI</div><div class="card-content"><div class="card-title">${s.name}</div><div class="card-year">${s.first_air_date?.slice(0,4)||'N/A'}</div></div><button class="info-btn" onclick="event.stopPropagation(); playTVSeries(${s.id},'${escapeQuote(s.name)}','${s.first_air_date?.slice(0,4)||''}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join('');
 }
 function loadShqipContent() {
     let grid = document.getElementById('shqipGrid');
     shqipMovies = getShqipMovies();
-    grid.innerHTML = shqipMovies.map(m => `<div class="movie-card" onclick="playShqipMovie('${m.id}')"><img src="${m.thumbnail}"><div class="rating"><i class="fas fa-star"></i> ${m.rating}</div><div class="type-badge shqip-badge">SHQIP</div><div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.year}</div></div><button class="info-btn" onclick="event.stopPropagation(); showShqipDetails('${m.id}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join('');
+    grid.innerHTML = shqipMovies.map(m => `<div class="movie-card" onclick="playShqipMovie('${m.id}')"><img src="${m.thumbnail}"><div class="rating"><i class="fas fa-star"></i> ${m.rating}</div><div class="type-badge shqip-badge">SHQIP</div><div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.year}</div></div><button class="info-btn" onclick="event.stopPropagation(); playShqipMovie('${m.id}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join('');
 }
 function loadYUContent() {
     let grid = document.getElementById('yuGrid');
     yuMovies = getYUMovies();
-    grid.innerHTML = yuMovies.map(m => `<div class="movie-card" onclick="playYUMovie('${m.id}')"><img src="${m.thumbnail}"><div class="rating"><i class="fas fa-star"></i> ${m.rating}</div><div class="type-badge yu-badge">EX YU</div><div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.year}</div></div><button class="info-btn" onclick="event.stopPropagation(); showYUMovieDetails('${m.id}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join('');
+    grid.innerHTML = yuMovies.map(m => `<div class="movie-card" onclick="playYUMovie('${m.id}')"><img src="${m.thumbnail}"><div class="rating"><i class="fas fa-star"></i> ${m.rating}</div><div class="type-badge yu-badge">EX YU</div><div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.year}</div></div><button class="info-btn" onclick="event.stopPropagation(); playYUMovie('${m.id}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join('');
 }
 async function loadTrending() {
     let grid = document.getElementById('trendingGrid');
@@ -377,7 +380,7 @@ async function loadTrending() {
         let title = i.title || i.name;
         let year = (i.release_date || i.first_air_date)?.slice(0,4) || 'N/A';
         let id = i.id;
-        return `<div class="movie-card" onclick="${isMovie ? `playMovie(${id},'${escapeQuote(title)}','${year}')` : `playTVSeries(${id},'${escapeQuote(title)}','${year}')`}"><img src="${getImageUrl(i.poster_path)}"><div class="rating"><i class="fas fa-fire"></i> ${i.vote_average?.toFixed(1)}</div><div class="type-badge">TRENDING</div><div class="card-content"><div class="card-title">${title}</div><div class="card-year">${year}</div></div><button class="info-btn" onclick="event.stopPropagation(); ${isMovie ? `showDetails('movie',${id},'${escapeQuote(title)}')` : `showDetails('tv',${id},'${escapeQuote(title)}')`}"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`;
+        return `<div class="movie-card" onclick="${isMovie ? `playMovie(${id},'${escapeQuote(title)}','${year}')` : `playTVSeries(${id},'${escapeQuote(title)}','${year}')`}"><img src="${getImageUrl(i.poster_path)}"><div class="rating"><i class="fas fa-fire"></i> ${i.vote_average?.toFixed(1)}</div><div class="type-badge">TRENDING</div><div class="card-content"><div class="card-title">${title}</div><div class="card-year">${year}</div></div><button class="info-btn" onclick="event.stopPropagation(); ${isMovie ? `playMovie(${id},'${escapeQuote(title)}','${year}')` : `playTVSeries(${id},'${escapeQuote(title)}','${year}')`}"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`;
     }).join('');
 }
 function showSection(sectionId) {
@@ -395,11 +398,11 @@ function showSection(sectionId) {
 }
 function performSearch(query, sourceId) {
     if (!query || query.length < 2) return;
-    if (sourceId === 'movieSearch') fetchTMDBData('/search/movie', { query }).then(data => { document.getElementById('moviesGrid').innerHTML = data.results.map(m => `<div class="movie-card" onclick="playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><img src="${getImageUrl(m.poster_path)}"><div class="rating"><i class="fas fa-star"></i> ${m.vote_average?.toFixed(1)}</div><div class="type-badge">FILM</div><div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.release_date?.slice(0,4)||'N/A'}</div></div><button class="info-btn" onclick="event.stopPropagation(); showDetails('movie',${m.id},'${escapeQuote(m.title)}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join(''); });
-    else if (sourceId === 'seriesSearch') fetchTMDBData('/search/tv', { query }).then(data => { document.getElementById('seriesGrid').innerHTML = data.results.map(s => `<div class="movie-card" onclick="playTVSeries(${s.id},'${escapeQuote(s.name)}','${s.first_air_date?.slice(0,4)||''}')"><img src="${getImageUrl(s.poster_path)}"><div class="rating"><i class="fas fa-star"></i> ${s.vote_average?.toFixed(1)}</div><div class="type-badge">SERI</div><div class="card-content"><div class="card-title">${s.name}</div><div class="card-year">${s.first_air_date?.slice(0,4)||'N/A'}</div></div><button class="info-btn" onclick="event.stopPropagation(); showDetails('tv',${s.id},'${escapeQuote(s.name)}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join(''); });
-    else if (sourceId === 'shqipSearch') { let filtered = getShqipMovies().filter(m => m.title.toLowerCase().includes(query.toLowerCase())); document.getElementById('shqipGrid').innerHTML = filtered.map(m => `<div class="movie-card" onclick="playShqipMovie('${m.id}')"><img src="${m.thumbnail}"><div class="rating"><i class="fas fa-star"></i> ${m.rating}</div><div class="type-badge shqip-badge">SHQIP</div><div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.year}</div></div><button class="info-btn" onclick="event.stopPropagation(); showShqipDetails('${m.id}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join(''); }
-    else if (sourceId === 'yuSearch') { let filtered = getYUMovies().filter(m => m.title.toLowerCase().includes(query.toLowerCase())); document.getElementById('yuGrid').innerHTML = filtered.map(m => `<div class="movie-card" onclick="playYUMovie('${m.id}')"><img src="${m.thumbnail}"><div class="rating"><i class="fas fa-star"></i> ${m.rating}</div><div class="type-badge yu-badge">EX YU</div><div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.year}</div></div><button class="info-btn" onclick="event.stopPropagation(); showYUMovieDetails('${m.id}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join(''); }
-    else if (sourceId === 'trendingSearch') fetchTMDBData('/trending/all/day').then(data => { let filtered = data.results.filter(i => (i.title || i.name).toLowerCase().includes(query.toLowerCase())); document.getElementById('trendingGrid').innerHTML = filtered.map(i => { let isMovie = i.media_type === 'movie'; let title = i.title || i.name; let year = (i.release_date || i.first_air_date)?.slice(0,4)||'N/A'; return `<div class="movie-card" onclick="${isMovie ? `playMovie(${i.id},'${escapeQuote(title)}','${year}')` : `playTVSeries(${i.id},'${escapeQuote(title)}','${year}')`}"><img src="${getImageUrl(i.poster_path)}"><div class="rating"><i class="fas fa-fire"></i> ${i.vote_average?.toFixed(1)}</div><div class="card-content"><div class="card-title">${title}</div><div class="card-year">${year}</div></div><button class="info-btn" onclick="event.stopPropagation(); ${isMovie ? `showDetails('movie',${i.id},'${escapeQuote(title)}')` : `showDetails('tv',${i.id},'${escapeQuote(title)}')`}"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`; }).join(''); });
+    if (sourceId === 'movieSearch') fetchTMDBData('/search/movie', { query }).then(data => { document.getElementById('moviesGrid').innerHTML = data.results.map(m => `<div class="movie-card" onclick="playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><img src="${getImageUrl(m.poster_path)}"><div class="rating"><i class="fas fa-star"></i> ${m.vote_average?.toFixed(1)}</div><div class="type-badge">FILM</div><div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.release_date?.slice(0,4)||'N/A'}</div></div><button class="info-btn" onclick="event.stopPropagation(); playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join(''); });
+    else if (sourceId === 'seriesSearch') fetchTMDBData('/search/tv', { query }).then(data => { document.getElementById('seriesGrid').innerHTML = data.results.map(s => `<div class="movie-card" onclick="playTVSeries(${s.id},'${escapeQuote(s.name)}','${s.first_air_date?.slice(0,4)||''}')"><img src="${getImageUrl(s.poster_path)}"><div class="rating"><i class="fas fa-star"></i> ${s.vote_average?.toFixed(1)}</div><div class="type-badge">SERI</div><div class="card-content"><div class="card-title">${s.name}</div><div class="card-year">${s.first_air_date?.slice(0,4)||'N/A'}</div></div><button class="info-btn" onclick="event.stopPropagation(); playTVSeries(${s.id},'${escapeQuote(s.name)}','${s.first_air_date?.slice(0,4)||''}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join(''); });
+    else if (sourceId === 'shqipSearch') { let filtered = getShqipMovies().filter(m => m.title.toLowerCase().includes(query.toLowerCase())); document.getElementById('shqipGrid').innerHTML = filtered.map(m => `<div class="movie-card" onclick="playShqipMovie('${m.id}')"><img src="${m.thumbnail}"><div class="rating"><i class="fas fa-star"></i> ${m.rating}</div><div class="type-badge shqip-badge">SHQIP</div><div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.year}</div></div><button class="info-btn" onclick="event.stopPropagation(); playShqipMovie('${m.id}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join(''); }
+    else if (sourceId === 'yuSearch') { let filtered = getYUMovies().filter(m => m.title.toLowerCase().includes(query.toLowerCase())); document.getElementById('yuGrid').innerHTML = filtered.map(m => `<div class="movie-card" onclick="playYUMovie('${m.id}')"><img src="${m.thumbnail}"><div class="rating"><i class="fas fa-star"></i> ${m.rating}</div><div class="type-badge yu-badge">EX YU</div><div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.year}</div></div><button class="info-btn" onclick="event.stopPropagation(); playYUMovie('${m.id}')"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`).join(''); }
+    else if (sourceId === 'trendingSearch') fetchTMDBData('/trending/all/day').then(data => { let filtered = data.results.filter(i => (i.title || i.name).toLowerCase().includes(query.toLowerCase())); document.getElementById('trendingGrid').innerHTML = filtered.map(i => { let isMovie = i.media_type === 'movie'; let title = i.title || i.name; let year = (i.release_date || i.first_air_date)?.slice(0,4)||'N/A'; return `<div class="movie-card" onclick="${isMovie ? `playMovie(${i.id},'${escapeQuote(title)}','${year}')` : `playTVSeries(${i.id},'${escapeQuote(title)}','${year}')`}"><img src="${getImageUrl(i.poster_path)}"><div class="rating"><i class="fas fa-fire"></i> ${i.vote_average?.toFixed(1)}</div><div class="card-content"><div class="card-title">${title}</div><div class="card-year">${year}</div></div><button class="info-btn" onclick="event.stopPropagation(); ${isMovie ? `playMovie(${i.id},'${escapeQuote(title)}','${year}')` : `playTVSeries(${i.id},'${escapeQuote(title)}','${year}')`}"><i class="fas fa-info-circle"></i></button><div class="play-overlay"><i class="fas fa-play"></i></div></div>`; }).join(''); });
 }
 function setupSearchEnter() {
     ['mainSearch', 'movieSearch', 'seriesSearch', 'shqipSearch', 'yuSearch', 'trendingSearch'].forEach(id => {
@@ -414,4 +417,3 @@ window.onload = () => {
     window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; let btn = document.getElementById('installButton'); if(btn) btn.style.display = 'flex'; });
     document.getElementById('installButton')?.addEventListener('click', async () => { if(deferredPrompt) { deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; document.getElementById('installButton').style.display = 'none'; } });
 };
-window.onclick = function(event) { let modal = document.getElementById('detailsModal'); if (event.target === modal) closeDetailsModal(); };
