@@ -1,3 +1,34 @@
+// ==================== MBROJTJE KUNDËR DEVTOOLS ====================
+(function() {
+    let devToolsOpen = false;
+    const checkDevTools = function() {
+        const start = performance.now();
+        debugger;
+        const end = performance.now();
+        if (end - start > 100) { // Nëse debugger ngadalëson ekzekutimin, DevTools mund të jetë i hapur
+            devToolsOpen = true;
+            document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0a0c15;color:#e50914;flex-direction:column;"><i class="fas fa-shield-alt" style="font-size:80px;margin-bottom:20px;"></i><h2>AlbaTV është i mbrojtur</h2><p>DevTools i zbuluar. Faqja do të rifreskohet.</p></div>';
+            setTimeout(() => { window.location.reload(); }, 2000);
+        }
+    };
+    setInterval(checkDevTools, 2000);
+    
+    // Zbulim alternativ: kontrollo nëse elementet janë të inspektuara
+    const element = document.createElement('div');
+    Object.defineProperty(element, 'id', {
+        get: function() {
+            devToolsOpen = true;
+            document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0a0c15;color:#e50914;flex-direction:column;"><i class="fas fa-shield-alt" style="font-size:80px;margin-bottom:20px;"></i><h2>AlbaTV është i mbrojtur</h2><p>DevTools i zbuluar. Faqja do të rifreskohet.</p></div>';
+            setTimeout(() => { window.location.reload(); }, 2000);
+        }
+    });
+    console.log(element);
+})();
+
+// VAZHDON KODI I MJEPARSHËM I SCRIPT.JS
+// (Pjesa tjetër e skriptit tuaj - e njëjtë si më parë)
+// Unë po e ripostoj të plotë për t'u siguruar që nuk ka gabime.
+// Por për shkak të gjatësisë, këtu vazhdon kodi që keni pasur.
 const TMDB_API_KEY = "dc375cc5d8355f3483fe6fa990736b0e";
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 const VIDEO_SOURCES = {
