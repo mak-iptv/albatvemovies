@@ -10,6 +10,7 @@ let allMovies = [], allSeries = [], shqipMovies = [], yuMovies = [];
 let currentMovieData = null, currentSeriesData = null, currentSources = [];
 let newMoviesSwiper = null;
 
+// ==================== UTILS ====================
 function getImageUrl(path, size = 'w500') {
     return path ? `https://image.tmdb.org/t/p/${size}${path}` : 'https://images.unsplash.com/photo-1535016120720-40c646be5580?w=500&q=80';
 }
@@ -50,6 +51,7 @@ async function fetchTMDBData(endpoint, params = {}) {
     return res.json();
 }
 
+// ==================== LOCAL MOVIES ====================
 function getShqipMovies() {
     return [
         { id: '1', title: "BESNIKERIA DHE BUJARIA", year: '2019', thumbnail: 'https://i.ytimg.com/vi/cbhgvrJfLx8/hqdefault.jpg', rating: '8.2', sources: [{ type: 'youtube', videoId: 'cbhgvrJfLx8' }] },
@@ -87,6 +89,7 @@ function getYUMovies() {
     ];
 }
 
+// ==================== INFO POSHTE PLAYER ====================
 async function displayPlayerInfo(type, id, title) {
     const infoDiv = document.getElementById('playerInfo');
     if (!infoDiv) return;
@@ -99,59 +102,65 @@ async function displayPlayerInfo(type, id, title) {
             fetchTMDBData(`${endpoint}/credits`),
             fetchTMDBData(`${endpoint}/videos`)
         ]);
-        
-        let cast = (credits && credits.cast && credits.cast.length) ? credits.cast.slice(0, 6) : [];
+        const cast = credits.cast ? credits.cast.slice(0, 8) : [];
         const trailer = videos.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
         const year = (details.release_date || details.first_air_date)?.slice(0,4) || 'N/A';
         const runtime = details.runtime ? `${details.runtime} min` : (details.episode_run_time?.[0] ? `${details.episode_run_time[0]} min` : 'N/A');
-        const genres = details.genres && details.genres.length ? details.genres.map(g => g.name).join(', ') : 'N/A';
+        const genres = details.genres.map(g => g.name).join(', ');
         
         let castHtml = '';
-        if (cast.length > 0) {
-            castHtml = `<div style="margin-top: 20px;"><h3><i class="fas fa-users"></i> Aktorët kryesorë</h3>
-                        <div style="display: flex; flex-wrap: wrap; gap: 15px;">` + 
-                        cast.map(actor => `
-                            <div style="text-align: center; width: 90px;">
-                                <img src="${getImageUrl(actor.profile_path, 'w185')}" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover;" onerror="this.src='https://via.placeholder.com/70x70?text=No+Image'">
-                                <div style="font-size: 12px; margin-top: 5px;">${actor.name}</div>
-                                <small style="font-size: 10px; color: #aaa;">${actor.character || ''}</small>
-                            </div>
-                        `).join('') + `</div></div>`;
+        if (cast.length) {
+            castHtml = `
+                <h3><i class="fas fa-users"></i> Aktorët kryesorë</h3>
+                <div class="cast-horizontal">
+                    ${cast.map(actor => `
+                        <div class="cast-card">
+                            <img src="${getImageUrl(actor.profile_path, 'w185')}" onerror="this.src='https://via.placeholder.com/80x80?text=No+Image'">
+                            <div class="name">${actor.name}</div>
+                            <div class="character">${actor.character || ''}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
         } else {
-            castHtml = `<div style="margin-top: 20px;"><h3><i class="fas fa-users"></i> Aktorët kryesorë</h3>
-                        <p><i>Nuk ka informacion për aktorët për këtë titull.</i></p></div>`;
+            castHtml = `<p><i>Nuk ka informacion për aktorët.</i></p>`;
         }
         
         infoDiv.innerHTML = `
-            <div style="display: flex; flex-wrap: wrap; gap: 20px;">
-                <div style="flex: 2; min-width: 200px;">
+            <div class="player-info-container">
+                <div class="player-info-left">
                     <h2><i class="fas fa-info-circle"></i> ${details.title || details.name} (${year})</h2>
-                    <p><strong>Vlerësim:</strong> ⭐ ${details.vote_average?.toFixed(1) || 'N/A'}/10 (${details.vote_count || 0} vota)</p>
-                    <p><strong>Zhanri:</strong> ${genres}</p>
+                    <p><strong>Vlerësim:</strong> ⭐ ${details.vote_average?.toFixed(1)}/10 (${details.vote_count} vota)</p>
+                    <p><strong>Zhanri:</strong> ${genres || 'N/A'}</p>
                     <p><strong>Kohëzgjatja:</strong> ${runtime}</p>
                     <p><strong>Përmbajtja:</strong> ${details.overview || 'Nuk ka përshkrim.'}</p>
                     ${trailer ? `<button class="trailer-btn" onclick="playTrailerInPlayer('${trailer.key}')"><i class="fab fa-youtube"></i> Shiko Trailer</button>` : '<p><i>Trailer nuk disponohet</i></p>'}
                 </div>
-                <div style="flex: 3;">
+                <div class="player-info-right">
                     ${castHtml}
                 </div>
             </div>
         `;
     } catch(e) {
         console.error(e);
-        infoDiv.innerHTML = '<p style="color:red;">Dështoi ngarkimi i informacionit. Kontrollo lidhjen ose provo përsëri.</p>';
+        infoDiv.innerHTML = '<p style="color:red;">Dështoi ngarkimi i informacionit.</p>';
     }
 }
-
 function displayShqipPlayerInfo(movie) {
     const infoDiv = document.getElementById('playerInfo');
     if (!infoDiv) return;
     infoDiv.style.display = 'block';
     infoDiv.innerHTML = `
-        <h2><i class="fas fa-flag"></i> ${movie.title} (${movie.year})</h2>
-        <p><strong>Vlerësim:</strong> ⭐ ${movie.rating}/10</p>
-        <p><strong>Përshkrimi:</strong> Film shqiptar i vitit ${movie.year}.</p>
-        <p><i>Aktorët kryesorë: do të shtohen së shpejti.</i></p>
+        <div class="player-info-container">
+            <div class="player-info-left">
+                <h2><i class="fas fa-flag"></i> ${movie.title} (${movie.year})</h2>
+                <p><strong>Vlerësim:</strong> ⭐ ${movie.rating}/10</p>
+                <p><strong>Përshkrimi:</strong> Film shqiptar i vitit ${movie.year}.</p>
+            </div>
+            <div class="player-info-right">
+                <p><i>Aktorët kryesorë: do të shtohen së shpejti.</i></p>
+            </div>
+        </div>
     `;
 }
 function displayYUPlayerInfo(movie) {
@@ -159,27 +168,35 @@ function displayYUPlayerInfo(movie) {
     if (!infoDiv) return;
     infoDiv.style.display = 'block';
     infoDiv.innerHTML = `
-        <h2><i class="fas fa-landmark"></i> ${movie.title} (${movie.year})</h2>
-        <p><strong>Vlerësim:</strong> ⭐ ${movie.rating}/10</p>
-        <p><strong>Zhanri:</strong> ${movie.genre?.join(', ')}</p>
-        <p><strong>Përshkrimi:</strong> Film klasik jugosllav.</p>
-        <p><i>Aktorët: Velimir Bata Živojinović, Ljubiša Samardžić etj.</i></p>
+        <div class="player-info-container">
+            <div class="player-info-left">
+                <h2><i class="fas fa-landmark"></i> ${movie.title} (${movie.year})</h2>
+                <p><strong>Vlerësim:</strong> ⭐ ${movie.rating}/10</p>
+                <p><strong>Zhanri:</strong> ${movie.genre?.join(', ')}</p>
+                <p><strong>Përshkrimi:</strong> Film klasik jugosllav.</p>
+            </div>
+            <div class="player-info-right">
+                <p><i>Aktorët: Velimir Bata Živojinović, Ljubiša Samardžić etj.</i></p>
+            </div>
+        </div>
     `;
 }
 function playTrailerInPlayer(trailerKey) {
     const playerFrame = document.getElementById('playerFrame');
     if (playerFrame) {
+        const originalSrc = playerFrame.src;
         playerFrame.src = `https://www.youtube-nocookie.com/embed/${trailerKey}?autoplay=1`;
-        showNotification("Traileri po luhet. Mbyll player-in dhe rifresko për të vazhduar filmin.", "info");
+        showNotification("Traileri po luhet. Mbyll player-in për të vazhduar filmin.", "info");
+        // Optionally restore after trailer ends? Not implemented for simplicity.
     }
 }
 
-// FIX 1: VidSrc.me URL e saktë
+// ==================== PLAYER & SOURCES ====================
 async function loadMovieSources(movieId) {
     let sources = [
         { id: 'vidsrc', name: 'VidSrc', url: `${VIDEO_SOURCES.vidsrc.baseUrl}${movieId}` },
         { id: 'smashy', name: 'Smashy', url: `${VIDEO_SOURCES.smashy.baseUrl}${movieId}` },
-        { id: 'vidsrcme', name: 'VidSrc.me', url: `${VIDEO_SOURCES.vidsrcme.baseUrl}movie/${movieId}` }  // ndrequr
+        { id: 'vidsrcme', name: 'VidSrc.me', url: `${VIDEO_SOURCES.vidsrcme.baseUrl}?tmdb=${movieId}` }
     ];
     currentSources = sources;
     let btnsDiv = document.getElementById('sourcesButtons');
@@ -226,29 +243,19 @@ function playSelectedEpisode() {
         }
     }
 }
-// FIX 2: populateEpisodes me error handling dhe shtimin e onchange për episode
 async function populateEpisodes(seriesId, seasonNum) {
-    try {
-        let seasonData = await fetchTMDBData(`/tv/${seriesId}/season/${seasonNum}`);
-        let episodeSelect = document.getElementById('episodeSelect');
-        if (!episodeSelect) return;
-        episodeSelect.innerHTML = '';
-        seasonData.episodes.forEach(ep => {
-            let opt = document.createElement('option');
-            opt.value = ep.episode_number;
-            opt.textContent = `Episodi ${ep.episode_number}: ${ep.name}`;
-            episodeSelect.appendChild(opt);
-        });
-        if (episodeSelect.options.length) episodeSelect.value = 1;
-        // ndreqje: kur ndryshon episodi, të luhet menjëherë
-        episodeSelect.onchange = () => playSelectedEpisode();
-    } catch(e) {
-        console.error("Gabim në ngarkimin e episodeve", e);
-        let episodeSelect = document.getElementById('episodeSelect');
-        if(episodeSelect) episodeSelect.innerHTML = '<option>Gabim në ngarkim</option>';
-    }
+    let seasonData = await fetchTMDBData(`/tv/${seriesId}/season/${seasonNum}`);
+    let episodeSelect = document.getElementById('episodeSelect');
+    if (!episodeSelect) return;
+    episodeSelect.innerHTML = '';
+    seasonData.episodes.forEach(ep => {
+        let opt = document.createElement('option');
+        opt.value = ep.episode_number;
+        opt.textContent = `Episodi ${ep.episode_number}: ${ep.name}`;
+        episodeSelect.appendChild(opt);
+    });
+    if (episodeSelect.options.length) episodeSelect.value = 1;
 }
-// FIX 3: pas popullimit fillestar të sezoneve, luaj episodin e parë
 async function loadSeriesSeasonsEpisodes(seriesId) {
     let details = await fetchTMDBData(`/tv/${seriesId}`);
     let seasonSelect = document.getElementById('seasonSelect');
@@ -265,13 +272,8 @@ async function loadSeriesSeasonsEpisodes(seriesId) {
     if (seasonSelect.options.length) {
         seasonSelect.value = 1;
         await populateEpisodes(seriesId, 1);
-        // luaj episodin e parë pasi të jenë gati sezonet
-        playSelectedEpisode();
     }
-    seasonSelect.onchange = async () => { 
-        await populateEpisodes(seriesId, seasonSelect.value); 
-        playSelectedEpisode(); 
-    };
+    seasonSelect.onchange = async () => { await populateEpisodes(seriesId, seasonSelect.value); playSelectedEpisode(); };
 }
 function playMovie(id, title, year) {
     currentMovieData = { id, title, year, type: 'movie' };
@@ -373,6 +375,7 @@ function closeYouTubePlayer() {
     if (youtubeIframe) youtubeIframe.src = '';
 }
 
+// ==================== RENDER FUNCTIONS ====================
 async function loadNewMoviesSlider() {
     let wrapper = document.getElementById('newMoviesSliderWrapper');
     if (!wrapper) return;
@@ -552,34 +555,8 @@ function showSection(sectionId) {
     else if (sectionId === 'yu') loadYUContent();
     else if (sectionId === 'trending') loadTrending();
 }
-// FIX 4: Kërkimi global (mainSearch) tani funksionon
 function performSearch(query, sourceId) {
     if (!query || query.length < 2) return;
-    
-    // Rasti i kërkimit global nga navbar
-    if (sourceId === 'mainSearch') {
-        // Drejtohemi te seksioni i filmave dhe kryejmë kërkim aty
-        showSection('movies');
-        // Pastaj kërkojmë në filma
-        fetchTMDBData('/search/movie', { query }).then(data => { 
-            const grid = document.getElementById('moviesGrid');
-            if(grid) {
-                grid.innerHTML = data.results.map(m => `
-                    <div class="movie-card">
-                        <img src="${getImageUrl(m.poster_path)}">
-                        <div class="rating"><i class="fas fa-star"></i> ${m.vote_average?.toFixed(1)}</div>
-                        <div class="type-badge">FILM</div>
-                        <div class="card-content"><div class="card-title">${m.title}</div><div class="card-year">${m.release_date?.slice(0,4)||'N/A'}</div></div>
-                        <button class="info-btn" onclick="event.stopPropagation(); playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><i class="fas fa-info-circle"></i></button>
-                        <div class="play-center" onclick="event.stopPropagation(); playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><i class="fas fa-play"></i></div>
-                    </div>
-                `).join('');
-            }
-        }).catch(e => showNotification("Gabim në kërkim", "error"));
-        return;
-    }
-    
-    // Pjesa tjetër (si më parë)
     if (sourceId === 'movieSearch') fetchTMDBData('/search/movie', { query }).then(data => { document.getElementById('moviesGrid').innerHTML = data.results.map(m => `
         <div class="movie-card">
             <img src="${getImageUrl(m.poster_path)}">
