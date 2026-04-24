@@ -370,5 +370,23 @@ nav {
     .hero h1 { font-size: 2rem; }
     .play-center { width: 40px; height: 40px; }
     .play-center i { font-size: 18px; }
+
+
+    .modal-content {
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    border-radius: 0;
+    padding: 15px;
+}
+
+.modal-large {
+    width: 100vw;
+    height: 100vh;
+}
+
+#playerFrame {
+    height: 75vh;
+}
     .player-info-left, .player-info-right { flex: 1 1 100%; }
 }
