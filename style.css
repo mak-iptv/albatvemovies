@@ -3,14 +3,12 @@
     padding: 0;
     box-sizing: border-box;
 }
-
 body {
     font-family: 'Inter', sans-serif;
     background: #0a0c15;
     color: #ffffff;
     overflow-x: hidden;
 }
-
 header {
     display: flex;
     justify-content: space-between;
@@ -23,7 +21,6 @@ header {
     z-index: 100;
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
-
 .logo {
     font-size: 1.8rem;
     font-weight: 700;
@@ -32,9 +29,8 @@ header {
     background-clip: text;
     color: transparent;
 }
-.logo span { color: #fff; background: none; -webkit-background-clip: unset; background-clip: unset; }
+.logo span { color: #fff; background: none; }
 .logo i { color: #e50914; margin-right: 5px; }
-
 nav {
     display: flex;
     gap: 1.5rem;
@@ -49,7 +45,6 @@ nav {
 }
 .nav-link i { margin-right: 6px; }
 .nav-link:hover, .nav-link.active { color: #e50914; }
-
 .install-btn {
     background: #e50914;
     border: none;
@@ -59,7 +54,6 @@ nav {
     cursor: pointer;
     font-weight: bold;
 }
-
 .search-container {
     max-width: 600px;
     margin: 1.5rem auto;
@@ -82,7 +76,6 @@ nav {
     transform: translateY(-50%);
     color: #aaa;
 }
-
 .section {
     padding: 0 2rem 2rem;
 }
@@ -140,6 +133,7 @@ nav {
     padding: 4px 8px;
     border-radius: 20px;
     font-size: 0.8rem;
+    z-index: 2;
 }
 .type-badge {
     position: absolute;
@@ -150,11 +144,14 @@ nav {
     border-radius: 20px;
     font-size: 0.7rem;
     font-weight: bold;
+    z-index: 2;
 }
 .shqip-badge { background: #2e7d32; }
 .yu-badge { background: #b85c1a; }
 .card-content {
     padding: 10px;
+    position: relative;
+    z-index: 1;
 }
 .card-title {
     font-weight: 600;
@@ -163,6 +160,41 @@ nav {
     text-overflow: ellipsis;
 }
 .card-year { font-size: 0.8rem; color: #aaa; }
+
+/* Play ikona në qendër */
+.play-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(229,9,20,0.85);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: 0.2s;
+    opacity: 0;
+    pointer-events: none;
+}
+.movie-card:hover .play-center {
+    opacity: 1;
+    pointer-events: auto;
+}
+.play-center i {
+    font-size: 24px;
+    margin-left: 4px;
+    color: white;
+}
+.play-center:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    background: #e50914;
+}
+
+/* Info button */
 .info-btn {
     position: absolute;
     bottom: 10px;
@@ -179,20 +211,11 @@ nav {
     align-items: center;
     justify-content: center;
 }
-.play-overlay {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    background: rgba(229,9,20,0.8);
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 2;
+.info-btn:hover {
+    background: #e50914;
 }
+
+/* Modal */
 .modal {
     position: fixed;
     top: 0;
@@ -241,24 +264,6 @@ nav {
     cursor: pointer;
 }
 .source-btn.active-source { background: #e50914; }
-.cast-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 20px;
-}
-.cast-item {
-    text-align: center;
-    width: 90px;
-}
-.cast-item img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-.cast-item span { display: block; font-size: 12px; margin-top: 5px; }
-.cast-item small { font-size: 10px; color: #aaa; }
 .trailer-btn {
     background: #ff4444;
     border: none;
@@ -267,7 +272,6 @@ nav {
     color: white;
     cursor: pointer;
     margin-top: 10px;
-    transition: 0.2s;
 }
 .trailer-btn:hover { background: #cc0000; }
 .loading {
@@ -289,17 +293,20 @@ nav {
     cursor: pointer;
 }
 .filter-btn.active { background: #e50914; }
+#playerInfo {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-top: 20px;
+}
+#playerInfo h2, #playerInfo h3 {
+    color: #e50914;
+    margin-bottom: 10px;
+}
 @media (max-width: 768px) {
     nav { gap: 0.8rem; }
     .nav-link { font-size: 0.8rem; }
     .featured-grid, .movies-grid { grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); }
     .hero h1 { font-size: 2rem; }
-}
-#playerInfo {
-    max-height: 400px;
-    overflow-y: auto;
-}
-#playerInfo h3 {
-    margin: 15px 0 10px 0;
-    color: #e50914;
+    .play-center { width: 40px; height: 40px; }
+    .play-center i { font-size: 18px; }
 }
