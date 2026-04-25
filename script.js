@@ -22,7 +22,7 @@ const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 
 // Serverat e renditur nga ai me më pak reklama tek ai me më shumë
 const VIDEO_SOURCES = {
-    embedSu: { name: "Server Premium (Pa Popups)", baseUrl: "https://embed.su/embed/movie/", baseUrlTv: "https://embed.su/embed/tv/", type: "embed" },
+    embedSu: { name: "Server Premium (Pa Popups)", baseUrl: "https://vidsrc-embed.ru/embed/movie/", baseUrlTv: "https://vidsrc-embed.ru/embed/tv/", type: "embed" },
     vidsrcPro: { name: "VidSrc Pro", baseUrl: "https://vidsrc.pro/embed/movie/", baseUrlTv: "https://vidsrc.pro/embed/tv/", type: "embed" },
     twoEmbed: { name: "2Embed (Rezervë)", baseUrl: "https://www.2embed.cc/embed/", baseUrlTv: "https://www.2embed.cc/embedtv/", type: "embed" }
 };
