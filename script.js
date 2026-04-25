@@ -1,54 +1,22 @@
-// ==================== ANTI-DEVTOOLS (AUTO REFRESH) ====================
+// ==================== ANTI-DEVTOOLS (PA AUTO REFRESH) ====================
 (function() {
-    // Metoda 1: Zbulim nëpërmjet ndryshimit të dimensioneve
-    function detectBySize() {
-        const widthDiff = window.outerWidth - window.innerWidth;
-        const heightDiff = window.outerHeight - window.innerHeight;
-        // DevTools zakonisht e rrit këtë diferencë (> 100 px)
-        if (widthDiff > 100 || heightDiff > 100) {
-            return true;
-        }
-        return false;
-    }
-
-    // Metoda 2: Zbulim nëpërmjet kohës së ekzekutimit (pa debugger)
-    function detectByTiming() {
-        const start = performance.now();
-        // Një veprim i lehtë që mund të vonohet nëse DevTools është i hapur
-        for (let i = 0; i < 1000; i++) { Math.sqrt(i); }
-        const end = performance.now();
-        // Nëse koha është më e madhe se 5 ms (ndryshon sipas pajisjes, por në DevTools rritet ndjeshëm)
-        // Për siguri, vendosim 15 ms – nëse vonon, ka të ngjarë DevTools i hapur.
-        return (end - start) > 15;
-    }
-
     let devToolsOpen = false;
     setInterval(() => {
-        if (detectBySize() || detectByTiming()) {
+        const widthDiff = window.outerWidth - window.innerWidth;
+        const heightDiff = window.outerHeight - window.innerHeight;
+        if (widthDiff > 100 || heightDiff > 100) {
             if (!devToolsOpen) {
                 devToolsOpen = true;
-                // Pastro localStorage dhe sessionStorage opsional (për siguri)
-                // localStorage.clear();
-                // sessionStorage.clear();
-                // Refresh faqe
-                window.location.reload();
+                console.clear();
+                console.log("%cAlbaTV - DevTools u zbulua, por faqja vazhdon normalisht.", "color: orange; font-size: 14px;");
             }
         } else {
             devToolsOpen = false;
         }
-    }, 2000);
-
-    // Zbulim alternativ për inspektim të elementeve
-    const element = document.createElement('div');
-    Object.defineProperty(element, 'id', {
-        get: function() {
-            window.location.reload();
-        }
-    });
-    console.log(element); // kjo linjë nuk shkakton reload nëse nuk hapet devtools
+    }, 3000);
 })();
 
-// ==================== VAZHDON KODI I APLIKACIONIT ====================
+// ==================== KONFIGURIMI ====================
 const TMDB_API_KEY = "dc375cc5d8355f3483fe6fa990736b0e";
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 const VIDEO_SOURCES = {
