@@ -246,7 +246,7 @@ function loadSource(sourceId) {
         else if (sourceId === 'vidsrcPro') playerFrame.src = `${VIDEO_SOURCES.vidsrcPro.baseUrlTv}${currentSeriesData.id}/${season}/${episode}`;
         else playerFrame.src = source.url;
     } else {
-        playerFrame.src = source.url;
+        playerFrame.src = `/api/clean-embed?url=${encodeURIComponent(source.url)}`;
     }
     document.querySelectorAll('.source-btn').forEach(btn => btn.classList.remove('active-source'));
     let activeBtn = document.querySelector(`.source-btn[onclick*="${sourceId}"]`);
