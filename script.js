@@ -22,7 +22,7 @@ const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 
 // BURIME VIDEO ME MË PAK REKLAMA (përditësuar)
 const VIDEO_SOURCES = {
-    embedSu: { name: "Embed.su", baseUrl: "https://embed.su/embed/movie/", baseUrlTv: "https://embed.su/embed/tv/", type: "embed" },
+    embedSu: { name: "Embed.su", baseUrl: "https://vidsrc.to/embed/movie/", baseUrlTv: "https://vidsrc.to/embed/tv/", type: "embed" },
     twoEmbed: { name: "2Embed", baseUrl: "https://www.2embed.cc/embed/", baseUrlTv: "https://www.2embed.cc/embedtv/", type: "embed" },
     vidsrcPro: { name: "VidSrc.pro", baseUrl: "https://vidsrc.pro/embed/movie/", baseUrlTv: "https://vidsrc.pro/embed/tv/", type: "embed" }
 };
