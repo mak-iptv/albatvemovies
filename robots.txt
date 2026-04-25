@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /script.js
+Disallow: /style.css
+Disallow: /manifest.json
+
+# Nëse do të bllokosh të gjithë skedarët e burimit (source) por lejo faqen kryesore
+Disallow: /*.js
+Disallow: /*.css
+
+# Sitemap (nëse ke një të tillë, përndryshe hiqe ose komento)
+# Sitemap: https://alba-film.vercel.app/sitemap.xml
