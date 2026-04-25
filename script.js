@@ -20,9 +20,9 @@
 const TMDB_API_KEY = "dc375cc5d8355f3483fe6fa990736b0e";
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 
-// BURIME VIDEO ME MË PAK REKLAMA (përditësuar)
+// BURIME VIDEO (do të kalohen përmes proxy-t për të hequr reklamat)
 const VIDEO_SOURCES = {
-    embedSu: { name: "Embed.su", baseUrl: "https://vidsrc.to/embed/movie/", baseUrlTv: "https://vidsrc.to/embed/tv/", type: "embed" },
+    embedSu: { name: "Embed.su", baseUrl: "https://embed.su/embed/movie/", baseUrlTv: "https://embed.su/embed/tv/", type: "embed" },
     twoEmbed: { name: "2Embed", baseUrl: "https://www.2embed.cc/embed/", baseUrlTv: "https://www.2embed.cc/embedtv/", type: "embed" },
     vidsrcPro: { name: "VidSrc.pro", baseUrl: "https://vidsrc.pro/embed/movie/", baseUrlTv: "https://vidsrc.pro/embed/tv/", type: "embed" }
 };
@@ -209,9 +209,8 @@ function playTrailerInPlayer(trailerKey) {
     }
 }
 
-// ==================== PLAYER & SOURCES ====================
+// ==================== PLAYER & SOURCES (PROXY ENABLED) ====================
 async function loadMovieSources(movieId) {
-    // Përdor burimet e reja me më pak reklama
     let sources = [
         { id: 'embedSu', name: 'Embed.su', url: `${VIDEO_SOURCES.embedSu.baseUrl}${movieId}` },
         { id: 'twoEmbed', name: '2Embed', url: `${VIDEO_SOURCES.twoEmbed.baseUrl}${movieId}` },
@@ -238,16 +237,33 @@ function loadSource(sourceId) {
     if (!source) return;
     let playerFrame = document.getElementById('playerFrame');
     if (!playerFrame) return;
+    
+    let finalUrl = source.url;
+    
+    // Për filmat dhe serialet (përveç YouTube/Dailymotion), dërgojmë përmes proxy-t
+    if (!finalUrl.includes('youtube.com') && !finalUrl.includes('youtu.be') && !finalUrl.includes('dailymotion.com')) {
+        finalUrl = `/api/clean-embed?url=${encodeURIComponent(finalUrl)}`;
+    }
+    
+    // Nëse është serial dhe përdoruesi ka zgjedhur sezon/episod, rregullojmë URL-në përkatëse
     if (currentSeriesData) {
         let season = document.getElementById('seasonSelect')?.value || 1;
         let episode = document.getElementById('episodeSelect')?.value || 1;
-        if (sourceId === 'embedSu') playerFrame.src = `${VIDEO_SOURCES.embedSu.baseUrlTv}${currentSeriesData.id}/${season}/${episode}`;
-        else if (sourceId === 'twoEmbed') playerFrame.src = `${VIDEO_SOURCES.twoEmbed.baseUrlTv}${currentSeriesData.id}/${season}/${episode}`;
-        else if (sourceId === 'vidsrcPro') playerFrame.src = `${VIDEO_SOURCES.vidsrcPro.baseUrlTv}${currentSeriesData.id}/${season}/${episode}`;
-        else playerFrame.src = source.url;
-    } else {
-        playerFrame.src = `/api/clean-embed?url=${encodeURIComponent(source.url)}`;
+        let rawUrl = '';
+        if (sourceId === 'embedSu') {
+            rawUrl = `${VIDEO_SOURCES.embedSu.baseUrlTv}${currentSeriesData.id}/${season}/${episode}`;
+        } else if (sourceId === 'twoEmbed') {
+            rawUrl = `${VIDEO_SOURCES.twoEmbed.baseUrlTv}${currentSeriesData.id}/${season}/${episode}`;
+        } else if (sourceId === 'vidsrcPro') {
+            rawUrl = `${VIDEO_SOURCES.vidsrcPro.baseUrlTv}${currentSeriesData.id}/${season}/${episode}`;
+        } else {
+            rawUrl = source.url;
+        }
+        finalUrl = `/api/clean-embed?url=${encodeURIComponent(rawUrl)}`;
     }
+    
+    playerFrame.src = finalUrl;
+    
     document.querySelectorAll('.source-btn').forEach(btn => btn.classList.remove('active-source'));
     let activeBtn = document.querySelector(`.source-btn[onclick*="${sourceId}"]`);
     if (activeBtn) activeBtn.classList.add('active-source');
@@ -269,32 +285,39 @@ async function populateEpisodes(seriesId, seasonNum) {
     let episodeSelect = document.getElementById('episodeSelect');
     if (!episodeSelect) return;
     episodeSelect.innerHTML = '';
-    seasonData.episodes.forEach(ep => {
-        let opt = document.createElement('option');
-        opt.value = ep.episode_number;
-        opt.textContent = `Episodi ${ep.episode_number}: ${ep.name}`;
-        episodeSelect.appendChild(opt);
-    });
-    if (episodeSelect.options.length) episodeSelect.value = 1;
+    if (seasonData.episodes) {
+        seasonData.episodes.forEach(ep => {
+            let opt = document.createElement('option');
+            opt.value = ep.episode_number;
+            opt.textContent = `Episodi ${ep.episode_number}: ${ep.name}`;
+            episodeSelect.appendChild(opt);
+        });
+        if (episodeSelect.options.length) episodeSelect.value = 1;
+    }
 }
 async function loadSeriesSeasonsEpisodes(seriesId) {
     let details = await fetchTMDBData(`/tv/${seriesId}`);
     let seasonSelect = document.getElementById('seasonSelect');
     if (!seasonSelect) return;
     seasonSelect.innerHTML = '';
-    details.seasons.forEach(season => {
-        if (season.season_number >= 0) {
-            let opt = document.createElement('option');
-            opt.value = season.season_number;
-            opt.textContent = `Sezoni ${season.season_number} (${season.episode_count} episode)`;
-            seasonSelect.appendChild(opt);
+    if (details.seasons) {
+        details.seasons.forEach(season => {
+            if (season.season_number >= 0) {
+                let opt = document.createElement('option');
+                opt.value = season.season_number;
+                opt.textContent = `Sezoni ${season.season_number} (${season.episode_count} episode)`;
+                seasonSelect.appendChild(opt);
+            }
+        });
+        if (seasonSelect.options.length) {
+            seasonSelect.value = 1;
+            await populateEpisodes(seriesId, 1);
         }
-    });
-    if (seasonSelect.options.length) {
-        seasonSelect.value = 1;
-        await populateEpisodes(seriesId, 1);
+        seasonSelect.onchange = async () => { 
+            await populateEpisodes(seriesId, seasonSelect.value); 
+            playSelectedEpisode(); 
+        };
     }
-    seasonSelect.onchange = async () => { await populateEpisodes(seriesId, seasonSelect.value); playSelectedEpisode(); };
 }
 function playMovie(id, title, year) {
     currentMovieData = { id, title, year, type: 'movie' };
@@ -564,10 +587,7 @@ function showSection(sectionId) {
     if (searchSection) searchSection.style.display = 'none';
     
     const activeSection = document.getElementById(sectionId);
-    if (!activeSection) {
-        console.error(`Seksioni "${sectionId}" nuk u gjet në HTML.`);
-        return;
-    }
+    if (!activeSection) return;
     activeSection.style.display = 'block';
     document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
     const activeLink = Array.from(document.querySelectorAll('.nav-link')).find(link => link.getAttribute('onclick')?.includes(`'${sectionId}'`));
@@ -700,7 +720,7 @@ async function performSearch(query, sourceId) {
         return;
     }
 
-    // Kërkime specifike për seksione (movieSearch, seriesSearch, etj.)
+    // Kërkime specifike për seksione
     if (sourceId === 'movieSearch') {
         fetchTMDBData('/search/movie', { query }).then(data => {
             document.getElementById('moviesGrid').innerHTML = data.results.map(m => `
@@ -819,5 +839,4 @@ window.onload = () => {
     });
 };
 
-// Rekomandim për përdoruesit: Instaloni uBlock Origin për të bllokuar reklamat e mbetura.
-console.log("%c💡 Këshillë: Për një përvojë pa reklama, instaloni shtesën uBlock Origin në shfletuesin tuaj.", "color: #4CAF50; font-size: 14px;");
+console.log("%c🔒 Prox-i për heqjen e reklamave është aktiv. Nëse ende shfaqen reklama, instaloni uBlock Origin.", "color: #4CAF50; font-size: 14px;");
