@@ -20,7 +20,7 @@
 const TMDB_API_KEY = "dc375cc5d8355f3483fe6fa990736b0e";
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 
-// BURIME VIDEO ME MË PAK REKLAMA (përditësuar)
+// BURIME VIDEO ME MË PAK REKLAMA
 const VIDEO_SOURCES = {
     embedSu: { name: "Embed.su", baseUrl: "https://vidsrc-embed.ru/embed/movie/", baseUrlTv: "https://vidsrc-embed.ru/embed/tv/", type: "embed" },
     twoEmbed: { name: "2Embed", baseUrl: "https://www.2embed.cc/embed/", baseUrlTv: "https://www.2embed.cc/embedtv/", type: "embed" },
@@ -30,6 +30,7 @@ const VIDEO_SOURCES = {
 let allMovies = [], allSeries = [], shqipMovies = [], yuMovies = [];
 let currentMovieData = null, currentSeriesData = null, currentSources = [];
 let newMoviesSwiper = null;
+let lastActiveSection = 'home'; // Për kthim pas kërkimit
 
 function getImageUrl(path, size = 'w500') {
     return path ? `https://image.tmdb.org/t/p/${size}${path}` : 'https://images.unsplash.com/photo-1535016120720-40c646be5580?w=500&q=80';
@@ -211,7 +212,6 @@ function playTrailerInPlayer(trailerKey) {
 
 // ==================== PLAYER & SOURCES ====================
 async function loadMovieSources(movieId) {
-    // Përdor burimet e reja me më pak reklama
     let sources = [
         { id: 'embedSu', name: 'Embed.su', url: `${VIDEO_SOURCES.embedSu.baseUrl}${movieId}` },
         { id: 'twoEmbed', name: '2Embed', url: `${VIDEO_SOURCES.twoEmbed.baseUrl}${movieId}` },
@@ -554,6 +554,8 @@ async function loadTrending() {
         `;
     }).join('');
 }
+
+// ==================== NDRYSHO SHOWSECTION PËR TË MBajtur lastActiveSection ====================
 function showSection(sectionId) {
     const sections = ['home', 'movies', 'series', 'shqip', 'yu', 'trending'];
     sections.forEach(id => {
@@ -572,6 +574,10 @@ function showSection(sectionId) {
     document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
     const activeLink = Array.from(document.querySelectorAll('.nav-link')).find(link => link.getAttribute('onclick')?.includes(`'${sectionId}'`));
     if (activeLink) activeLink.classList.add('active');
+    
+    // Ruaj sektorin e fundit aktiv për t'u kthyer pas kërkimit
+    lastActiveSection = sectionId;
+    
     if (sectionId === 'home') { loadFeaturedContent(); animateCounter('movieCount', 10000, 3000); animateCounter('seriesCount', 2000, 2500); animateCounter('yuCount', 500, 2000); loadNewMoviesSlider(); }
     else if (sectionId === 'movies') loadAllMovies();
     else if (sectionId === 'series') loadAllSeries();
@@ -580,11 +586,24 @@ function showSection(sectionId) {
     else if (sectionId === 'trending') loadTrending();
 }
 
-// ==================== KËRKIMI GLOBAL ====================
+// ==================== KËRKIMI GLOBAL I PËRMIRËSUAR ====================
+let searchDebounceTimer;
+function resetToLastSection() {
+    const mainSearch = document.getElementById('mainSearch');
+    if (mainSearch && mainSearch.value.trim() === '') {
+        const searchSection = document.getElementById('searchResults');
+        if (searchSection && searchSection.style.display === 'block') {
+            searchSection.style.display = 'none';
+            showSection(lastActiveSection);
+        }
+    }
+}
+
 async function performSearch(query, sourceId) {
-    if (!query || query.length < 2) return;
+    if (!query || query.trim().length < 2) return;
 
     if (sourceId === 'mainSearch') {
+        // Fshih të gjithë seksionet dhe shfaq searchResults
         const sections = ['home', 'movies', 'series', 'shqip', 'yu', 'trending'];
         sections.forEach(id => {
             const el = document.getElementById(id);
@@ -600,6 +619,7 @@ async function performSearch(query, sourceId) {
         grid.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Duke kërkuar...</div>';
 
         try {
+            // Kërko njëkohësisht në TMDB dhe lokalet
             const [movieResults, tvResults] = await Promise.all([
                 fetchTMDBData('/search/movie', { query: query }),
                 fetchTMDBData('/search/tv', { query: query })
@@ -656,7 +676,7 @@ async function performSearch(query, sourceId) {
             });
 
             if (combined.length === 0) {
-                grid.innerHTML = `<div style="text-align:center; padding:40px;">⚠️ Nuk u gjet asnjë rezultat për "<strong>${escapeQuote(query)}</strong>".</div>`;
+                grid.innerHTML = `<div style="text-align:center; padding:40px;"><i class="fas fa-search"></i> Nuk u gjet asnjë rezultat për "<strong>${escapeQuote(query)}</strong>".<br>Provo me një fjalë tjetër.</div>`;
                 return;
             }
 
@@ -694,8 +714,8 @@ async function performSearch(query, sourceId) {
                 `;
             }).join('');
         } catch (err) {
-            console.error(err);
-            grid.innerHTML = '<div style="color:red; text-align:center;">Gabim gjatë kërkimit. Kontrollo lidhjen.</div>';
+            console.error('Gabim në kërkim:', err);
+            grid.innerHTML = '<div style="color:red; text-align:center;"><i class="fas fa-exclamation-triangle"></i> Dështoi lidhja me serverin. Kontrollo internetin dhe provo përsëri.</div>';
         }
         return;
     }
@@ -713,7 +733,7 @@ async function performSearch(query, sourceId) {
                     <div class="play-center" onclick="event.stopPropagation(); playMovie(${m.id},'${escapeQuote(m.title)}','${m.release_date?.slice(0,4)||''}')"><i class="fas fa-play"></i></div>
                 </div>
             `).join('');
-        });
+        }).catch(() => showNotification('Gabim në kërkimin e filmave', 'error'));
     } 
     else if (sourceId === 'seriesSearch') {
         fetchTMDBData('/search/tv', { query }).then(data => {
@@ -727,7 +747,7 @@ async function performSearch(query, sourceId) {
                     <div class="play-center" onclick="event.stopPropagation(); playTVSeries(${s.id},'${escapeQuote(s.name)}','${s.first_air_date?.slice(0,4)||''}')"><i class="fas fa-play"></i></div>
                 </div>
             `).join('');
-        });
+        }).catch(() => showNotification('Gabim në kërkimin e serialeve', 'error'));
     }
     else if (sourceId === 'shqipSearch') {
         let filtered = getShqipMovies().filter(m => m.title.toLowerCase().includes(query.toLowerCase()));
@@ -773,11 +793,11 @@ async function performSearch(query, sourceId) {
                     </div>
                 `;
             }).join('');
-        });
+        }).catch(() => showNotification('Gabim në kërkimin e trendit', 'error'));
     }
 }
 
-function setupSearchEnter() {
+function setupSearchEvents() {
     const searchIds = ['mainSearch', 'movieSearch', 'seriesSearch', 'shqipSearch', 'yuSearch', 'trendingSearch'];
     searchIds.forEach(id => {
         let input = document.getElementById(id);
@@ -785,10 +805,36 @@ function setupSearchEnter() {
             input.addEventListener('keypress', e => {
                 if (e.key === 'Enter') performSearch(e.target.value, id);
             });
+            // Kërkimi live vetëm për kërkimin global
+            if (id === 'mainSearch') {
+                input.addEventListener('input', (e) => {
+                    const val = e.target.value;
+                    if (val.trim().length >= 2) {
+                        clearTimeout(searchDebounceTimer);
+                        searchDebounceTimer = setTimeout(() => performSearch(val, id), 500);
+                    } else if (val.trim() === '') {
+                        resetToLastSection();
+                    }
+                });
+            }
         }
     });
+
+    // Ikona e xhamit
+    const searchIcon = document.querySelector('.search-container .search-icon');
+    if (searchIcon) {
+        searchIcon.addEventListener('click', () => {
+            const query = document.getElementById('mainSearch').value;
+            if (query.trim().length >= 2) {
+                performSearch(query, 'mainSearch');
+            } else {
+                showNotification('Shkruani të paktën 2 shkronja për të kërkuar', 'info');
+            }
+        });
+    }
 }
 
+// ==================== INIT ====================
 document.addEventListener('DOMContentLoaded', () => {
     loadFeaturedContent();
     loadAllMovies();
@@ -798,7 +844,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadTrending();
     loadNewMoviesSlider();
     showSection('home');
-    setupSearchEnter();
+    setupSearchEvents();
 });
 
 window.onload = () => {
@@ -819,5 +865,4 @@ window.onload = () => {
     });
 };
 
-// Rekomandim për përdoruesit: Instaloni uBlock Origin për të bllokuar reklamat e mbetura.
 console.log("%c💡 Këshillë: Për një përvojë pa reklama, instaloni shtesën uBlock Origin në shfletuesin tuaj.", "color: #4CAF50; font-size: 14px;");
