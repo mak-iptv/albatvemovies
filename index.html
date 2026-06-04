@@ -34,7 +34,6 @@
         </div>
 
         <main>
-            <!-- HOME -->
             <div id="home" class="section">
                 <div class="hero">
                     <h1>AlbaTV</h1>
@@ -68,7 +67,6 @@
                 </div>
             </div>
 
-            <!-- MOVIES -->
             <div id="movies" class="section" style="display:none;">
                 <div class="section-header">
                     <h2><i class="fas fa-film"></i> Të gjithë filmat</h2>
@@ -80,7 +78,6 @@
                 <div class="movies-grid" id="moviesGrid"></div>
             </div>
 
-            <!-- SERIES -->
             <div id="series" class="section" style="display:none;">
                 <div class="section-header">
                     <h2><i class="fas fa-tv"></i> Serialet</h2>
@@ -92,7 +89,6 @@
                 <div class="movies-grid" id="seriesGrid"></div>
             </div>
 
-            <!-- SHQIP -->
             <div id="shqip" class="section" style="display:none;">
                 <div class="section-header">
                     <h2><i class="fas fa-flag"></i> Filmat Shqiptarë</h2>
@@ -104,7 +100,6 @@
                 <div class="movies-grid" id="shqipGrid"></div>
             </div>
 
-            <!-- YU -->
             <div id="yu" class="section" style="display:none;">
                 <div class="section-header">
                     <h2><i class="fas fa-landmark"></i> Filmat Jugosllavë</h2>
@@ -116,7 +111,6 @@
                 <div class="movies-grid" id="yuGrid"></div>
             </div>
 
-            <!-- TRENDING -->
             <div id="trending" class="section" style="display:none;">
                 <div class="section-header">
                     <h2><i class="fas fa-chart-line"></i> Më të diskutuara</h2>
@@ -127,14 +121,12 @@
                 <div class="movies-grid" id="trendingGrid"></div>
             </div>
 
-            <!-- Seksioni i rezultateve të kërkimit global -->
-<section id="searchResults" style="display: none; padding: 20px;">
-    <h2><i class="fas fa-search"></i> Rezultatet e kërkimit: <span id="searchQueryText"></span></h2>
-    <div id="globalSearchGrid" class="movies-grid"></div>
-</section>
+            <div id="searchResults" class="section" style="display: none; padding: 20px;">
+                <h2><i class="fas fa-search"></i> Rezultatet e kërkimit: <span id="searchQueryText"></span></h2>
+                <div id="globalSearchGrid" class="movies-grid"></div>
+            </div>
         </main>
 
-        <!-- Player Modal -->
         <div id="playerModal" class="modal" style="display:none;">
             <div class="modal-content modal-large">
                 <span class="close" onclick="closePlayer()">&times;</span>
@@ -152,7 +144,6 @@
             </div>
         </div>
 
-        <!-- YouTube Modal (for trailer backup) -->
         <div id="youtubeModal" class="modal" style="display:none;">
             <div class="modal-content">
                 <span class="close" onclick="closeYouTubePlayer()">&times;</span>
