@@ -1,26 +1,37 @@
+/* ==========================================================================
+   1. RREGULLIMET THEMELORE & TIPOGRAFIA
+   ========================================================================== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
 body {
     font-family: 'Inter', sans-serif;
     background: #0a0c15;
     color: #ffffff;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
 }
+
+/* ==========================================================================
+   2. KOKA E FAQES (HEADER) & NAVIGIMI
+   ========================================================================== */
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
-    background: rgba(10,12,21,0.95);
+    background: rgba(10, 12, 21, 0.95);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     position: sticky;
     top: 0;
     z-index: 100;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
+
 .logo {
     font-size: 1.8rem;
     font-weight: 700;
@@ -28,23 +39,29 @@ header {
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    user-select: none;
 }
+
 .logo span { color: #fff; background: none; }
 .logo i { color: #e50914; margin-right: 5px; }
+
 nav {
     display: flex;
     gap: 1.5rem;
     flex-wrap: wrap;
 }
+
 .nav-link {
     color: #ccc;
     text-decoration: none;
     font-weight: 500;
-    transition: 0.3s;
+    transition: color 0.3s ease;
     font-size: 1rem;
 }
+
 .nav-link i { margin-right: 6px; }
 .nav-link:hover, .nav-link.active { color: #e50914; }
+
 .install-btn {
     background: #e50914;
     border: none;
@@ -53,88 +70,159 @@ nav {
     color: white;
     cursor: pointer;
     font-weight: bold;
+    transition: transform 0.2s, background 0.2s;
 }
+.install-btn:hover { background: #b81b24; transform: scale(1.05); }
+
+/* ==========================================================================
+   3. FILTRAT, KËRKIMI & SEKSIONET KRYESORE
+   ========================================================================== */
 .search-container {
     max-width: 600px;
     margin: 1.5rem auto;
     position: relative;
+    padding: 0 1rem; /* Shtohet padding që mos të ngjitet në skaje në mobile */
 }
+
 .search-input {
     width: 100%;
     padding: 12px 20px;
+    padding-right: 50px;
     border-radius: 50px;
     border: none;
     background: #1e1f2c;
     color: white;
     font-size: 1rem;
     outline: none;
+    transition: box-shadow 0.3s;
 }
+.search-input:focus { box-shadow: 0 0 0 2px #e50914; }
+
 .search-icon {
     position: absolute;
-    right: 20px;
+    right: 30px;
     top: 50%;
     transform: translateY(-50%);
     color: #aaa;
 }
-.section {
-    padding: 0 2rem 2rem;
+
+/* Seksionet header brenda kategorive */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 1.5rem;
 }
+
+.search-mini input {
+    background: #1e1f2c;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    outline: none;
+}
+.search-mini input:focus { border-color: #e50914; }
+
+.section { padding: 0 2rem 2rem; }
+
 .hero {
     text-align: center;
-    padding: 2rem 0;
+    padding: 3rem 1.5rem;
     background: linear-gradient(145deg, #0f111c, #0a0c15);
     border-radius: 30px;
     margin-bottom: 2rem;
+    border: 1px solid rgba(255,255,255,0.05);
 }
 .hero h1 { font-size: 3rem; margin-bottom: 0.5rem; }
+.hero p { color: #aaa; font-size: 1.1rem; }
+
 .stats {
     display: flex;
     justify-content: center;
     gap: 2rem;
     margin-top: 1.5rem;
+    flex-wrap: wrap;
 }
 .stat {
     background: #1e1f2c;
     padding: 10px 20px;
     border-radius: 40px;
     font-weight: bold;
+    font-size: 0.9rem;
 }
-.section-title {
-    margin: 2rem 0 1rem;
-}
+
+.section-title { margin: 2rem 0 1rem; }
 .section-title h2 {
     border-left: 4px solid #e50914;
     padding-left: 15px;
+    font-size: 1.5rem;
 }
+
+/* ==========================================================================
+   4. STILIMI I SWIPER SLIDER (I SHTUAR)
+   ========================================================================== */
+.new-movies-swiper {
+    width: 100%;
+    padding: 1.5rem 0 2.5rem !important;
+}
+.new-movies-swiper .swiper-slide {
+    width: auto; /* Lejon përmasat dinamike të kartave brenda slider-it */
+}
+.new-movies-swiper .swiper-button-next, 
+.new-movies-swiper .swiper-button-prev {
+    color: #e50914;
+    transform: scale(0.7);
+}
+.new-movies-swiper .swiper-pagination-bullet-active {
+    background: #e50914;
+}
+
+/* ==========================================================================
+   5. GRID-I DHE KARTAT E FILMAVE (MOVIE CARDS)
+   ========================================================================== */
 .featured-grid, .movies-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 20px;
 }
+
 .movie-card {
     position: relative;
     background: #151724;
     border-radius: 12px;
     overflow: hidden;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.2s;
     cursor: pointer;
+    width: 100%;
 }
-.movie-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+.movie-card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5); 
+}
+
 .movie-card img {
     width: 100%;
     aspect-ratio: 2/3;
     object-fit: cover;
+    display: block;
 }
+
 .rating {
     position: absolute;
     top: 10px;
     left: 10px;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0,0,0,0.75);
     padding: 4px 8px;
     border-radius: 20px;
     font-size: 0.8rem;
     z-index: 2;
+    font-weight: 600;
+    color: #ffb300;
 }
+
 .type-badge {
     position: absolute;
     top: 10px;
@@ -148,8 +236,9 @@ nav {
 }
 .shqip-badge { background: #2e7d32; }
 .yu-badge { background: #b85c1a; }
+
 .card-content {
-    padding: 10px;
+    padding: 12px;
     position: relative;
     z-index: 1;
 }
@@ -158,14 +247,17 @@ nav {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin-bottom: 4px;
 }
 .card-year { font-size: 0.8rem; color: #aaa; }
+
+/* Butoni Play në qendër të kartës */
 .play-center {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(229,9,20,0.85);
+    transform: translate(-50%, -50%) scale(0.8);
+    background: rgba(229, 9, 20, 0.9);
     border-radius: 50%;
     width: 50px;
     height: 50px;
@@ -174,16 +266,17 @@ nav {
     justify-content: center;
     cursor: pointer;
     z-index: 10;
-    transition: 0.2s;
+    transition: opacity 0.2s ease, transform 0.2s ease;
     opacity: 0;
     pointer-events: none;
 }
 .movie-card:hover .play-center {
     opacity: 1;
     pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
 }
 .play-center i {
-    font-size: 24px;
+    font-size: 22px;
     margin-left: 4px;
     color: white;
 }
@@ -191,6 +284,7 @@ nav {
     transform: translate(-50%, -50%) scale(1.1);
     background: #e50914;
 }
+
 .info-btn {
     position: absolute;
     bottom: 10px;
@@ -206,54 +300,88 @@ nav {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: background 0.2s;
 }
-.info-btn:hover {
-    background: #e50914;
-}
+.info-btn:hover { background: #e50914; }
+
+/* ==========================================================================
+   6. MODALET (PLAYER & YOUTUBE)
+   ========================================================================== */
 .modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.9);
+    background: rgba(0, 0, 0, 0.95);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1000;
+    padding: 10px;
 }
+
 .modal-content {
     background: #151724;
     border-radius: 20px;
-    width: 90%;
+    width: 95%;
     max-width: 1200px;
-    padding: 20px;
+    padding: 25px;
     position: relative;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
 }
+
 .modal-large {
     max-width: 1200px;
-    height: 80vh;
+    height: 90vh; /* Ngritur në 90vh për të pasur më shumë vend */
+    max-height: 850px;
     display: flex;
     flex-direction: column;
 }
+
 .close {
     position: absolute;
     top: 15px;
-    right: 25px;
-    font-size: 28px;
+    right: 20px;
+    font-size: 32px;
     cursor: pointer;
-    color: white;
+    color: #fff;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    z-index: 1010;
 }
+.close:hover { opacity: 1; }
+
+#playerTitle {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    padding-right: 40px;
+}
+
+/* Kontenitori i player-it dhe burimeve */
+#sourcesContainer {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Mbush hapësirën e mbetur */
+    min-height: 0; /* Parandalon rritjen jashtë mase të flex item */
+}
+
 #playerFrame {
     width: 100%;
-    height: 55vh;
+    flex-grow: 1;
+    background: #000;
     border: none;
+    border-radius: 8px;
 }
+
 .source-buttons {
     display: flex;
     gap: 10px;
     margin-bottom: 15px;
+    flex-wrap: wrap;
 }
+
 .source-btn {
     background: #2c3e66;
     border: none;
@@ -261,119 +389,24 @@ nav {
     border-radius: 30px;
     color: white;
     cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s;
 }
+.source-btn:hover { background: #3a5285; }
 .source-btn.active-source { background: #e50914; }
-.trailer-btn {
-    background: #ff4444;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 30px;
-    color: white;
-    cursor: pointer;
-    margin-top: 10px;
-    display: inline-block;
-}
-.trailer-btn:hover { background: #cc0000; }
-.loading {
-    text-align: center;
-    padding: 3rem;
-}
-.filter-buttons {
+
+/* Kontrollet e Serialeve (Sezonet / Episodet) */
+#seriesControls {
     display: flex;
     gap: 10px;
+    margin-bottom: 15px;
     flex-wrap: wrap;
-    margin: 1rem 0;
 }
-.filter-btn {
+#seriesControls select {
     background: #1e1f2c;
-    border: none;
-    padding: 6px 14px;
-    border-radius: 30px;
     color: white;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 8px 12px;
+    border-radius: 8px;
+    outline: none;
     cursor: pointer;
-}
-.filter-btn.active { background: #e50914; }
-/* Info section under player */
-#playerInfo {
-    margin-top: 20px;
-    background: #1e1f2c;
-    border-radius: 16px;
-    padding: 20px;
-    max-height: 350px;
-    overflow-y: auto;
-    flex-shrink: 0;
-}
-.player-info-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 25px;
-}
-.player-info-left {
-    flex: 2;
-    min-width: 200px;
-}
-.player-info-left h2 {
-    color: #e50914;
-    font-size: 1.5rem;
-    margin-bottom: 12px;
-}
-.player-info-left p {
-    margin: 8px 0;
-    line-height: 1.4;
-}
-.player-info-right {
-    flex: 3;
-}
-.player-info-right h3 {
-    color: #e50914;
-    margin-bottom: 12px;
-    font-size: 1.2rem;
-}
-.cast-horizontal {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 20px;
-    padding-bottom: 10px;
-}
-.cast-horizontal::-webkit-scrollbar {
-    height: 6px;
-}
-.cast-horizontal::-webkit-scrollbar-track {
-    background: #2c2e3e;
-    border-radius: 10px;
-}
-.cast-horizontal::-webkit-scrollbar-thumb {
-    background: #e50914;
-    border-radius: 10px;
-}
-.cast-card {
-    text-align: center;
-    width: 90px;
-    flex-shrink: 0;
-}
-.cast-card img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #e50914;
-}
-.cast-card .name {
-    font-size: 12px;
-    margin-top: 6px;
-    font-weight: 500;
-}
-.cast-card .character {
-    font-size: 10px;
-    color: #aaa;
-}
-@media (max-width: 768px) {
-    nav { gap: 0.8rem; }
-    .nav-link { font-size: 0.8rem; }
-    .featured-grid, .movies-grid { grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); }
-    .hero h1 { font-size: 2rem; }
-    .play-center { width: 40px; height: 40px; }
-    .play-center i { font-size: 18px; }
-    .player-info-left, .player-info-right { flex: 1 1 100%; }
-}
