@@ -410,3 +410,122 @@ nav {
     border-radius: 8px;
     outline: none;
     cursor: pointer;
+}
+#seriesControls button {
+    background: #2e7d32;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.trailer-btn {
+    background: #ff4444;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 30px;
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+    display: inline-block;
+    font-weight: 500;
+}
+.trailer-btn:hover { background: #cc0000; }
+
+/* ==========================================================================
+   7. SEKSIONI I INFORMACIONIT POSHTË PLAYER-IT
+   ========================================================================== */
+#playerInfo {
+    margin-top: 20px;
+    background: #1e1f2c;
+    border-radius: 16px;
+    padding: 20px;
+    max-height: 250px;
+    overflow-y: auto;
+    flex-shrink: 0; /* Mos e lejo të zvogëlohet */
+}
+
+.player-info-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+}
+.player-info-left { flex: 2; min-width: 250px; }
+.player-info-left h2 { color: #e50914; font-size: 1.5rem; margin-bottom: 12px; }
+.player-info-left p { margin: 8px 0; line-height: 1.5; color: #ddd; }
+.player-info-right { flex: 3; min-width: 250px; }
+.player-info-right h3 { color: #e50914; margin-bottom: 12px; font-size: 1.2rem; }
+
+/* Lista e Aktorëve (Cast Horizontal) */
+.cast-horizontal {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 20px;
+    padding-bottom: 10px;
+}
+.cast-horizontal::-webkit-scrollbar { height: 6px; }
+.cast-horizontal::-webkit-scrollbar-track { background: #2c2e3e; border-radius: 10px; }
+.cast-horizontal::-webkit-scrollbar-thumb { background: #e50914; border-radius: 10px; }
+
+.cast-card { text-align: center; width: 90px; flex-shrink: 0; }
+.cast-card img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e50914;
+}
+.cast-card .name { font-size: 11px; margin-top: 6px; font-weight: 600; }
+.cast-card .character { font-size: 10px; color: #aaa; }
+
+/* UTILITIES */
+.loading { text-align: center; padding: 3rem; font-size: 1.2rem; color: #aaa; }
+
+.filter-buttons { display: flex; gap: 10px; flex-wrap: wrap; margin: 1rem 0; }
+.filter-btn {
+    background: #1e1f2c;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 30px;
+    color: white;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+.filter-btn.active { background: #e50914; }
+
+/* ==========================================================================
+   8. RESPONSIVENESS (DIZAJNI PËR MOBILE & TABLET)
+   ========================================================================== */
+@media (max-width: 992px) {
+    .modal-large { height: 85vh; }
+    #playerFrame { height: 45vh; }
+}
+
+@media (max-width: 768px) {
+    header { padding: 1rem; flex-direction: column; gap: 10px; text-align: center; }
+    nav { gap: 0.8rem; justify-content: center; }
+    .nav-link { font-size: 0.85rem; }
+    
+    .section { padding: 0 1rem 1rem; }
+    .section-header { flex-direction: column; align-items: stretch; }
+    
+    .featured-grid, .movies-grid { 
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
+        gap: 15px;
+    }
+    
+    .hero h1 { font-size: 2rem; }
+    .hero p { font-size: 0.9rem; }
+    .stats { gap: 0.8rem; }
+    
+    .play-center { width: 40px; height: 40px; opacity: 1; pointer-events: auto; } /* Shfaqet gjithmonë në mobile pasi s'ka hover */
+    .play-center i { font-size: 18px; }
+    
+    .player-info-left, .player-info-right { flex: 1 1 100%; }
+    .modal-content { padding: 15px; }
+    #playerInfo { max-height: 200px; }
+}
