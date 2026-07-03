@@ -24,7 +24,7 @@ const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 const VIDEO_SOURCES = {
     embedSu: { name: "Embed.su", baseUrl: "https://vidsrc-embed.ru/embed/movie/", baseUrlTv: "https://vidsrc-embed.ru/embed/tv/", type: "embed" },
     twoEmbed: { name: "2Embed", baseUrl: "https://www.2embed.cc/embed/", baseUrlTv: "https://www.2embed.cc/embedtv/", type: "embed" },
-    vidsrcPro: { name: "VidSrc.pro", baseUrl: "https://vidsrc.pro/embed/movie/", baseUrlTv: "https://vidsrc.pro/embed/tv/", type: "embed" }
+    vidsrcPro: { name: "VidSrc.pro", baseUrl: "https://vidsrc.sbs/embed/movie/", baseUrlTv: "https://vidsrc.pro/embed/tv/", type: "embed" }
 };
 
 let allMovies = [], allSeries = [], shqipMovies = [], yuMovies = [];
