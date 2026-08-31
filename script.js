@@ -91,7 +91,8 @@ function getShqipMovies() {
         { id: '15', title: "Unë e dua Erën", year: '1991', thumbnail: 'https://s1.dmcdn.net/1/Z3sIA1elov-uFoUyY/856x480f', rating: '8.1', sources: [{ type: 'dailymotion', videoId: 'x9q7eru', url: 'https://www.dailymotion.com/embed/video/x9q7eru' }] },
         { id: '16', title: "Yjet e neteve te gjata", year: '1972', thumbnail: 'https://image.tmdb.org/t/p/w500/4B2XRnN0YyX6caqp5VAPFkn3rmq.jpg', rating: '8.1', sources: [{ type: 'dailymotion', videoId: 'x9qbsdu', url: 'https://www.dailymotion.com/embed/video/x9qbsdu' }] },
         { id: '12', title: "BALLË PËR BALLË", year: '1979', thumbnail: 'https://i.ytimg.com/vi/cjFE0aOVv5w/hqdefault.jpg', rating: '8.3', sources: [{ type: 'youtube', videoId: 'cjFE0aOVv5w' }] },
-        { id: '17', title: "Triumf Pa Lavdi | Filmi i plotë 2026", year: '2026', thumbnail: 'https://i.ytimg.com/vi/YfMWLJZxT1U/maxresdefault.jpg', rating: '8.3', sources: [{ type: 'youtube', videoId: 'YfMWLJZxT1U' }] }
+        { id: '17', title: "Triumf Pa Lavdi | Filmi i plotë 2026", year: '2026', thumbnail: 'https://i.ytimg.com/vi/YfMWLJZxT1U/maxresdefault.jpg', rating: '8.3', sources: [{ type: 'youtube', videoId: 'YfMWLJZxT1U' }] },
+        { id: '18', title: "Golden Brothers 2 - Filmi i plote - 2026 (4K) | Filmi i plotë 2026", year: '2026', thumbnail: 'https://i.ytimg.com/vi/uoKqqCJvNnY/maxresdefault.jpg', rating: '8.3', sources: [{ type: 'youtube', videoId: 'uoKqqCJvNnY' }] }
     ];
 }
 function getYUMovies() {
